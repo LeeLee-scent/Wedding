@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Wedding Invitation</title>
+    <!-- 引入質感字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --burgundy: #800020;
+            --cream: #fffcf9;
+        }
+        
+        body, html { 
+            margin: 0; padding: 0; 
+            overflow-x: hidden; 
+            font-family: 'Noto Serif TC', serif;
+            background-color: var(--cream);
+            color: #333;
+        }
+
+        /* 1. 動態帷幕：增加絲絨質感 */
+        #curtain-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100; display: flex; cursor: pointer;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+        }
+        .curtain {
+            width: 50%; height: 100%; 
+            background: var(--burgundy);
+            transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .curtain-left { border-right: 1.5px solid var(--gold); }
+        .curtain-right { border-left: 1.5px solid var(--gold); }
+        .curtain-text { 
+            color: var(--gold); 
+            font-size: 1.5rem; 
+            letter-spacing: 5px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* 2. 主內容佈局：專注於視覺展示 */
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        .opened + .content { opacity: 1; }
+
+        /* 3. 圓形刮刮樂：展示高畫質似顏繪 */
+        #scratch-container {
+            position: relative; 
+            width: 320px; height: 320px; 
+            margin: 30px auto;
+            border-radius: 50%; 
+            overflow: hidden; 
+            border: 5px solid white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        #scratch-canvas {
+            position: absolute; top: 0; left: 0; z-index: 2; touch-action: none;
+        }
+        .reveal-content {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .reveal-content img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+        }
+
+        /* 4. 文字藝術與故事 */
+        .wedding-title {
+            font-size: 1.8rem;
+            color: var(--burgundy);
+            margin: 20px 0 5px;
+            letter-spacing: 2px;
+        }
+        .story-text {
+            font-size: 0.95rem;
+            line-height: 2;
+            color: #666;
+            margin: 20px auto;
+            max-width: 80%;
+            white-space: pre-line;
+        }
+        .date-info {
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            display: inline-block;
+            padding: 10px 40px;
+            margin: 20px 0;
+            font-weight: bold;
+            color: var(--burgundy);
+        }
+
+        .opened .curtain-left { transform: translateX(-100%); }
+        .opened .curtain-right { transform: translateX(100%); }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="curtain-container" onclick="openCurtain()">
+        <div class="curtain curtain-left"><div class="curtain-text">摯愛的親友</div></div>
+        <div class="curtain curtain-right"><div class="curtain-text">誠摯邀請您</div></div>
+    </div>
+
+    <div class="content" id="main-content">
+        <h1 class="wedding-title">We are getting married</h1>
+        
+        <div id="scratch-container">
+            <div class="reveal-content">
+                <!-- 放置 1200px 以上的似顏繪插畫 -->
+                <img src="main-image.jpg" alt="Our Wedding Illustration">
+            </div>
+            <canvas id="scratch-canvas" width="320" height="320"></canvas>
+        </div>
+
+        <div class="date-info">
+            2026 . 09 . 20
+        </div>
+
+        <div class="story-text">
+            兩條平行線，在台東海邊的民宿交會
+            在音符與海浪聲中，寫下了屬於我們的旋律
+            
+            這一天，誠摯邀請您
+            見證我們人生中最重要的樂章
+        </div>
+
+        <p style="font-size: 0.8rem; color: #999; margin-top: 40px;">
+            地點：新店彭園會館
+        </p>
+    </div>
+
+    <script>
+        function openCurtain() {
+            document.getElementById('curtain-container').classList.add('opened');
+            document.getElementById('bgm').play();
+            setTimeout(() => {
+                document.getElementById('curtain-container').style.zIndex = '-1';
+            }, 1800);
+        }
+
+        // 刮刮樂邏輯
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 初始覆蓋層：使用帶質感的灰色
+        ctx.fillStyle = '#d1d1d1';
+        ctx.fillRect(0, 0, 320, 320);
+        ctx.fillStyle = '#666';
+        ctx.font = '16px "Noto Serif TC"';
+        ctx.textAlign = 'center';
+        ctx.fillText('親手刮開我們的回憶', 160, 160);
+
+        let isDrawing = false;
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        window.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', scratch);
+    </script>
+</body>
+</html>
