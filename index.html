@@ -6,125 +6,142 @@
     <title>Our Wedding Day</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --burgundy: #800020; --cream: #fffcf9; }
+        :root { 
+            --morandi-blue: #92a4ad; /* 莫蘭迪灰藍 */
+            --morandi-grey: #b5ada5; /* 莫蘭迪暖灰 */
+            --gold: #c5a368; 
+            --burgundy: #7a3e3e; 
+            --cream: #f9f7f2; 
+        }
         body, html { margin: 0; padding: 0; background: var(--cream); font-family: 'Noto Serif TC', serif; scroll-behavior: smooth; overflow-x: hidden; }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 
-        /* --- 第一部分：門縫式開場 --- */
-        #part1 { background: #1a1a1a; z-index: 10; }
+        /* --- 第一部分：莫蘭迪門縫開場 --- */
+        #part1 { background: var(--morandi-blue); z-index: 10; }
         .door-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: flex; flex-direction: column; cursor: pointer; }
-        .door { height: 50%; width: 100%; background: #1a1a1a; transition: transform 1.6s cubic-bezier(0.85, 0, 0.15, 1); display: flex; align-items: center; justify-content: center; position: relative; }
-        .door-top { border-bottom: 0.5px solid var(--gold); align-items: flex-end; padding-bottom: 20px; }
-        .door-bottom { border-top: 0.5px solid var(--gold); align-items: flex-start; padding-top: 20px; }
-        .door-label { color: var(--gold); letter-spacing: 12px; font-weight: 300; font-size: 1.2rem; }
+        .door { height: 50%; width: 100%; background: var(--morandi-blue); transition: transform 1.6s cubic-bezier(0.85, 0, 0.15, 1); display: flex; align-items: center; justify-content: center; position: relative; }
+        .door-top { border-bottom: 0.5px solid rgba(255,255,255,0.3); align-items: flex-end; padding-bottom: 30px; }
+        .door-bottom { border-top: 0.5px solid rgba(255,255,255,0.3); align-items: flex-start; padding-top: 30px; }
+        .door-label { color: white; letter-spacing: 15px; font-weight: 300; font-size: 1.1rem; opacity: 0.8; }
+        
         .opened .door-top { transform: translateY(-100%); }
         .opened .door-bottom { transform: translateY(100%); }
+        
         .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('assets/hero-photo.jpg') center/cover no-repeat; opacity: 0; transition: opacity 2s ease 0.5s; }
-        .opened .hero-bg { opacity: 0.75; }
+        .opened .hero-bg { opacity: 0.7; }
 
-        /* --- 第二部分：大方形刮刮樂 (含內嵌倒數) --- */
-        #part2 { background: white; padding: 60px 0; }
-        #scratch-wrapper { 
-            position: relative; width: 90vw; max-width: 500px; aspect-ratio: 4/5; 
-            border: 1px solid #eee; box-shadow: 0 15px 45px rgba(0,0,0,0.08); 
-        }
+        .hero-text { position: absolute; color: white; text-align: center; z-index: 15; opacity: 0; transform: translateY(20px); transition: all 1.5s ease 1.2s; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .opened .hero-text { opacity: 1; transform: translateY(0); }
+
+        /* --- 第二部分：大方形刮刮樂 (含秒倒數) --- */
+        #part2 { background: white; padding: 80px 0; }
+        #scratch-wrapper { position: relative; width: 90vw; max-width: 480px; aspect-ratio: 1/1; border: 8px solid #f0efed; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; touch-action: none; width: 100%; height: 100%; }
-        .reveal-box { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .reveal-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .reveal-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; z-index: -1; }
-        .inner-timer { 
-            background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 5px; 
-            display: flex; gap: 10px; color: var(--burgundy); 
-        }
+        
+        .inner-timer { background: rgba(255, 255, 255, 0.88); padding: 15px 25px; border-radius: 2px; display: flex; gap: 15px; color: var(--burgundy); backdrop-filter: blur(5px); }
+        .timer-unit { text-align: center; min-width: 45px; }
+        .timer-unit span { font-size: 1.4rem; font-weight: bold; display: block; }
+        .timer-unit small { font-size: 0.6rem; letter-spacing: 1px; }
 
-        /* --- 第三部分：正式喜帖格式 --- */
-        .invitation-card { 
-            border: 2px double var(--gold); padding: 60px 40px; max-width: 500px; width: 85%; 
-            background: white; text-align: center; line-height: 2.5; position: relative;
+        /* --- 第三部分：設計感喜帖外框 --- */
+        .invitation-frame { 
+            position: relative; padding: 60px 35px; max-width: 460px; width: 80%; background: white; text-align: center; line-height: 2.3;
+            border: 1px solid var(--gold); outline: 4px solid white; outline-offset: -12px; box-shadow: 0 0 0 1px var(--gold) inset;
         }
-        .invitation-card h2 { margin-bottom: 30px; letter-spacing: 10px; color: var(--burgundy); }
+        .invitation-frame::before, .invitation-frame::after {
+            content: "✧"; position: absolute; color: var(--gold); font-size: 1.2rem; width: 100%; left: 0;
+        }
+        .invitation-frame::before { top: 15px; }
+        .invitation-frame::after { bottom: 15px; }
 
-        /* --- 第四部分：四格相片 --- */
-        .photo-grid { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; 
-            width: 90%; max-width: 800px; padding: 20px; 
-        }
-        .grid-item { aspect-ratio: 1/1; background: #eee; overflow: hidden; border: 1px solid #ddd; }
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .grid-item img:hover { transform: scale(1.05); }
+        /* --- 第四部分：相片牆與影片 --- */
+        #part4 { background: #fdfdfd; padding: 80px 0; }
+        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 90%; max-width: 700px; margin-bottom: 50px; }
+        .grid-item { aspect-ratio: 1/1; overflow: hidden; background: #eee; }
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .video-box { width: 90%; max-width: 700px; aspect-ratio: 16/9; background: #000; position: relative; }
+        video { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
 
     <audio id="bgm" loop preload="auto"><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-    <!-- 第一部分：門縫開場 -->
+    <!-- 第一部分 -->
     <section id="part1">
         <div class="door-overlay" onclick="startExperience(this)">
-            <div class="door door-top"><div class="door-label">THE WEDDING</div></div>
-            <div class="door door-bottom"><div class="door-label">ADVENTURE</div></div>
+            <div class="door door-top"><div class="door-label">MOMENTS</div></div>
+            <div class="door door-bottom"><div class="door-label">ETERNITY</div></div>
         </div>
         <div class="hero-bg"></div>
+        <div class="hero-text">
+            <h1 style="letter-spacing: 12px; font-weight: 400; margin-bottom: 5px;">LIN & LEE</h1>
+            <p style="letter-spacing: 4px; font-size: 0.9rem; opacity: 0.9;">2026 . 10 . 03</p>
+        </div>
     </section>
 
-    <!-- 第二部分：方形刮刮樂內嵌倒數 -->
+    <!-- 第二部分 -->
     <section id="part2">
         <div id="scratch-wrapper">
             <div class="reveal-box">
-                <img src="assets/main-image.jpg" alt="Reveal Photo">
-                <div class="inner-timer" id="timer">
-                    <div style="text-align:center;"><span id="days" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>DAYS</small></div>
-                    <div style="text-align:center;"><span id="hours" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>HRS</small></div>
-                    <div style="text-align:center;"><span id="mins" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>MINS</small></div>
+                <img src="assets/main-image.jpg" alt="Memory">
+                <div class="inner-timer">
+                    <div class="timer-unit"><span id="days">00</span><small>DAYS</small></div>
+                    <div class="timer-unit"><span id="hours">00</span><small>HRS</small></div>
+                    <div class="timer-unit"><span id="mins">00</span><small>MINS</small></div>
+                    <div class="timer-unit" style="color: var(--gold);"><span id="secs">00</span><small>SECS</small></div>
                 </div>
             </div>
             <canvas id="scratch-canvas"></canvas>
         </div>
-        <p style="margin-top: 20px; color: #888; font-size: 0.9rem;">— 刮開畫布 揭曉時間與回憶 —</p>
     </section>
 
-    <!-- 第三部分：正式喜帖格式 -->
+    <!-- 第三部分 -->
     <section id="part3">
-        <div class="invitation-card">
-            <h2>謹謝。親恩</h2>
-            <p style="font-size: 1.1rem; letter-spacing: 2px;">
-                <strong>新郎：李先生 &nbsp; 新娘：林小姐</strong><br>
-                奉天承運。連理結盟
+        <div class="invitation-frame">
+            <h3 style="color: var(--burgundy); letter-spacing: 8px; margin-bottom: 20px;">誠摯邀請</h3>
+            <p style="font-size: 1.1rem;">
+                <strong>新郎 李XX & 新娘 林XX</strong>
             </p>
-            <p style="font-size: 0.95rem;">
-                我們將於 <strong>2026 年 10 月 03 日</strong>（星期六）<br>
-                舉行結婚典禮。誠邀各位親友蒞臨同慶<br><br>
-                <strong>【 席設 】</strong><br>
-                新店彭園會館<br>
+            <p style="font-size: 0.95rem; color: #666;">
+                兩條平行線在台東的海邊交會<br>
+                從此開啟了屬於我們的故事<br><br>
+                <strong>2026 年 10 月 03 日</strong><br>
+                午間 12:00 入席<br><br>
+                <strong>【 新店彭園會館 】</strong><br>
                 新北市新店區北新路三段219號2樓
-            </p>
-            <p style="font-size: 0.9rem; color: var(--gold); margin-top: 30px;">
-                12:00 入席  |  12:30 準時開席
             </p>
         </div>
     </section>
 
-    <!-- 第四部分：四格相片牆 -->
+    <!-- 第四部分 -->
     <section id="part4">
-        <h3 style="letter-spacing: 5px; color: var(--burgundy);">GALLERY</h3>
         <div class="photo-grid">
-            <div class="grid-item"><img src="assets/photo1.jpg" alt="Memory 1"></div>
-            <div class="grid-item"><img src="assets/photo2.jpg" alt="Memory 2"></div>
-            <div class="grid-item"><img src="assets/photo3.jpg" alt="Memory 3"></div>
-            <div class="grid-item"><img src="assets/photo4.jpg" alt="Memory 4"></div>
+            <div class="grid-item"><img src="assets/photo1.jpg"></div>
+            <div class="grid-item"><img src="assets/photo2.jpg"></div>
+            <div class="grid-item"><img src="assets/photo3.jpg"></div>
+            <div class="grid-item"><img src="assets/photo4.jpg"></div>
+        </div>
+        
+        <div class="video-box">
+            <video controls poster="assets/video-poster.jpg">
+                <source src="assets/wedding-video.mp4" type="video/mp4">
+            </video>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #888;">PREVIEW OUR STORY</p>
         </div>
     </section>
 
     <script>
         function startExperience(el) {
             el.parentElement.classList.add('opened');
-            document.getElementById('bgm').play();
+            document.getElementById('bgm').play().catch(() => {});
             setTimeout(() => { el.style.display = 'none'; }, 2000);
         }
 
-        // 方形刮刮樂
+        // 刮刮樂初始化
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const wrapper = document.getElementById('scratch-wrapper');
@@ -132,34 +149,34 @@
         function initCanvas() {
             canvas.width = wrapper.offsetWidth;
             canvas.height = wrapper.offsetHeight;
-            ctx.fillStyle = '#e0e0e0';
+            ctx.fillStyle = '#cfd8dc'; // 莫蘭迪淡灰藍
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#999';
-            ctx.font = '20px "Noto Serif TC"';
+            ctx.fillStyle = '#546e7a';
+            ctx.font = '18px "Noto Serif TC"';
             ctx.textAlign = 'center';
-            ctx.fillText('親手刮開我們的驚喜', canvas.width/2, canvas.height/2);
+            ctx.fillText('輕輕刮開 揭曉驚喜', canvas.width/2, canvas.height/2);
         }
 
         function handleScratch(e) {
             const r = canvas.getBoundingClientRect();
-            const x = ((e.clientX || (e.touches && e.touches[0].clientX)) - r.left);
-            const y = ((e.clientY || (e.touches && e.touches[0].clientY)) - r.top);
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - r.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - r.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 45, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 40, 0, Math.PI*2); ctx.fill();
         }
 
         canvas.addEventListener('mousemove', (e) => { if(e.buttons===1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); });
         window.addEventListener('load', initCanvas);
-        window.addEventListener('resize', initCanvas);
 
-        // 倒數計時器邏輯
+        // 倒數計時含秒
         function updateTimer() {
             const diff = new Date('2026-10-03T12:00:00') - new Date();
             if (diff <= 0) return;
             document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
             document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
             document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+            document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
         setInterval(updateTimer, 1000); updateTimer();
     </script>
