@@ -4,178 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Wedding Day</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Zhi+Mang+Xing&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- 選用支援度最穩定的思源宋體與手寫英文 -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --wood-base: #5d4037;
             --gold: #c5a368; 
             --cream-bg: #fdfaf5;
+            --overlay-grey: #bdc3c7;
         }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; }
         
-        * { box-sizing: border-box; } /* 防止 Padding 撐破寬度 */
+        /* 提升整體流暢度的滑入特效 */
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .fade-in-section.visible { opacity: 1; transform: translateY(0); }
 
-        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
-        
-        #bg-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        section { min-height: 80vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 40px 20px; }
 
-        section { min-height: 80vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 1; padding: 20px; opacity: 0; transform: translateY(20px); transition: 1s ease-out; }
-        section.show { opacity: 1; transform: translateY(0); }
-
-        /* --- 第一部分：純 CSS 木紋 --- */
-        #part1 { background: #2c1b18; z-index: 10; min-height: 100vh; padding: 0; opacity: 1; transform: none; }
-        .door { 
-            height: 50%; width: 100%; z-index: 20;
-            /* 使用 CSS 繪製木頭紋理 */
-            background-color: #795548;
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.2) 1px, rgba(0,0,0,0.2) 2px),
-                              repeating-linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px);
-            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .door-top { border-bottom: 2px solid #3e2723; align-items: flex-end; padding-bottom: 40px; }
-        .door-bottom { border-top: 2px solid #3e2723; align-items: flex-start; padding-top: 40px; }
-        
-        /* 響應式文字：使用 clamp 防止跑版 */
-        .door-label { color: rgba(255,255,255,0.7); letter-spacing: 0.5rem; font-family: 'Dancing Script', cursive; font-size: clamp(1rem, 5vw, 1.5rem); }
-        
+        /* 第一部分：開門 */
+        #part1 { background: #2c1b18; min-height: 100vh; padding: 0; z-index: 10; }
+        .door { height: 50.5%; width: 100%; z-index: 20; position: absolute; left: 0; background: url('assets/wood-texture.jpg') center/cover; transition: transform 2.5s ease-in-out; }
+        .door-top { top: 0; border-bottom: 1px solid rgba(0,0,0,0.3); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; }
+        .door-bottom { bottom: 0; border-top: 1px solid rgba(0,0,0,0.3); display: flex; align-items: flex-start; justify-content: center; padding-top: 40px; }
         .opened .door-top { transform: translateY(-100%); }
         .opened .door-bottom { transform: translateY(100%); }
+        .door-label { color: #fff; letter-spacing: 8px; font-family: 'Dancing Script', cursive; font-size: 1.3rem; opacity: 0.8; }
 
-        .hero-img { 
-            position: absolute; width: 100%; height: 100%; 
-            background: url('assets/hero-photo.jpg') center/cover; 
-            opacity: 0; transition: opacity 3s ease 1s; 
-        }
-        .opened .hero-img { opacity: 0.6; }
-        .hero-text { 
-            position: absolute; text-align: center; z-index: 15; color: white; width: 90%;
-            opacity: 0; transition: 2.5s ease 2s; 
-        }
-        .opened .hero-text { opacity: 1; }
-        .hero-text h2 { font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 10vw, 4rem); margin: 0; }
+        /* 第二部分：刮刮樂質感提升 */
+        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background: #fff; border-radius: 4px; overflow: hidden; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; width: 100%; height: 100%; cursor: crosshair; }
 
-        /* --- 第二部分：刮刮樂 --- */
-        #scratch-container {
-            position: relative; width: 90vw; max-width: 400px; aspect-ratio: 1/1.2;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); background: #fff; overflow: hidden;
-        }
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; width: 100%; height: 100%; }
-
-        /* --- 第三部分：純 CSS 大理石質感 --- */
-        #part3 { 
-            /* 模擬大理石紋路 */
-            background: linear-gradient(135deg, #fdfaf5 25%, transparent 25%) -50px 0,
-                        linear-gradient(225deg, #fdfaf5 25%, transparent 25%) -50px 0,
-                        linear-gradient(315deg, #fdfaf5 25%, transparent 25%),
-                        linear-gradient(45deg, #fdfaf5 25%, transparent 25%);
-            background-size: 100px 100px;
-            background-color: #f5f1e9;
-        }
+        /* 第三部分：大理石卡片 */
         .invitation-frame { 
-            padding: 40px 20px; width: 95%; max-width: 420px; 
-            background: rgba(255,255,255,0.85); border: 1px solid var(--gold); 
-            text-align: center; backdrop-filter: blur(5px);
+            padding: 50px 30px; width: 100%; max-width: 420px; text-align: center;
+            background: url('assets/marble-card.jpg') center/cover; border: 1px solid var(--gold);
+            position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-        .invitation-frame p { 
-            font-size: clamp(0.9rem, 4vw, 1.1rem); 
-            line-height: 2; word-break: keep-all; 
-        }
+        .invitation-frame::after { content: ""; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid rgba(197, 163, 104, 0.3); pointer-events: none; }
+        .handwritten-title { font-weight: 700; font-size: 2.5rem; color: #5d4037; margin-bottom: 20px; letter-spacing: 2px; }
 
+        /* 第四部分：四格圖與影片 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 600px; margin-bottom: 30px; }
+        .photo-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
+        .video-container { width: 100%; max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-effect"></canvas>
-    <audio id="bgm" loop preload="auto"><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
     <section id="part1">
-        <div class="door-overlay" onclick="startExperience(this)" style="position: absolute; width: 100%; height: 100%; z-index: 30; cursor: pointer;">
-            <div class="door door-top"><div class="door-label">THE JOURNEY BEGINS</div></div>
-            <div class="door door-bottom"><div class="door-label">LIN & LEE</div></div>
+        <div class="door-overlay" onclick="startExperience(this)" style="position: absolute; width: 100%; height: 100%; z-index: 30;">
+            <div class="door door-top"><div class="door-label">The Wedding Day</div></div>
+            <div class="door door-bottom"><div class="door-label">Save The Date</div></div>
         </div>
-        <div class="hero-img" id="hero-img"></div>
-        <div class="hero-text">
-            <h2>Lin & Lee</h2>
-            <p style="letter-spacing: 4px; font-size: 1.1rem;">2026 . 10 . 03</p>
+        <div style="position: absolute; width: 100%; height: 100%; background: url('assets/hero-photo.jpg') center/cover; opacity: 0; transition: 3s;" id="hero-img"></div>
+        <div id="hero-text" style="position: absolute; z-index: 15; text-align: center; color: white; opacity: 0; transition: 2s 1s;">
+            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0;">Lin & Lee</h1>
+            <p style="letter-spacing: 5px;">2026 . 10 . 03</p>
         </div>
     </section>
 
-    <section id="part2">
+    <section id="part2" class="fade-in-section">
         <div id="scratch-container">
-            <div style="width:100%; height:100%;" id="photo-content">
-                <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
-                <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:10px; background:white;">
-                    <div style="text-align:center;"><span id="days" style="font-weight:bold;font-size:1.1rem;">00</span><br><small>DAYS</small></div>
-                    <div style="text-align:center;"><span id="hours" style="font-weight:bold;font-size:1.1rem;">00</span><br><small>HRS</small></div>
-                    <div style="text-align:center;"><span id="mins" style="font-weight:bold;font-size:1.1rem;">00</span><br><small>MINS</small></div>
-                    <div style="text-align:center;"><span id="secs" style="font-weight:bold;font-size:1.1rem;">00</span><br><small>SECS</small></div>
-                </div>
+            <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
+            <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
+                <div style="text-align:center;"><span id="days" style="font-weight:700; font-size:1.2rem;">00</span><br><small>DAYS</small></div>
+                <div style="text-align:center;"><span id="hours" style="font-weight:700; font-size:1.2rem;">00</span><br><small>HRS</small></div>
+                <div style="text-align:center;"><span id="mins" style="font-weight:700; font-size:1.2rem;">00</span><br><small>MINS</small></div>
+                <div style="text-align:center;"><span id="secs" style="font-weight:700; font-size:1.2rem;">00</span><br><small>SECS</small></div>
             </div>
             <canvas id="scratch-canvas"></canvas>
         </div>
     </section>
 
-    <section id="part3">
+    <section id="part3" class="fade-in-section">
         <div class="invitation-frame">
-            <div style="font-family: 'Zhi Mang Xing', cursive; font-size: clamp(2.5rem, 8vw, 3.5rem); color: #7a3e3e; margin-bottom: 15px;">誠摯邀請</div>
-            <p><strong>林建安 & 李抒琪</strong></p>
-            <p>
+            <div class="handwritten-title">誠摯邀請</div>
+            <p style="font-size: 1.1rem;"><strong>李先生 & 林小姐</strong></p>
+            <p style="line-height: 2.2; color: #444;">
                 在台東海邊遇見了你<br>
                 從此我們的世界有了旋律<br>
                 誠摯邀請您見證我們的幸福時刻<br><br>
                 <strong>2026 年 10 月 03 日</strong><br>
-                18:30 入席 | 八德彭園會館
+                12:00 入席 | 新店彭園會館
             </p>
         </div>
     </section>
 
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('section').forEach(s => observer.observe(s));
+    <section id="part4" class="fade-in-section">
+        <div class="photo-grid">
+            <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
+            <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
+        </div>
+        <div class="video-container">
+            <video controls width="100%" poster="assets/video-poster.jpg"><source src="assets/wedding-video.mp4" type="video/mp4"></video>
+        </div>
+    </section>
 
+    <script>
+        // 啟動體驗
         function startExperience(el) {
             el.parentElement.classList.add('opened');
+            document.getElementById('hero-img').style.opacity = "0.7";
+            document.getElementById('hero-text').style.opacity = "1";
             document.getElementById('bgm').play().catch(()=>{});
             setTimeout(() => { el.style.display = 'none'; }, 3000);
         }
 
-        // --- 刮刮樂優化 ---
-        const scCanvas = document.getElementById('scratch-canvas');
-        const scCtx = scCanvas.getContext('2d');
-        const scContainer = document.getElementById('scratch-container');
+        // 滑動揭示特效
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+
+        // 刮刮樂：質感塗層與亮點
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('scratch-container');
 
         function initScratch() {
-            scCanvas.width = scContainer.offsetWidth;
-            scCanvas.height = scContainer.offsetHeight;
-            const g = scCtx.createLinearGradient(0,0,scCanvas.width,scCanvas.height);
-            g.addColorStop(0, '#bdc3c7'); g.addColorStop(1, '#95a5a6');
-            scCtx.fillStyle = g; scCtx.fillRect(0,0,scCanvas.width,scCanvas.height);
-            scCtx.fillStyle = '#444'; scCtx.font = '24px "Zhi Mang Xing"'; scCtx.textAlign='center';
-            scCtx.fillText('刮開揭曉驚喜', scCanvas.width/2, scCanvas.height/2);
-        }
-        window.onload = initScratch;
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            
+            // 基礎塗層：金屬質感漸層
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#c0c0c0');
+            grad.addColorStop(0.5, '#e0e0e0');
+            grad.addColorStop(1, '#a9a9a9');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        function scratch(e) {
-            const r = scCanvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - r.left;
-            const y = (e.clientY || e.touches[0].clientY) - r.top;
-            scCtx.globalCompositeOperation = 'destination-out';
-            scCtx.beginPath(); scCtx.arc(x, y, 30, 0, Math.PI*2); scCtx.fill();
-        }
-        scCanvas.addEventListener('touchmove', e => { scratch(e); e.preventDefault(); }, {passive: false});
-        scCanvas.addEventListener('mousemove', e => { if(e.buttons===1) scratch(e); });
+            // 加入隨機亮點 (粒子感)
+            for(let i=0; i<150; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.5)' : 'rgba(197, 163, 104, 0.3)';
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1.5, 0, Math.PI*2);
+                ctx.fill();
+            }
 
+            ctx.fillStyle = '#5d4037';
+            ctx.font = '700 20px "Noto Serif TC"';
+            ctx.textAlign = 'center';
+            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 7);
+        }
+        window.addEventListener('load', initScratch);
+
+        function handleScratch(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 35, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
+        canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
+
+        // 倒數計時
         function updateTimer() {
-            const diff = new Date('2026-10-03T12:00:00') - new Date();
+            const target = new Date('2026-10-03T12:00:00');
+            const now = new Date();
+            const diff = target - now;
             if (diff <= 0) return;
-            document.getElementById('days').innerText = String(Math.floor(diff/864e5)).padStart(2,'0');
-            document.getElementById('hours').innerText = String(Math.floor((diff%864e5)/36e5)).padStart(2,'0');
-            document.getElementById('mins').innerText = String(Math.floor((diff%36e5)/6e4)).padStart(2,'0');
-            document.getElementById('secs').innerText = String(Math.floor((diff%6e4)/1000)).padStart(2,'0');
+            document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+            document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+            document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
-        setInterval(updateTimer, 1000);
+        setInterval(updateTimer, 1000); updateTimer();
     </script>
 </body>
 </html>
