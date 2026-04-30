@@ -11,11 +11,11 @@
         
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 
-        /* --- 門縫式開場優化 --- */
+        /* --- 極簡門縫式開場 --- */
         #part1 { background: #1a1a1a; z-index: 10; }
         .door-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 20; display: flex; flex-direction: column; cursor: wait; /* 載入中顯示等待指標 */
+            z-index: 20; display: flex; flex-direction: column; cursor: pointer;
         }
         .door {
             height: 50%; width: 100%; background: #1a1a1a;
@@ -27,26 +27,19 @@
         .door-bottom { border-top: 0.5px solid var(--gold); align-items: flex-start; padding-top: 20px; }
         .door-label { color: var(--gold); letter-spacing: 12px; font-weight: 300; transition: opacity 0.5s; font-size: 1.2rem; }
         
-        /* 載入中提示文字 */
-        .loading-hint { 
-            position: absolute; bottom: 10%; color: rgba(212, 175, 55, 0.5); 
-            font-size: 0.8rem; letter-spacing: 2px; animation: pulse 2s infinite; 
-        }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
         .opened .door-top { transform: translateY(-100%); }
         .opened .door-bottom { transform: translateY(100%); }
-        .opened .door-label, .opened .loading-hint { opacity: 0; }
+        .opened .door-label { opacity: 0; }
 
-        /* 照片顯示優化：使用 background-image 提升渲染效率 */
-        .hero-bg { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('assets/hero-photo.jpg') center/cover no-repeat;
-            opacity: 0; transition: opacity 2s ease 0.5s;
-        }
+        .hero-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2s ease 0.5s; }
         .opened .hero-bg { opacity: 0.75; }
+        .hero-text { 
+            position: absolute; color: white; text-align: center; z-index: 15; 
+            opacity: 0; transform: translateY(20px); transition: all 1.5s ease 1s;
+        }
+        .opened .hero-text { opacity: 1; transform: translateY(0); }
 
-        /* 刮刮樂區域 */
+        /* --- 刮刮樂：450px 大尺寸 --- */
         #part2 { background: white; padding: 60px 0; }
         #scratch-container { 
             position: relative; width: 450px; height: 450px; border-radius: 50%; 
@@ -57,34 +50,43 @@
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; touch-action: none; }
         .reveal-content img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* 倒數計時樣式 */
         .countdown-timer { display: flex; gap: 15px; margin-top: 30px; }
         .timer-box { color: #333; padding: 10px; min-width: 60px; text-align: center; border-bottom: 2px solid var(--gold); }
+
+        /* 電子喜帖內容區 */
         .invitation-frame { border: 1px solid var(--gold); padding: 50px 30px; max-width: 450px; width: 85%; background: white; text-align: center; line-height: 2.2; }
+        
+        /* 影片展示區 */
+        .media-container { width: 90%; max-width: 800px; aspect-ratio: 16/9; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        video { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <audio id="bgm" loop preload="auto"><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
+    <!-- 第一部分：門縫開場 -->
     <section id="part1">
-        <div class="door-overlay" id="loader" onclick="handleStart()">
+        <div class="door-overlay" onclick="startExperience(this)">
             <div class="door door-top"><div class="door-label">THE WEDDING</div></div>
             <div class="door door-bottom"><div class="door-label">ADVENTURE</div></div>
-            <div class="loading-hint" id="status-text">影像讀取中...</div>
         </div>
-        <div class="hero-bg"></div>
-        <div class="hero-text" style="position: absolute; color: white; text-align: center; z-index: 15; opacity: 0; transition: 1.5s ease 1s;">
+        <img src="assets/hero-photo.jpg" class="hero-bg" alt="Cover Photo">
+        <div class="hero-text">
             <h1 style="letter-spacing: 10px; font-weight: 400;">LEE & LIN</h1>
             <p style="letter-spacing: 3px; font-size: 0.9rem;">2026 . 10 . 03</p>
         </div>
     </section>
 
+    <!-- 第二部分：刮刮樂與更新後的倒數 -->
     <section id="part2">
         <h2 style="font-weight: 400; letter-spacing: 4px;">親手揭曉</h2>
         <div id="scratch-container">
-            <div class="reveal-content"><img src="assets/main-image.jpg" id="scratch-img" alt="似顏繪"></div>
+            <div class="reveal-content"><img src="assets/main-image.jpg" alt="似顏繪"></div>
             <canvas id="scratch-canvas" width="450" height="450"></canvas>
         </div>
+        <!-- 倒數計時器 -->
         <div class="countdown-timer" id="timer">
             <div class="timer-box"><span id="days" style="font-size:1.5rem;">00</span><br><small>Days</small></div>
             <div class="timer-box"><span id="hours" style="font-size:1.5rem;">00</span><br><small>Hrs</small></div>
@@ -93,65 +95,61 @@
         </div>
     </section>
 
-    <!-- ... 第三部分與第四部分代碼同前 ... -->
+    <!-- 第三部分：敘事與故事 -->
+    <section id="part3">
+        <div class="invitation-frame">
+            <h3 style="color: var(--burgundy); letter-spacing: 5px;">Our Story</h3>
+            <p style="font-size: 0.95rem;">
+                在台東的海邊，兩條平行線交會了。<br>
+                從那刻起，我們決定一起譜寫餘生的樂章。<br><br>
+                誠摯邀請您，見證這一刻。
+            </p>
+            <hr style="width: 30px; border: 0.5px solid var(--gold); margin: 30px auto;">
+            <p style="font-size: 0.85rem; color: #888;">新店彭園會館</p>
+        </div>
+    </section>
+
+    <!-- 第四部分：回憶影片 -->
+    <section id="part4">
+        <div class="media-container">
+            <video controls poster="assets/video-cover.jpg">
+                <source src="assets/wedding-video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
 
     <script>
-        // 1. 強大的預載入機制
-        const assets = [
-            'assets/hero-photo.jpg',
-            'assets/main-image.jpg',
-            'assets/bgm.mp3'
-        ];
-        
-        let loadedCount = 0;
-        const statusText = document.getElementById('status-text');
-        const loader = document.getElementById('loader');
-
-        function preload() {
-            assets.forEach(src => {
-                if (src.endsWith('.mp3')) {
-                    const audio = new Audio();
-                    audio.src = src;
-                    audio.oncanplaythrough = checkProgress;
-                } else {
-                    const img = new Image();
-                    img.src = src;
-                    img.onload = checkProgress;
-                }
-            });
-        }
-
-        function checkProgress() {
-            loadedCount++;
-            if (loadedCount >= assets.length) {
-                statusText.innerText = "點擊開啟樂章";
-                loader.style.cursor = "pointer";
-                window.isReady = true;
-            }
-        }
-
-        function handleStart() {
-            if (!window.isReady) return; // 沒跑完不准點
-            loader.parentElement.classList.add('opened');
-            document.querySelector('.hero-text').style.opacity = "1";
+        function startExperience(el) {
+            el.parentElement.classList.add('opened');
             document.getElementById('bgm').play();
-            setTimeout(() => { loader.style.display = 'none'; }, 2000);
+            setTimeout(() => { el.style.display = 'none'; }, 2000);
         }
 
-        window.onload = preload;
-
-        // 2. 倒數計時與刮刮樂 (邏輯同前，但確保目標日期為 2026-10-03)
+        // --- 倒數計時邏輯：目標日期更新為 2026/10/03 ---
         function updateTimer() {
-            const diff = new Date('2026-10-03T00:00:00') - new Date();
-            if (diff <= 0) return;
-            document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
-            document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
-            document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
-            document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+            const targetDate = new Date('2026-10-03T00:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('timer').innerHTML = "<p>It's Our Wedding Day!</p>";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(d).padStart(2, '0');
+            document.getElementById('hours').innerText = String(h).padStart(2, '0');
+            document.getElementById('mins').innerText = String(m).padStart(2, '0');
+            document.getElementById('secs').innerText = String(s).padStart(2, '0');
         }
         setInterval(updateTimer, 1000);
         updateTimer();
 
+        // 刮刮樂邏輯
         const cvs = document.getElementById('scratch-canvas'), ctx = cvs.getContext('2d');
         ctx.fillStyle = '#e0e0e0'; ctx.fillRect(0,0,450,450);
         ctx.fillStyle = '#999'; ctx.font = '18px "Noto Serif TC"'; ctx.textAlign = 'center';
@@ -163,10 +161,11 @@
             const x = ((e.clientX || (e.touches && e.touches[0].clientX)) - r.left) * sx;
             const y = ((e.clientY || (e.touches && e.touches[0].clientY)) - r.top) * sy;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 45, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 40, 0, Math.PI*2); ctx.fill();
         }
         cvs.addEventListener('mousemove', (e) => { if(e.buttons===1) handleScratch(e); });
         cvs.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); });
+        cvs.addEventListener('touchstart', (e) => { handleScratch(e); e.preventDefault(); });
     </script>
 </body>
 </html>
