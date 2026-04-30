@@ -4,49 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Wedding Day</title>
-    <!-- 選用支援度最穩定的思源宋體與手寫英文 -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --gold: #c5a368; 
+            --gold-light: rgba(197, 163, 104, 0.3);
             --cream-bg: #fdfaf5;
-            --overlay-grey: #bdc3c7;
+            --text-dark: #5d4037;
+            --white-glass: rgba(255, 255, 255, 0.7);
         }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; }
+        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; color: var(--text-dark); }
         
-        /* 提升整體流暢度的滑入特效 */
-        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        /* 提升流暢度：進場動畫 */
+        .fade-in-section { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
         .fade-in-section.visible { opacity: 1; transform: translateY(0); }
 
-        section { min-height: 80vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 40px 20px; }
+        section { min-height: 85vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 60px 20px; }
 
-        /* 第一部分：開門 */
-        #part1 { background: #2c1b18; min-height: 100vh; padding: 0; z-index: 10; }
-        .door { height: 50.5%; width: 100%; z-index: 20; position: absolute; left: 0; background: url('assets/wood-texture.jpg') center/cover; transition: transform 2.5s ease-in-out; }
-        .door-top { top: 0; border-bottom: 1px solid rgba(0,0,0,0.3); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; }
-        .door-bottom { bottom: 0; border-top: 1px solid rgba(0,0,0,0.3); display: flex; align-items: flex-start; justify-content: center; padding-top: 40px; }
+        /* 第一部分：開門 (加入視差潛力) */
+        #part1 { background: #2c1b18; min-height: 100vh; padding: 0; z-index: 10; overflow: hidden; }
+        .door { height: 50.5%; width: 100%; z-index: 20; position: absolute; left: 0; background: url('assets/wood-texture.jpg') center/cover; transition: transform 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95); }
+        .door-top { top: 0; border-bottom: 1px solid rgba(0,0,0,0.4); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5vh; }
+        .door-bottom { bottom: 0; border-top: 1px solid rgba(0,0,0,0.4); display: flex; align-items: flex-start; justify-content: center; padding-top: 5vh; }
         .opened .door-top { transform: translateY(-100%); }
         .opened .door-bottom { transform: translateY(100%); }
-        .door-label { color: #fff; letter-spacing: 8px; font-family: 'Dancing Script', cursive; font-size: 1.3rem; opacity: 0.8; }
+        .door-label { color: #fff; letter-spacing: 10px; font-family: 'Dancing Script', cursive; font-size: 1.4rem; opacity: 0.8; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 
-        /* 第二部分：刮刮樂質感提升 */
-        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background: #fff; border-radius: 4px; overflow: hidden; }
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; width: 100%; height: 100%; cursor: crosshair; }
+        #hero-img { position: absolute; width: 100%; height: 110%; top: -5%; background: url('assets/hero-photo.jpg') center/cover; opacity: 0; transition: opacity 3s ease, transform 10s linear; }
+        .opened #hero-img { opacity: 0.75; transform: scale(1.05); }
 
-        /* 第三部分：大理石卡片 */
+        /* 第二部分：刮刮樂 */
+        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background: #fff; border-radius: 8px; overflow: hidden; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
+        .timer-box { height: 20%; display: flex; justify-content: center; align-items: center; gap: 20px; background: #fff; border-top: 1px solid #f0f0f0; }
+        .timer-unit { text-align: center; font-size: 0.8rem; letter-spacing: 1px; }
+        .timer-unit span { font-weight: 700; font-size: 1.4rem; color: var(--gold); display: block; }
+
+        /* 第三部分：大理石卡片 (質感加強) */
         .invitation-frame { 
-            padding: 50px 30px; width: 100%; max-width: 420px; text-align: center;
+            padding: 60px 35px; width: 100%; max-width: 440px; text-align: center;
             background: url('assets/marble-card.jpg') center/cover; border: 1px solid var(--gold);
-            position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+            animation: float 6s ease-in-out infinite;
         }
-        .invitation-frame::after { content: ""; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid rgba(197, 163, 104, 0.3); pointer-events: none; }
-        .handwritten-title { font-weight: 700; font-size: 2.5rem; color: #5d4037; margin-bottom: 20px; letter-spacing: 2px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .invitation-frame::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--white-glass); z-index: 0; }
+        .invitation-content { position: relative; z-index: 1; }
+        .invitation-frame::after { content: ""; position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; border: 1px solid var(--gold-light); pointer-events: none; }
+        
+        .handwritten-title { font-weight: 700; font-size: 2.8rem; color: var(--text-dark); margin-bottom: 25px; letter-spacing: 4px; }
 
-        /* 第四部分：四格圖與影片 */
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 600px; margin-bottom: 30px; }
-        .photo-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
-        .video-container { width: 100%; max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        /* 第四部分：影音區 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.5s ease; }
+        .photo-grid img:hover { transform: scale(1.02); }
+        .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.15); border: 4px solid #fff; }
     </style>
 </head>
 <body>
@@ -58,21 +73,21 @@
             <div class="door door-top"><div class="door-label">The Wedding Day</div></div>
             <div class="door door-bottom"><div class="door-label">Save The Date</div></div>
         </div>
-        <div style="position: absolute; width: 100%; height: 100%; background: url('assets/hero-photo.jpg') center/cover; opacity: 0; transition: 3s;" id="hero-img"></div>
-        <div id="hero-text" style="position: absolute; z-index: 15; text-align: center; color: white; opacity: 0; transition: 2s 1s;">
-            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0;">Lin & Lee</h1>
-            <p style="letter-spacing: 5px;">2026 . 10 . 03</p>
+        <div id="hero-img"></div>
+        <div id="hero-text" style="position: absolute; z-index: 15; text-align: center; color: white; opacity: 0; transition: 2.5s 1.2s;">
+            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.8rem; margin: 0; text-shadow: 0 2px 15px rgba(0,0,0,0.3);">Lin & Lee</h1>
+            <p style="letter-spacing: 6px; font-weight: 300;">2026 . 10 . 03</p>
         </div>
     </section>
 
     <section id="part2" class="fade-in-section">
         <div id="scratch-container">
-            <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
-            <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
-                <div style="text-align:center;"><span id="days" style="font-weight:700; font-size:1.2rem;">00</span><br><small>DAYS</small></div>
-                <div style="text-align:center;"><span id="hours" style="font-weight:700; font-size:1.2rem;">00</span><br><small>HRS</small></div>
-                <div style="text-align:center;"><span id="mins" style="font-weight:700; font-size:1.2rem;">00</span><br><small>MINS</small></div>
-                <div style="text-align:center;"><span id="secs" style="font-weight:700; font-size:1.2rem;">00</span><br><small>SECS</small></div>
+            <img src="assets/main-image.jpg" style="width:100%; height:80%; object-fit:cover;">
+            <div class="timer-box">
+                <div class="timer-unit"><span id="days">00</span>DAYS</div>
+                <div class="timer-unit"><span id="hours">00</span>HRS</div>
+                <div class="timer-unit"><span id="mins">00</span>MINS</div>
+                <div class="timer-unit"><span id="secs">00</span>SECS</div>
             </div>
             <canvas id="scratch-canvas"></canvas>
         </div>
@@ -80,15 +95,17 @@
 
     <section id="part3" class="fade-in-section">
         <div class="invitation-frame">
-            <div class="handwritten-title">誠摯邀請</div>
-            <p style="font-size: 1.1rem;"><strong>林建安 & 李抒琪</strong></p>
-            <p style="line-height: 2.2; color: #444;">
-                在台東海邊遇見了你<br>
-                從此我們的世界有了旋律<br>
-                誠摯邀請您見證我們的幸福時刻<br><br>
-                <strong>2026 年 10 月 03 日</strong><br>
-                18:30 入席 | 八德彭園會館
-            </p>
+            <div class="invitation-content">
+                <div class="handwritten-title">誠摯邀請</div>
+                <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
+                <p style="line-height: 2.4; color: #444; margin-top: 20px;">
+                    在台東海邊遇見了你<br>
+                    從此我們的世界有了旋律<br>
+                    誠摯邀請您見證我們的幸福時刻<br><br>
+                    <span style="border-bottom: 1px solid var(--gold); padding-bottom: 5px;"><strong>2026 年 10 月 03 日</strong></span><br>
+                    18:30 入席 | 八德彭園會館
+                </p>
+            </div>
         </div>
     </section>
 
@@ -98,27 +115,27 @@
             <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
         </div>
         <div class="video-container">
-            <video controls width="100%" poster="assets/video-poster.jpg"><source src="assets/wedding-video.mp4" type="video/mp4"></video>
+            <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
+                <source src="assets/wedding-video.mp4" type="video/mp4">
+            </video>
         </div>
     </section>
 
     <script>
-        // 啟動體驗
         function startExperience(el) {
             el.parentElement.classList.add('opened');
-            document.getElementById('hero-img').style.opacity = "0.7";
             document.getElementById('hero-text').style.opacity = "1";
-            document.getElementById('bgm').play().catch(()=>{});
+            const bgm = document.getElementById('bgm');
+            bgm.volume = 0.5;
+            bgm.play().catch(()=>{ console.log("Audio play blocked by browser"); });
             setTimeout(() => { el.style.display = 'none'; }, 3000);
         }
 
-        // 滑動揭示特效
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
         document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
 
-        // 刮刮樂：質感塗層與亮點
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
@@ -127,44 +144,42 @@
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
             
-            // 基礎塗層：金屬質感漸層
             const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            grad.addColorStop(0, '#c0c0c0');
-            grad.addColorStop(0.5, '#e0e0e0');
-            grad.addColorStop(1, '#a9a9a9');
+            grad.addColorStop(0, '#d4d4d4');
+            grad.addColorStop(0.5, '#f5f5f5');
+            grad.addColorStop(1, '#bcbcbc');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 加入隨機亮點 (粒子感)
-            for(let i=0; i<150; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.5)' : 'rgba(197, 163, 104, 0.3)';
+            for(let i=0; i<200; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.6)' : 'rgba(197, 163, 104, 0.4)';
                 ctx.beginPath();
-                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1.5, 0, Math.PI*2);
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1.8, 0, Math.PI*2);
                 ctx.fill();
             }
 
             ctx.fillStyle = '#5d4037';
-            ctx.font = '700 20px "Noto Serif TC"';
+            ctx.font = '700 22px "Noto Serif TC"';
             ctx.textAlign = 'center';
-            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 7);
+            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 8);
         }
         window.addEventListener('load', initScratch);
+        window.addEventListener('resize', initScratch);
 
         function handleScratch(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(x, y, 35, 0, Math.PI * 2);
+            ctx.arc(x, y, 38, 0, Math.PI * 2);
             ctx.fill();
         }
         canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
 
-        // 倒數計時
         function updateTimer() {
-            const target = new Date('2026-10-03T12:00:00');
+            const target = new Date('2026-10-03T18:30:00'); // 更新為晚上入席時間
             const now = new Date();
             const diff = target - now;
             if (diff <= 0) return;
