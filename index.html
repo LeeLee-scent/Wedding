@@ -7,121 +7,179 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --burgundy: #800020; --cream: #fffcf9; }
-        body, html { margin: 0; padding: 0; background: var(--cream); font-family: 'Noto Serif TC', serif; scroll-behavior: smooth; }
+        body, html { margin: 0; padding: 0; background: var(--cream); font-family: 'Noto Serif TC', serif; scroll-behavior: smooth; overflow-x: hidden; }
         
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 
-        /* 第一部分：動態帷幕 */
+        /* --- 修改部分 1：開場樣式改為藝術淡入 --- */
         #part1 { background: #000; z-index: 10; }
-        .curtain-wrapper { position: absolute; width: 100%; height: 100%; display: flex; cursor: pointer; z-index: 20; }
-        .curtain { width: 50%; height: 100%; background: var(--burgundy); transition: transform 1.8s ease; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold); }
-        .curtain-text { color: var(--gold); font-size: 1.5rem; writing-mode: vertical-rl; letter-spacing: 5px; }
-        .opened .curtain-left { transform: translateX(-100%); }
-        .opened .curtain-right { transform: translateX(100%); }
+        .intro-overlay { 
+            position: absolute; width: 100%; height: 100%; 
+            background: rgba(128, 0, 32, 0.95); /* Burgundy background with slight transparency */
+            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1); /* Slower, elegant fade */
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; z-index: 20; 
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.7);
+        }
+        .intro-text-vertical { 
+            color: var(--gold); font-size: 1.8rem; writing-mode: vertical-rl; 
+            letter-spacing: 8px; margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(212,175,55,0.5);
+            transition: opacity 1s ease;
+        }
+        .intro-hint { color: rgba(212,175,55,0.7); font-size: 0.9rem; margin-top: 20px; letter-spacing: 2px;}
+
+        /* 開啟後的狀態 */
+        .opened .intro-overlay { opacity: 0; pointer-events: none; }
+        .opened .intro-text-vertical { opacity: 0; }
+
         .hero-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         .hero-text { position: absolute; color: white; text-align: center; z-index: 15; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
 
-        /* 第二部分：刮刮樂與倒數 */
-        #part2 { background: white; padding: 50px 0; }
-        #scratch-container { position: relative; width: 320px; height: 320px; border-radius: 50%; overflow: hidden; border: 4px solid var(--gold); margin: 20px 0; }
+        /* --- 修改部分 2：刮刮樂尺寸放大 --- */
+        #part2 { background: white; padding: 60px 0; }
+        #scratch-container { 
+            position: relative; 
+            width: 450px; height: 450px; /* 大幅增加尺寸 */
+            border-radius: 50%; overflow: hidden; 
+            border: 6px solid white; /* 更厚的白框提升質感 */
+            margin: 30px 0; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            /* 手機端自適應：確保不會超出螢幕 */
+            max-width: 90vw; max-height: 90vw;
+        }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; touch-action: none; }
-        .countdown-timer { display: flex; gap: 15px; margin-top: 20px; }
-        .timer-box { background: var(--burgundy); color: white; padding: 10px; border-radius: 8px; min-width: 60px; text-align: center; }
+        .reveal-content img { width: 100%; height: 100%; object-fit: cover; }
+
+        .countdown-timer { display: flex; gap: 15px; margin-top: 30px; }
+        .timer-box { background: var(--burgundy); color: white; padding: 12px; border-radius: 8px; min-width: 70px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         /* 第三部分：電子喜帖質感外框 */
         #part3 { background: var(--cream); padding: 40px; }
         .invitation-frame { border: 2px solid var(--gold); padding: 40px 20px; max-width: 500px; width: 90%; background: white; position: relative; box-shadow: 0 0 20px rgba(212,175,55,0.2); }
         .invitation-frame::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid var(--gold); pointer-events: none; }
 
-        /* 第四部分：輪播/影片 */
+        /* 第四部分：影片 */
         #part4 { background: #eee; }
-        .media-container { width: 90%; max-width: 800px; height: 450px; background: #000; display: flex; align-items: center; justify-content: center; }
+        .media-container { width: 90%; max-width: 800px; height: 450px; background: #000; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         video { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-    <!-- 第一部分 -->
     <section id="part1">
-        <div class="curtain-wrapper" onclick="this.parentElement.classList.add('opened'); document.getElementById('bgm').play();">
-            <div class="curtain curtain-left"><div class="curtain-text">摯愛的親友</div></div>
-            <div class="curtain curtain-right"><div class="curtain-text">誠摯邀請您</div></div>
+        <div class="intro-overlay" onclick="startExperience(this)">
+            <div class="intro-text-vertical">摯愛親友．誠摯邀請</div>
+            <div class="intro-hint">點擊開啟樂章</div>
         </div>
-        <img src="hero-photo.jpg" class="hero-bg" alt="Cover Photo">
+        <img src="assets/hero-photo.jpg" class="hero-bg" alt="Cover Photo">
         <div class="hero-text">
             <h1>We Are Getting Married</h1>
-            <p>向下捲動開啟樂章</p>
+            <p>向下捲動，親手刮開我們的回憶</p>
         </div>
     </section>
 
-    <!-- 第二部分 -->
     <section id="part2">
-        <h2>解鎖專屬驚喜</h2>
+        <h2 style="color: var(--burgundy);">解鎖專屬驚喜</h2>
         <div id="scratch-container">
-            <div class="reveal-content" style="width:100%; height:100%;"><img src="main-image.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
-            <canvas id="scratch-canvas" width="320" height="320"></canvas>
+            <div class="reveal-content" style="width:100%; height:100%;">
+                <img src="assets/main-image.jpg" alt="高畫質似顏繪">
+            </div>
+            <canvas id="scratch-canvas" width="450" height="450"></canvas>
         </div>
         <div class="countdown-timer" id="timer">
-            <div class="timer-box"><span id="days">00</span><br><small>Days</small></div>
-            <div class="timer-box"><span id="hours">00</span><br><small>Hrs</small></div>
-            <div class="timer-box"><span id="mins">00</span><br><small>Mins</small></div>
-            <div class="timer-box"><span id="secs">00</span><br><small>Secs</small></div>
+            <div class="timer-box"><span id="days" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>Days</small></div>
+            <div class="timer-box"><span id="hours" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>Hrs</small></div>
+            <div class="timer-box"><span id="mins" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>Mins</small></div>
+            <div class="timer-box"><span id="secs" style="font-size:1.5rem; font-weight:bold;">00</span><br><small>Secs</small></div>
         </div>
     </section>
 
-    <!-- 第三部分 -->
     <section id="part3">
         <div class="invitation-frame">
             <h2 style="color: var(--burgundy);">Invitation</h2>
-            <p>內容文字藝術與故事呈現 (待更新)</p>
-            <p>兩條線的交會，從台東開始...</p>
+            <p style="white-space: pre-line; line-height: 2;">
+                內容文字藝術與故事呈現 (待更新)
+                兩條線的交會，從台東開始...
+                在音符中相愛，在海浪中承諾。
+            </p>
         </div>
     </section>
 
-    <!-- 第四部分 -->
     <section id="part4">
         <h2>我們的回憶</h2>
         <div class="media-container">
-            <!-- 可替換為 video 標籤或輪播圖 -->
-            <video controls poster="video-cover.jpg">
-                <source src="wedding-video.mp4" type="video/mp4">
+            <video controls poster="assets/video-cover.jpg">
+                <source src="assets/wedding-video.mp4" type="video/mp4">
                 Your browser does not support video.
             </video>
         </div>
     </section>
 
     <script>
+        // 開場控制：播放音樂並淡出疊加層
+        function startExperience(overlayElement) {
+            overlayElement.parentElement.classList.add('opened');
+            const bgm = document.getElementById('bgm');
+            // 嘗試播放，捕捉可能因瀏覽器限制導致的失敗
+            bgm.play().catch(error => {
+                console.log("Audio autoplay was prevented. User interaction required.");
+            });
+        }
+
         // 倒數計時邏輯 (目標日期：2026/09/20)
         function updateTimer() {
-            const target = new Date('September 20, 2026 00:00:00').getTime();
+            const target = new Date('October 3, 2026 00:00:00').getTime();
             const now = new Date().getTime();
             const diff = target - now;
             
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            if (diff <= 0) {
+                document.getElementById('timer').innerText = "Just Married!";
+                return;
+            }
+
+            document.getElementById('days').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById('mins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById('secs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
         }
         setInterval(updateTimer, 1000);
+        updateTimer(); // 立即執行一次避免延遲
 
-        // 刮刮樂邏輯 (延續高畫質似顏繪)
+        // --- 刮刮樂邏輯：適配放大後的尺寸 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
+        const CONTAINER_SIZE = 450;
+        
+        // 初始覆蓋層
         ctx.fillStyle = '#d1d1d1';
-        ctx.fillRect(0, 0, 320, 320);
-        ctx.fillStyle = '#666'; ctx.textAlign = 'center'; ctx.fillText('親手刮開我們的回憶', 160, 160);
+        ctx.fillRect(0, 0, CONTAINER_SIZE, CONTAINER_SIZE);
+        ctx.fillStyle = '#888'; 
+        ctx.font = '20px "Noto Serif TC"';
+        ctx.textAlign = 'center'; 
+        ctx.fillText('親手刮開我們的回憶', CONTAINER_SIZE/2, CONTAINER_SIZE/2);
 
         function scratch(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+            // 處理行動端與桌面端的座標差異，並考慮到 CSS 縮放
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = ((e.clientX || (e.touches && e.touches[0].clientX)) - rect.left) * scaleX;
+            const y = ((e.clientY || (e.touches && e.touches[0].clientY)) - rect.top) * scaleY;
+            
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); 
+            ctx.arc(x, y, 40, 0, Math.PI * 2); // 稍微放大刮除半徑
+            ctx.fill();
         }
+
+        // 事件監聽 (適配滑鼠與觸控)
         canvas.addEventListener('mousemove', (e) => { if(e.buttons===1) scratch(e); });
         canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
+        canvas.addEventListener('mousedown', scratch);
+        canvas.addEventListener('touchstart', (e) => { scratch(e); e.preventDefault(); });
     </script>
 </body>
 </html>
