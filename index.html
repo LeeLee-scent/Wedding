@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>An & Chi Wedding</title>
+    <title>An & Chi Wedding Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a368; --cream-bg: #fdfaf5; }
+        :root { --gold: #c5a368; --cream-bg: #fdfaf5; --text-dark: #5d4037; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
+        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; }
 
+        /* --- 1. 信封開場層 --- */
         #envelope-wrapper {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100vh;
             z-index: 9999;
-            perspective: 3000px; /* 增加透視深度 */
-            background: #fff; 
-            transition: opacity 1.8s ease 3s, visibility 1.8s ease 3s; 
+            perspective: 3000px;
+            background: #fff;
+            transition: opacity 2s ease 3.5s, visibility 2s ease 3.5s;
         }
 
-        /* 1. 封底：作為基底層 */
         .envelope-back {
             position: absolute;
             width: 100%; height: 100%;
@@ -28,7 +28,6 @@
             z-index: 1;
         }
 
-        /* 2. 下半部三角形：強化邊緣立體陰影 */
         .envelope-bottom-flap {
             position: absolute;
             bottom: 0; width: 100%; height: 65%;
@@ -37,19 +36,16 @@
             clip-path: polygon(0 35%, 50% 0, 100% 35%, 100% 100%, 0 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding-top: 120px;
-            /* 多重陰影加強厚度感 */
-            filter: drop-shadow(0 -5px 10px rgba(0,0,0,0.15)) 
-                    drop-shadow(0 -15px 30px rgba(0,0,0,0.1));
-            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1) 1s;
+            filter: drop-shadow(0 -5px 10px rgba(0,0,0,0.15)) drop-shadow(0 -15px 30px rgba(0,0,0,0.1));
+            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1) 1s;
         }
 
-        /* 3. 上半部群組：翻轉動作主體 */
         .envelope-top-group {
             position: absolute;
             top: 0; width: 100%; height: 45%; 
             z-index: 25;
             transform-origin: top;
-            transition: transform 3.8s cubic-bezier(0.4, 0, 0.2, 1); /* 速度稍微放得更慢 */
+            transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .envelope-top-flap {
@@ -57,94 +53,184 @@
             width: 100%; height: 100%;
             background: #fff url('assets/envelope-top.png') center bottom/cover;
             clip-path: polygon(0 0, 100% 0, 50% 100%);
-            /* 針對上蓋尖端強化向下陰影，讓它「壓」在下半部上方 */
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)) 
-                    drop-shadow(0 25px 40px rgba(0,0,0,0.15)); 
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)) drop-shadow(0 25px 40px rgba(0,0,0,0.15));
         }
 
-        /* 4. 封蠟：極致放大與懸浮感 */
         .seal-btn {
             position: absolute;
-            bottom: -85px; /* 根據放大後的比例微調位置 */
-            left: 50%;
+            bottom: -85px; left: 50%;
             transform: translateX(-50%);
-            width: 170px; /* 再次放大封蠟尺寸 */
-            cursor: pointer;
+            width: 170px;
             z-index: 30;
-            /* 封蠟專屬的圓形重陰影，增加厚度感 */
             filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
-            transition: opacity 1.5s ease 2.2s, transform 0.5s ease;
-        }
-        
-        .seal-btn:active { transform: translateX(-50%) scale(0.95); }
-
-        /* --- 動態開啟效果 --- */
-        .opened .envelope-top-group { 
-            transform: rotateX(155deg); 
-        }
-        
-        .opened .seal-btn { 
-            opacity: 0; 
+            transition: opacity 1.5s ease 2.5s;
+            cursor: pointer;
         }
 
-        .opened .envelope-bottom-flap { 
-            transform: translateY(100%); 
-        }
+        /* 開啟動畫狀態 */
+        .opened .envelope-top-group { transform: rotateX(155deg); }
+        .opened .seal-btn { opacity: 0; pointer-events: none; }
+        .opened .envelope-bottom-flap { transform: translateY(100%); }
+        .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        .opened#envelope-wrapper { 
-            opacity: 0; 
-            visibility: hidden; 
-        }
-
-        /* 主內容樣式 */
-        #main-content { opacity: 0; transition: opacity 2.5s ease 2.5s; }
+        /* --- 2. 原始網頁內容設計 --- */
+        #main-content { opacity: 0; transition: opacity 2.5s ease 2s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
-        #hero-section { 
-            height: 100vh; width: 100%; 
-            background: url('assets/hero-photo.jpg') center/cover;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
+        .fade-in-section.active { opacity: 1; transform: translateY(0); }
+
+        section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
+
+        /* Hero 區塊 */
+        #hero-section { background: url('assets/hero-photo.jpg') center/cover; position: relative; color: white; text-align: center; }
+        #hero-section::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); }
+        .hero-inner { position: relative; z-index: 10; }
+
+        /* 刮刮樂與倒數 */
+        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); background: #fff; border-radius: 8px; overflow: hidden; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
+
+        /* 邀請函文字框 */
+        .invitation-frame { 
+            padding: 60px 35px; width: 100%; max-width: 450px; text-align: center;
+            background: #fff; border: 1px solid var(--gold); position: relative;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
         }
+
+        /* 照片牆 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-<div id="envelope-wrapper" onclick="startWedding()">
-    <div class="envelope-back"></div>
-    
-    <div class="envelope-top-group">
-        <div class="envelope-top-flap"></div>
-        <img src="assets/seal.png" class="seal-btn" alt="Seal">
+    <!-- 1. 信封層 -->
+    <div id="envelope-wrapper" onclick="startWedding()">
+        <div class="envelope-back"></div>
+        <div class="envelope-top-group">
+            <div class="envelope-top-flap"></div>
+            <img src="assets/seal.png" class="seal-btn" alt="Seal">
+        </div>
+        <div class="envelope-bottom-flap">
+            <h2 style="font-size: 1.6rem; color: #a89486; font-weight: 400; letter-spacing: 2px;">Wedding Invitation</h2>
+            <p style="font-size: 1.1rem; color: #a89486; margin-top: 10px;">2026.10.03</p>
+        </div>
     </div>
-    
-    <div class="envelope-bottom-flap">
-        <h2 style="font-size: 1.6rem; color: #a89486; font-weight: 400; letter-spacing: 2px; text-align: center;">Te invitamos a nuestro gran día</h2>
-        <p style="font-size: 1.1rem; color: #a89486; margin-top: 15px; letter-spacing: 3px;">2026.10.03</p>
-    </div>
-</div>
 
-<main id="main-content">
-    <section id="hero-section">
-        <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">An & Chi</h1>
-    </section>
-</main>
+    <!-- 2. 主要內容區 (原設計) -->
+    <main id="main-content">
+        <!-- Hero 區塊 -->
+        <section id="hero-section">
+            <div class="hero-inner">
+                <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
+                <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
+            </div>
+        </section>
 
-<script>
-    function startWedding() {
-        const wrapper = document.getElementById('envelope-wrapper');
-        const mainContent = document.getElementById('main-content');
-        
-        if (!wrapper.classList.contains('opened')) {
-            wrapper.classList.add('opened');
-            const bgm = document.getElementById('bgm');
-            bgm.play().catch(()=>{});
-            mainContent.classList.add('visible');
-            setTimeout(() => { wrapper.style.display = 'none'; }, 6500);
+        <!-- 刮刮樂倒數 -->
+        <section id="part2" class="fade-in-section">
+            <div id="scratch-container">
+                <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
+                <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px;">
+                    <div style="text-align:center;"><span id="days" style="font-weight:700; color:var(--gold);">00</span><br><small>DAYS</small></div>
+                    <div style="text-align:center;"><span id="hours" style="font-weight:700; color:var(--gold);">00</span><br><small>HRS</small></div>
+                    <div style="text-align:center;"><span id="mins" style="font-weight:700; color:var(--gold);">00</span><br><small>MINS</small></div>
+                    <div style="text-align:center;"><span id="secs" style="font-weight:700; color:var(--gold);">00</span><br><small>SECS</small></div>
+                </div>
+                <canvas id="scratch-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- 誠摯邀請文字 -->
+        <section id="part3" class="fade-in-section">
+            <div class="invitation-frame">
+                <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
+                <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
+                <p style="line-height: 2.4; color: #444; margin-top: 20px;">
+                    在台東海邊遇見了你<br>
+                    從此我們的世界有了旋律<br>
+                    誠摯邀請您見證我們的幸福時刻<br><br>
+                    <strong>2026 年 10 月 03 日</strong><br>
+                    18:30 入席 | 八德彭園會館
+                </p>
+            </div>
+        </section>
+
+        <!-- 照片牆與影片 -->
+        <section id="part4" class="fade-in-section">
+            <div class="photo-grid">
+                <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
+                <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
+            </div>
+            <div style="width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2);">
+                <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
+                    <source src="assets/wedding-video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function startWedding() {
+            const wrapper = document.getElementById('envelope-wrapper');
+            const mainContent = document.getElementById('main-content');
+            
+            if (!wrapper.classList.contains('opened')) {
+                wrapper.classList.add('opened');
+                document.getElementById('bgm').play().catch(()=>{});
+                mainContent.classList.add('visible');
+
+                // 重要：動畫結束後將 wrapper 徹底移除並恢復捲動
+                setTimeout(() => {
+                    wrapper.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 6500); 
+            }
         }
-    }
-</script>
 
+        // 滑動揭示
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-section').forEach(s => observer.observe(s));
+
+        // 刮刮樂畫布
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('scratch-container');
+
+        window.onload = () => {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            ctx.fillStyle = '#d4d4d4';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#5d4037'; ctx.font = '700 20px "Noto Serif TC"'; ctx.textAlign = 'center';
+            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2);
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        };
+
+        function handleScratch(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
+        }
+        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
+        canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
+
+        function updateTimer() {
+            const diff = new Date('2026-10-03T18:30:00') - new Date();
+            if (diff <= 0) return;
+            document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+            document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+            document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
+        }
+    </script>
 </body>
 </html>
