@@ -9,107 +9,156 @@
         :root { 
             --gold: #c5a368; 
             --cream-bg: #fdfaf5;
+            --text-dark: #5d4037;
         }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; }
+        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; color: var(--text-dark); }
         
-        /* 原始進場特效 */
-        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        /* 原始進場動畫 */
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
         .fade-in-section.visible { opacity: 1; transform: translateY(0); }
 
-        section { min-height: 80vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 40px 20px; }
+        section { min-height: 85vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 60px 20px; }
 
-        /* --- 第一部分：圖片式信封開屏 --- */
-        #part1 { background: #2c1b18; min-height: 100vh; padding: 0; z-index: 10; overflow: hidden; }
-        
-        .envelope-door { 
-            height: 50.5%; width: 100%; z-index: 20; position: absolute; left: 0; 
-            transition: transform 2.5s ease-in-out; 
-        }
-        /* 上蓋：使用您的圖片 */
-        .door-top { 
-            top: 0; 
-            background: url('assets/envelope-top.png') center bottom/cover; 
-            display: flex; align-items: flex-end; justify-content: center;
-        }
-        /* 下半部：使用您的圖片 */
-        .door-bottom { 
-            bottom: 0; 
-            background: url('assets/envelope-bottom.png') center top/cover; 
-            display: flex; align-items: flex-start; justify-content: center;
+        /* --- 第一部分：高級信封開場 --- */
+        #part1 { 
+            background: #dcd3cb; 
+            min-height: 100vh; 
+            padding: 0; 
+            z-index: 100; 
+            perspective: 2000px; 
         }
 
-        /* 封蠟圖片 A&C */
+        .envelope-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* 三角形上蓋 - 使用 CSS 切割 */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 60%; 
+            background: url('assets/envelope-top.png') center bottom/cover;
+            z-index: 25;
+            clip-path: polygon(0 0, 100% 0, 50% 100%); 
+            transform-origin: top;
+            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 封底 */
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            background: url('assets/envelope-bottom.png') center top/cover;
+            z-index: 20;
+            transition: transform 1.5s ease-in 0.8s;
+        }
+
+        /* 放大版封蠟 (A&C) */
         .seal-btn {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90px; /* 依圖片比例調整 */
+            width: 130px; 
             z-index: 30;
-            cursor: pointer;
-            transition: 0.5s;
+            transition: all 0.8s cubic-bezier(0.5, 0, 0.5, 1);
+            filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3));
         }
 
-        .opened .door-top { transform: translateY(-100%); }
-        .opened .door-bottom { transform: translateY(100%); }
-        .opened .seal-btn { opacity: 0; transform: translate(-50%, -50%) scale(1.2); pointer-events: none; }
+        /* 開啟後的動畫狀態 */
+        .opened .envelope-flap { transform: rotateX(160deg); }
+        .opened .seal-btn { opacity: 0; transform: translate(-50%, -150%) scale(1.2); pointer-events: none; }
+        .opened .envelope-bottom { transform: translateY(100%); }
 
-        /* 原始內頁設計 */
-        #hero-img { position: absolute; width: 100%; height: 100%; background: url('assets/hero-photo.jpg') center/cover; opacity: 0; transition: 3s; }
-        #hero-text { position: absolute; z-index: 15; text-align: center; color: white; opacity: 0; transition: 2s 1s; }
+        /* 銜接原始設計：Hero 區域 */
+        #hero-img { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            background: url('assets/hero-photo.jpg') center/cover; 
+            opacity: 0; 
+            transition: opacity 2.5s ease 1.2s; 
+            z-index: 5;
+        }
+        .opened #hero-img { opacity: 0.8; }
+
+        #hero-text { 
+            position: absolute; 
+            z-index: 15; 
+            text-align: center; 
+            color: white; 
+            width: 100%;
+            top: 45%;
+            opacity: 0; 
+            transition: 2s 2s; 
+        }
 
         /* --- 原始其餘區塊樣式 --- */
-        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background: #fff; border-radius: 4px; overflow: hidden; }
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; width: 100%; height: 100%; cursor: crosshair; }
+        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background: #fff; border-radius: 8px; overflow: hidden; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
+        
         .invitation-frame { 
-            padding: 50px 30px; width: 100%; max-width: 420px; text-align: center;
+            padding: 60px 35px; width: 100%; max-width: 440px; text-align: center;
             background: url('assets/marble-card.jpg') center/cover; border: 1px solid var(--gold);
-            position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+            animation: float 6s ease-in-out infinite;
         }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 600px; margin-bottom: 30px; }
-        .photo-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 6px; }
     </style>
 </head>
 <body>
 
+    <!-- 背景音樂 -->
     <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
+    <!-- 第一部分：信封開場 -->
     <section id="part1">
-        <div class="door-overlay" onclick="startExperience(this)" style="position: absolute; width: 100%; height: 100%; z-index: 30;">
-            <!-- 封蠟圖片 -->
+        <div class="envelope-container" onclick="openWedding(this)">
             <img src="assets/seal.png" class="seal-btn" alt="A&C Seal">
-            <!-- 圖片信封蓋 -->
-            <div class="envelope-door door-top"></div>
-            <div class="envelope-door door-bottom"></div>
-        </div>
-        <div id="hero-img"></div>
-        <div id="hero-text">
-            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin: 0;">Lin & Lee</h1>
-            <p style="letter-spacing: 5px;">2026 . 10 . 03</p>
+            <div class="envelope-flap"></div>
+            <div class="envelope-bottom"></div>
+            
+            <!-- 開啟後露出的原設計內容 -->
+            <div id="hero-img"></div>
+            <div id="hero-text">
+                <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.8rem; margin: 0; text-shadow: 0 2px 15px rgba(0,0,0,0.3);">An & Chi</h1>
+                <p style="letter-spacing: 5px; font-weight: 300;">2026 . 10 . 03</p>
+            </div>
         </div>
     </section>
 
-    <!-- 恢復原始第二部分 -->
+    <!-- 第二部分：刮刮樂與倒數 -->
     <section id="part2" class="fade-in-section">
         <div id="scratch-container">
             <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
             <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
-                <div style="text-align:center;"><span id="days" style="font-weight:700; font-size:1.2rem;">00</span><br><small>DAYS</small></div>
-                <div style="text-align:center;"><span id="hours" style="font-weight:700; font-size:1.2rem;">00</span><br><small>HRS</small></div>
-                <div style="text-align:center;"><span id="mins" style="font-weight:700; font-size:1.2rem;">00</span><br><small>MINS</small></div>
-                <div style="text-align:center;"><span id="secs" style="font-weight:700; font-size:1.2rem;">00</span><br><small>SECS</small></div>
+                <div style="text-align:center;"><span id="days" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>DAYS</div>
+                <div style="text-align:center;"><span id="hours" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>HRS</div>
+                <div style="text-align:center;"><span id="mins" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>MINS</div>
+                <div style="text-align:center;"><span id="secs" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>SECS</div>
             </div>
             <canvas id="scratch-canvas"></canvas>
         </div>
     </section>
 
-    <!-- 恢復原始第三部分 (文字已更新) -->
+    <!-- 第三部分：誠摯邀請 (資訊更新) -->
     <section id="part3" class="fade-in-section">
         <div class="invitation-frame">
-            <div class="handwritten-title" style="font-weight: 700; font-size: 2.5rem; color: #5d4037; margin-bottom: 20px;">誠摯邀請</div>
-            <p style="font-size: 1.1rem;"><strong>林建安 & 李抒琪</strong></p>
-            <p style="line-height: 2.2; color: #444;">
+            <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
+            <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
+            <p style="line-height: 2.4; color: #444; margin-top: 20px;">
                 在台東海邊遇見了你<br>
                 從此我們的世界有了旋律<br>
                 誠摯邀請您見證我們的幸福時刻<br><br>
@@ -119,31 +168,48 @@
         </div>
     </section>
 
+    <!-- 第四部分：照片牆與影片 -->
     <section id="part4" class="fade-in-section">
         <div class="photo-grid">
             <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
             <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
         </div>
-        <div style="width: 100%; max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
-            <video controls width="100%" poster="assets/video-poster.jpg"><source src="assets/wedding-video.mp4" type="video/mp4"></video>
+        <div style="width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.15);">
+            <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
+                <source src="assets/wedding-video.mp4" type="video/mp4">
+            </video>
         </div>
     </section>
 
     <script>
-        function startExperience(el) {
-            el.parentElement.classList.add('opened');
-            document.getElementById('hero-img').style.opacity = "0.7";
-            document.getElementById('hero-text').style.opacity = "1";
-            document.getElementById('bgm').play().catch(()=>{});
-            setTimeout(() => { el.style.display = 'none'; }, 3000);
+        // 信封開啟邏輯
+        function openWedding(el) {
+            if (!el.classList.contains('opened')) {
+                el.classList.add('opened');
+                
+                // 播放背景音樂
+                const bgm = document.getElementById('bgm');
+                bgm.play().catch(()=>{ console.log("Audio play blocked"); });
+
+                // 文字浮現
+                setTimeout(() => {
+                    document.getElementById('hero-text').style.opacity = "1";
+                }, 1200);
+
+                // 防止開啟後擋住下方內容點擊
+                setTimeout(() => {
+                    el.style.pointerEvents = "none";
+                }, 3500);
+            }
         }
 
+        // 滑動揭示
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
         document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
 
-        // 原始刮刮樂邏輯
+        // 刮刮樂邏輯
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
@@ -152,27 +218,29 @@
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
             const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            grad.addColorStop(0, '#c0c0c0'); grad.addColorStop(0.5, '#e0e0e0'); grad.addColorStop(1, '#a9a9a9');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#d4d4d4'); grad.addColorStop(0.5, '#f5f5f5'); grad.addColorStop(1, '#bcbcbc');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             for(let i=0; i<150; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.5)' : 'rgba(197, 163, 104, 0.3)';
-                ctx.beginPath(); ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1.5, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.4)' : 'rgba(197, 163, 104, 0.2)';
+                ctx.beginPath(); ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1.2, 0, Math.PI*2); ctx.fill();
             }
-            ctx.fillStyle = '#5d4037'; ctx.font = '700 20px "Noto Serif TC"'; ctx.textAlign = 'center';
-            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 7);
+            ctx.fillStyle = '#5d4037'; ctx.font = '700 22px "Noto Serif TC"'; ctx.textAlign = 'center';
+            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 8);
         }
         window.addEventListener('load', initScratch);
 
         function handleScratch(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 38, 0, Math.PI * 2); ctx.fill();
         }
         canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
 
+        // 倒數計時
         function updateTimer() {
             const target = new Date('2026-10-03T18:30:00');
             const now = new Date();
