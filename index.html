@@ -3,253 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Wedding Day</title>
+    <title>An & Chi Wedding</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --gold: #c5a368; 
-            --cream-bg: #fdfaf5;
-            --text-dark: #5d4037;
-        }
-
+        :root { --gold: #c5a368; --cream-bg: #fdfaf5; --text-dark: #5d4037; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; scroll-behavior: smooth; color: var(--text-dark); }
-        
-        /* 原始進場動畫 */
-        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-        .fade-in-section.visible { opacity: 1; transform: translateY(0); }
+        body, html { margin: 0; padding: 0; background: var(--cream-bg); font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        section { min-height: 85vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 60px 20px; }
-
-        /* --- 第一部分：三層結構信封設計 --- */
-        #part1 { 
-            background: #e5ddd5; 
-            min-height: 100vh; 
-            padding: 0; 
-            z-index: 100; 
-            perspective: 2500px; /* 增加透視深度 */
+        /* --- 高級信封開場結構 --- */
+        #envelope-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: 9999;
+            perspective: 2000px;
+            background: #fff; /* 初始背景色 */
+            transition: opacity 1.2s ease 2s, visibility 1.2s ease 2s;
         }
 
-        .envelope-container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            cursor: pointer;
-            overflow: hidden;
-            transition: opacity 1.5s ease 2s; /* 最後漸漸淡化消失 */
-        }
-
-        /* 1. 最底部封底圖片 */
         .envelope-back {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('assets/envelope-back.jpg') center/cover;
-            z-index: 10;
+            width: 100%; height: 100%;
+            background: url('assets/envelope-back.png') center/cover;
+            z-index: 1;
         }
 
-        /* 2. 下半部三角形 (固定，帶陰影) */
+        /* 下半部三角形：顯示文字內容 */
         .envelope-bottom-flap {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60%;
+            bottom: 0; width: 100%; height: 55%;
             background: url('assets/envelope-bottom.png') center top/cover;
-            z-index: 20;
-            clip-path: polygon(0 40%, 50% 0, 100% 40%, 100% 100%, 0 100%);
-            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.2)); /* 向上方的陰影感 */
+            z-index: 10;
+            clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 100%, 0 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding-top: 80px;
+            transition: transform 1.5s ease-in 1.2s;
         }
 
-        /* 3. 上半部三角形 (會翻開，帶陰影) */
+        /* 上半部三角形：帶有浮雕花紋 */
         .envelope-top-flap {
             position: absolute;
-            top: 0;
-            width: 100%;
-            height: 60%;
+            top: 0; width: 100%; height: 50%;
             background: url('assets/envelope-top.png') center bottom/cover;
-            z-index: 25;
-            clip-path: polygon(0 0, 100% 0, 50% 100%); 
+            z-index: 20;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
             transform-origin: top;
-            transition: transform 2.2s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.25)); /* 向下方的陰影感 */
+            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
         }
 
-        /* 4. 中間封蠟 (A&C) */
+        /* 放大版封蠟 */
         .seal-btn {
             position: absolute;
-            top: 55%; /* 配合三角形交疊位置 */
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 130px; 
+            width: 140px; /* 根據參考圖放大 */
             z-index: 30;
-            transition: all 1.2s cubic-bezier(0.5, 0, 0.5, 1);
-            filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3));
+            cursor: pointer;
+            transition: all 0.8s ease;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
         }
 
-        /* --- 開啟後的動畫 --- */
-        .opened .envelope-top-flap { 
-            transform: rotateX(170deg); /* 緩慢翻開 */
-        }
+        /* 點擊啟動動畫 */
+        .opened .envelope-top-flap { transform: rotateX(150deg); }
+        .opened .seal-btn { opacity: 0; transform: translate(-50%, -150%) scale(1.1); pointer-events: none; }
+        .opened .envelope-bottom-flap { transform: translateY(100%); }
+        .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        .opened .seal-btn { 
-            opacity: 0; 
-            transform: translate(-50%, -180%) scale(1.1); /* 隨翻蓋向上漂移消失 */
-            pointer-events: none; 
+        /* --- 原有設計內容 --- */
+        main { position: relative; z-index: 5; }
+        #hero-section { 
+            height: 100vh; width: 100%; 
+            background: url('assets/hero-photo.jpg') center/cover;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; text-align: center;
         }
-
-        .opened .envelope-container {
-            opacity: 0; /* 動畫跑完漸漸淡化 */
-            pointer-events: none;
-        }
-
-        /* 銜接原設計：Hero 照片 */
-        #hero-img { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            background: url('assets/hero-photo.jpg') center/cover; 
-            z-index: 5;
-        }
-
-        #hero-text { 
-            position: absolute; 
-            z-index: 15; 
-            text-align: center; 
-            color: white; 
-            width: 100%;
-            top: 45%;
-        }
-
-        /* --- 原設計其餘樣式 --- */
-        #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background: #fff; border-radius: 8px; overflow: hidden; }
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 440px; text-align: center; background: #fff; border: 1px solid var(--gold); position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.08); }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
-        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 6px; }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: 1.5s ease; }
+        .visible .fade-in { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
+<audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-    <!-- 第一部分：三層信封 -->
-    <section id="part1">
-        <!-- 這是最後會顯露的底層設計 -->
-        <div id="hero-img"></div>
-        <div id="hero-text">
-            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.8rem; margin: 0; text-shadow: 0 2px 15px rgba(0,0,0,0.3);">An & Chi</h1>
-            <p style="letter-spacing: 5px; font-weight: 300;">2026 . 10 . 03</p>
-        </div>
+<!-- 信封層 -->
+<div id="envelope-wrapper" onclick="startWedding()">
+    <div class="envelope-back"></div>
+    
+    <div class="envelope-top-flap"></div>
+    
+    <div class="envelope-bottom-flap">
+        <h2 style="font-size: 1.8rem; margin: 0; color: #8d7b6d; font-weight: 400; letter-spacing: 2px;">Te invitamos a</h2>
+        <p style="font-size: 1rem; color: #8d7b6d; margin-top: 10px;">10.03.2026</p>
+    </div>
 
-        <!-- 這是會消失的信封覆蓋層 -->
-        <div class="envelope-container" onclick="openWedding(this)">
-            <div class="envelope-back"></div> <!-- 底層封底圖片 -->
-            <img src="assets/seal.png" class="seal-btn" alt="A&C Seal">
-            <div class="envelope-top-flap"></div> <!-- 上半部三角形圖片 -->
-            <div class="envelope-bottom-flap"></div> <!-- 下半部三角形圖片 -->
-        </div>
+    <img src="assets/seal.png" class="seal-btn" alt="Seal">
+</div>
+
+<!-- 婚禮主要內容 -->
+<main id="main-content">
+    <section id="hero-section">
+        <h1 class="fade-in" style="font-family: 'Dancing Script', cursive; font-size: 4rem; margin: 0;">An & Chi</h1>
+        <p class="fade-in" style="letter-spacing: 6px; margin-top: 15px;">2026 . 10 . 03</p>
     </section>
 
-    <!-- 第二部分：刮刮樂 -->
-    <section id="part2" class="fade-in-section">
-        <div id="scratch-container">
-            <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
-            <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
-                <div style="text-align:center;"><span id="days" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>DAYS</div>
-                <div style="text-align:center;"><span id="hours" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>HRS</div>
-                <div style="text-align:center;"><span id="mins" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>MINS</div>
-                <div style="text-align:center;"><span id="secs" style="font-weight:700; font-size:1.4rem; color:var(--gold); display:block;">00</span>SECS</div>
-            </div>
-            <canvas id="scratch-canvas"></canvas>
-        </div>
-    </section>
+    <!-- 這裡接您後續的刮刮樂、誠摯邀請、照片牆等代碼 -->
+</main>
 
-    <!-- 第三部分：誠摯邀請 -->
-    <section id="part3" class="fade-in-section">
-        <div class="invitation-frame">
-            <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
-            <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
-            <p style="line-height: 2.4; color: #444; margin-top: 20px;">
-                在台東海邊遇見了你<br>
-                從此我們的世界有了旋律<br>
-                誠摯邀請您見證我們的幸福時刻<br><br>
-                <strong>2026 年 10 月 03 日</strong><br>
-                18:30 入席 | 八德彭園會館
-            </p>
-        </div>
-    </section>
+<script>
+    function startWedding() {
+        const wrapper = document.getElementById('envelope-wrapper');
+        const mainContent = document.getElementById('main-content');
+        
+        if (!wrapper.classList.contains('opened')) {
+            wrapper.classList.add('opened');
+            
+            // 播放音樂
+            const bgm = document.getElementById('bgm');
+            bgm.play().catch(()=>{});
 
-    <!-- 第四部分：照片牆 -->
-    <section id="part4" class="fade-in-section">
-        <div class="photo-grid">
-            <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
-            <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
-        </div>
-        <div style="width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.15);">
-            <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
-                <source src="assets/wedding-video.mp4" type="video/mp4">
-            </video>
-        </div>
-    </section>
-
-    <script>
-        function openWedding(el) {
-            if (!el.classList.contains('opened')) {
-                el.classList.add('opened');
-                
-                const bgm = document.getElementById('bgm');
-                bgm.play().catch(()=>{});
-
-                // 3秒後完全移除信封結構，避免影響後續操作
-                setTimeout(() => {
-                    el.style.display = 'none';
-                }, 4000);
-            }
+            // 觸發內容顯示動畫
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 2500);
         }
+    }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+    // 當頁面載入完成後檢查是否需要初始化
+    window.onload = () => {
+        // 確保初始狀態
+        window.scrollTo(0, 0);
+    };
+</script>
 
-        // 刮刮樂邏輯
-        const canvas = document.getElementById('scratch-canvas');
-        const ctx = canvas.getContext('2d');
-        const container = document.getElementById('scratch-container');
-
-        function initScratch() {
-            canvas.width = container.offsetWidth;
-            canvas.height = container.offsetHeight;
-            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            grad.addColorStop(0, '#d4d4d4'); grad.addColorStop(0.5, '#f5f5f5'); grad.addColorStop(1, '#bcbcbc');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#5d4037'; ctx.font = '700 22px "Noto Serif TC"'; ctx.textAlign = 'center';
-            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 8);
-        }
-        window.addEventListener('load', initScratch);
-
-        function handleScratch(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 38, 0, Math.PI * 2); ctx.fill();
-        }
-        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
-        canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
-
-        function updateTimer() {
-            const target = new Date('2026-10-03T18:30:00');
-            const now = new Date();
-            const diff = target - now;
-            if (diff <= 0) return;
-            document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
-            document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
-            document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
-            document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-    </script>
 </body>
 </html>
