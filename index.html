@@ -21,13 +21,13 @@
 
         section { min-height: 85vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 60px 20px; }
 
-        /* --- 第一部分：高級信封開場 --- */
+        /* --- 第一部分：三層結構信封設計 --- */
         #part1 { 
-            background: #dcd3cb; 
+            background: #e5ddd5; 
             min-height: 100vh; 
             padding: 0; 
             z-index: 100; 
-            perspective: 2000px; 
+            perspective: 2500px; /* 增加透視深度 */
         }
 
         .envelope-container {
@@ -36,60 +36,80 @@
             height: 100vh;
             cursor: pointer;
             overflow: hidden;
+            transition: opacity 1.5s ease 2s; /* 最後漸漸淡化消失 */
         }
 
-        /* 三角形上蓋 - 使用 CSS 切割 */
-        .envelope-flap {
+        /* 1. 最底部封底圖片 */
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('assets/envelope-back.jpg') center/cover;
+            z-index: 10;
+        }
+
+        /* 2. 下半部三角形 (固定，帶陰影) */
+        .envelope-bottom-flap {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: url('assets/envelope-bottom.png') center top/cover;
+            z-index: 20;
+            clip-path: polygon(0 40%, 50% 0, 100% 40%, 100% 100%, 0 100%);
+            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.2)); /* 向上方的陰影感 */
+        }
+
+        /* 3. 上半部三角形 (會翻開，帶陰影) */
+        .envelope-top-flap {
             position: absolute;
             top: 0;
             width: 100%;
-            height: 60%; 
+            height: 60%;
             background: url('assets/envelope-top.png') center bottom/cover;
             z-index: 25;
             clip-path: polygon(0 0, 100% 0, 50% 100%); 
             transform-origin: top;
-            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 2.2s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.25)); /* 向下方的陰影感 */
         }
 
-        /* 封底 */
-        .envelope-bottom {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50%;
-            background: url('assets/envelope-bottom.png') center top/cover;
-            z-index: 20;
-            transition: transform 1.5s ease-in 0.8s;
-        }
-
-        /* 放大版封蠟 (A&C) */
+        /* 4. 中間封蠟 (A&C) */
         .seal-btn {
             position: absolute;
-            top: 50%;
+            top: 55%; /* 配合三角形交疊位置 */
             left: 50%;
             transform: translate(-50%, -50%);
             width: 130px; 
             z-index: 30;
-            transition: all 0.8s cubic-bezier(0.5, 0, 0.5, 1);
+            transition: all 1.2s cubic-bezier(0.5, 0, 0.5, 1);
             filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3));
         }
 
-        /* 開啟後的動畫狀態 */
-        .opened .envelope-flap { transform: rotateX(160deg); }
-        .opened .seal-btn { opacity: 0; transform: translate(-50%, -150%) scale(1.2); pointer-events: none; }
-        .opened .envelope-bottom { transform: translateY(100%); }
+        /* --- 開啟後的動畫 --- */
+        .opened .envelope-top-flap { 
+            transform: rotateX(170deg); /* 緩慢翻開 */
+        }
 
-        /* 銜接原始設計：Hero 區域 */
+        .opened .seal-btn { 
+            opacity: 0; 
+            transform: translate(-50%, -180%) scale(1.1); /* 隨翻蓋向上漂移消失 */
+            pointer-events: none; 
+        }
+
+        .opened .envelope-container {
+            opacity: 0; /* 動畫跑完漸漸淡化 */
+            pointer-events: none;
+        }
+
+        /* 銜接原設計：Hero 照片 */
         #hero-img { 
             position: absolute; 
             width: 100%; 
             height: 100%; 
             background: url('assets/hero-photo.jpg') center/cover; 
-            opacity: 0; 
-            transition: opacity 2.5s ease 1.2s; 
             z-index: 5;
         }
-        .opened #hero-img { opacity: 0.8; }
 
         #hero-text { 
             position: absolute; 
@@ -98,48 +118,39 @@
             color: white; 
             width: 100%;
             top: 45%;
-            opacity: 0; 
-            transition: 2s 2s; 
         }
 
-        /* --- 原始其餘區塊樣式 --- */
+        /* --- 原設計其餘樣式 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background: #fff; border-radius: 8px; overflow: hidden; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-        
-        .invitation-frame { 
-            padding: 60px 35px; width: 100%; max-width: 440px; text-align: center;
-            background: url('assets/marble-card.jpg') center/cover; border: 1px solid var(--gold);
-            position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.08);
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
+        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 440px; text-align: center; background: #fff; border: 1px solid var(--gold); position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.08); }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 6px; }
     </style>
 </head>
 <body>
 
-    <!-- 背景音樂 -->
     <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-    <!-- 第一部分：信封開場 -->
+    <!-- 第一部分：三層信封 -->
     <section id="part1">
+        <!-- 這是最後會顯露的底層設計 -->
+        <div id="hero-img"></div>
+        <div id="hero-text">
+            <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.8rem; margin: 0; text-shadow: 0 2px 15px rgba(0,0,0,0.3);">An & Chi</h1>
+            <p style="letter-spacing: 5px; font-weight: 300;">2026 . 10 . 03</p>
+        </div>
+
+        <!-- 這是會消失的信封覆蓋層 -->
         <div class="envelope-container" onclick="openWedding(this)">
+            <div class="envelope-back"></div> <!-- 底層封底圖片 -->
             <img src="assets/seal.png" class="seal-btn" alt="A&C Seal">
-            <div class="envelope-flap"></div>
-            <div class="envelope-bottom"></div>
-            
-            <!-- 開啟後露出的原設計內容 -->
-            <div id="hero-img"></div>
-            <div id="hero-text">
-                <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.8rem; margin: 0; text-shadow: 0 2px 15px rgba(0,0,0,0.3);">An & Chi</h1>
-                <p style="letter-spacing: 5px; font-weight: 300;">2026 . 10 . 03</p>
-            </div>
+            <div class="envelope-top-flap"></div> <!-- 上半部三角形圖片 -->
+            <div class="envelope-bottom-flap"></div> <!-- 下半部三角形圖片 -->
         </div>
     </section>
 
-    <!-- 第二部分：刮刮樂與倒數 -->
+    <!-- 第二部分：刮刮樂 -->
     <section id="part2" class="fade-in-section">
         <div id="scratch-container">
             <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -153,7 +164,7 @@
         </div>
     </section>
 
-    <!-- 第三部分：誠摯邀請 (資訊更新) -->
+    <!-- 第三部分：誠摯邀請 -->
     <section id="part3" class="fade-in-section">
         <div class="invitation-frame">
             <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
@@ -168,7 +179,7 @@
         </div>
     </section>
 
-    <!-- 第四部分：照片牆與影片 -->
+    <!-- 第四部分：照片牆 -->
     <section id="part4" class="fade-in-section">
         <div class="photo-grid">
             <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
@@ -182,28 +193,20 @@
     </section>
 
     <script>
-        // 信封開啟邏輯
         function openWedding(el) {
             if (!el.classList.contains('opened')) {
                 el.classList.add('opened');
                 
-                // 播放背景音樂
                 const bgm = document.getElementById('bgm');
-                bgm.play().catch(()=>{ console.log("Audio play blocked"); });
+                bgm.play().catch(()=>{});
 
-                // 文字浮現
+                // 3秒後完全移除信封結構，避免影響後續操作
                 setTimeout(() => {
-                    document.getElementById('hero-text').style.opacity = "1";
-                }, 1200);
-
-                // 防止開啟後擋住下方內容點擊
-                setTimeout(() => {
-                    el.style.pointerEvents = "none";
-                }, 3500);
+                    el.style.display = 'none';
+                }, 4000);
             }
         }
 
-        // 滑動揭示
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.15 });
@@ -221,10 +224,6 @@
             grad.addColorStop(0, '#d4d4d4'); grad.addColorStop(0.5, '#f5f5f5'); grad.addColorStop(1, '#bcbcbc');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for(let i=0; i<150; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.4)' : 'rgba(197, 163, 104, 0.2)';
-                ctx.beginPath(); ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1.2, 0, Math.PI*2); ctx.fill();
-            }
             ctx.fillStyle = '#5d4037'; ctx.font = '700 22px "Noto Serif TC"'; ctx.textAlign = 'center';
             ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2 + 8);
         }
@@ -240,7 +239,6 @@
         canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
 
-        // 倒數計時
         function updateTimer() {
             const target = new Date('2026-10-03T18:30:00');
             const now = new Date();
