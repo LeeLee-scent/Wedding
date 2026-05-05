@@ -6,11 +6,11 @@
     <title>An & Chi Wedding Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a368; --cream-bg: #fdfaf5; }
+        :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封質感強化 (對應示意圖梯形結構) --- */
+        /* --- 1. 信封結構修正 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 3000px; background: #fff;
@@ -23,19 +23,19 @@
             z-index: 1;
         }
 
-        /* 下半部梯形 */
+        /* 下半部：高度稍微增加到 55% 確保重疊 */
         .envelope-bottom-flap {
-            position: absolute; bottom: 0; width: 100%; height: 50%;
-            background: #fff url('assets/envelope-bottom.png') center top/cover;
+            position: absolute; bottom: 0; width: 100%; height: 55%;
+            background: #fff url('assets/envelope-bottom.png') center top/cover no-repeat;
             z-index: 10;
-            clip-path: polygon(0 100%, 100% 100%, 100% 45%, 50% 15%, 0 45%);
-            filter: drop-shadow(0 -1px 1px rgba(255,255,255,0.8)) 
-                    drop-shadow(0 -15px 30px rgba(0,0,0,0.3));
+            /* 修正多邊形頂點位置，讓它與上蓋銜接 */
+            clip-path: polygon(0 100%, 100% 100%, 100% 35%, 50% 0%, 0 35%);
+            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 5vh;
+            padding-bottom: 8vh;
         }
 
-        /* 上半部梯形群組 */
+        /* 上半部群組：高度設為 50%，與下半部產生重疊區間 */
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
@@ -44,25 +44,25 @@
 
         .envelope-top-flap {
             position: absolute; width: 100%; height: 100%;
-            background: #fff url('assets/envelope-top.png') center bottom/cover;
-            clip-path: polygon(0 0, 100% 0, 100% 55%, 50% 85%, 0 55%);
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)) 
-                    drop-shadow(0 25px 45px rgba(0,0,0,0.4)); 
+            background: #fff url('assets/envelope-top.png') center bottom/cover no-repeat;
+            /* 修正多邊形底部的尖角位置 */
+            clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); 
         }
 
-        /* 250px 巨型封蠟 */
+        /* 封蠟位置微調，使其壓在尖角最底端 */
         .seal-btn {
-            position: absolute; bottom: -55px; left: 50%; transform: translateX(-50%);
+            position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
-            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
             cursor: pointer; transition: opacity 2s ease 2.5s;
         }
 
-        .opened .envelope-top-group { transform: rotateX(150deg); }
-        .opened .seal-btn { opacity: 0; }
+        .opened .envelope-top-group { transform: rotateX(155deg); }
+        .opened .seal-btn { opacity: 0; pointer-events: none; }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. Hero 電影感縮放 --- */
+        /* --- 2. 內容與動畫 (維持原本設定) --- */
         #main-content { opacity: 0; transition: opacity 2.5s ease 3.5s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
@@ -70,34 +70,24 @@
             0% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-
         #hero-section { 
             height: 100vh; width: 100%; background: url('assets/hero-photo.jpg') center/cover; 
             position: relative; color: white; text-align: center; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
-        
         #hero-section::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: inherit; z-index: 1;
             animation: heroScale 10s ease-out forwards;
         }
-        
-        #hero-section::after { 
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.25); z-index: 2; 
-        }
-
+        #hero-section::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); z-index: 2; }
         .hero-inner { position: relative; z-index: 10; }
 
-        /* --- 3. 內容區塊樣式 --- */
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
-
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-
         .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
@@ -107,32 +97,30 @@
 
     <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
 
-    <!-- 信封層 -->
     <div id="envelope-wrapper" onclick="startWedding()">
         <div class="envelope-back"></div>
+        
+        <!-- 上蓋群組 -->
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
             <img src="assets/seal.png" class="seal-btn" alt="Seal">
         </div>
+        
+        <!-- 下半部底座 -->
         <div class="envelope-bottom-flap">
-            <!-- 內容可修改：信封外部文字 -->
             <h2 style="font-size: 1.6rem; color: #8d7b6d; font-weight: 400; letter-spacing: 4px; margin: 0;">An & Chi</h2>
             <p style="font-size: 1.1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">2026.10.03</p>
         </div>
     </div>
 
-    <!-- 主內容區 -->
     <main id="main-content">
-        <!-- Hero 區塊 -->
         <section id="hero-section">
             <div class="hero-inner">
-                <!-- 內容可修改：主標題 -->
                 <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
                 <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
             </div>
         </section>
 
-        <!-- 刮刮樂倒數區 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -146,10 +134,8 @@
             </div>
         </section>
 
-        <!-- 誠摯邀請區 -->
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
-                <!-- 內容可修改：邀請函正文 -->
                 <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
                 <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
                 <p style="line-height: 2.4; color: #444; margin-top: 20px;">
@@ -162,7 +148,6 @@
             </div>
         </section>
 
-        <!-- 照片牆與影片區 -->
         <section id="part4" class="fade-in-section">
             <div class="photo-grid">
                 <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
@@ -177,7 +162,6 @@
     </main>
 
     <script>
-        // --- 核心邏輯 ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
@@ -192,7 +176,6 @@
             }
         }
 
-        // --- 刮刮樂漸層與粒子 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
@@ -224,9 +207,8 @@
         canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
 
-        // --- 倒數計時器 ---
         function updateTimer() {
-            const targetDate = new Date('2026-10-03T18:30:00'); // 可修改目標日期
+            const targetDate = new Date('2026-10-03T18:30:00');
             const diff = targetDate - new Date();
             if (diff <= 0) return;
             document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
@@ -235,7 +217,6 @@
             document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
 
-        // --- 滾動觸發動畫 ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
