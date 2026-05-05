@@ -10,11 +10,12 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封結構修正 --- */
+        /* --- 1. 信封結構優化 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 3000px; background: #fff;
-            transition: opacity 1.5s ease-in-out 4s, visibility 1.5s ease-in-out 4s;
+            /* 縮短消失動畫，提升流暢感 */
+            transition: opacity 1s ease-in-out 1.2s, visibility 1s ease-in-out 1.2s;
         }
 
         .envelope-back {
@@ -23,67 +24,64 @@
             z-index: 1;
         }
 
-        /* 下半部：高度稍微增加到 55% 確保重疊 */
         .envelope-bottom-flap {
             position: absolute; bottom: 0; width: 100%; height: 55%;
             background: #fff url('assets/envelope-bottom.png') center top/cover no-repeat;
             z-index: 10;
-            /* 修正多邊形頂點位置，讓它與上蓋銜接 */
             clip-path: polygon(0 100%, 100% 100%, 100% 35%, 50% 0%, 0 35%);
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 8vh;
         }
 
-        /* 上半部群組：高度設為 50%，與下半部產生重疊區間 */
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
-            transition: transform 5.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1); /* 加快翻轉速度 */
         }
 
         .envelope-top-flap {
             position: absolute; width: 100%; height: 100%;
             background: #fff url('assets/envelope-top.png') center bottom/cover no-repeat;
-            /* 修正多邊形底部的尖角位置 */
             clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); 
         }
 
-        /* 封蠟位置微調，使其壓在尖角最底端 */
+        /* 封蠟位置下移，精準壓在尖點 */
         .seal-btn {
-            position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%);
+            position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
-            cursor: pointer; transition: opacity 2s ease 2.5s;
+            cursor: pointer; transition: opacity 0.5s ease;
         }
 
         .opened .envelope-top-group { transform: rotateX(155deg); }
         .opened .seal-btn { opacity: 0; pointer-events: none; }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 內容與動畫 (維持原本設定) --- */
-        #main-content { opacity: 0; transition: opacity 2.5s ease 3.5s; position: relative; z-index: 5; }
+        /* --- 2. 後方設計 (移除動畫，改為靜態) --- */
+        #main-content { 
+            opacity: 0; 
+            transition: opacity 1.2s ease 0.8s; /* 大幅減少等待時間 */
+            position: relative; z-index: 5; 
+        }
         .visible#main-content { opacity: 1; }
 
-        @keyframes heroScale {
-            0% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
         #hero-section { 
-            height: 100vh; width: 100%; background: url('assets/hero-photo.jpg') center/cover; 
+            height: 100vh; width: 100%; 
+            background: url('assets/hero-photo.jpg') center/cover; 
             position: relative; color: white; text-align: center; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
-        #hero-section::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: inherit; z-index: 1;
-            animation: heroScale 10s ease-out forwards;
+        /* 移除 ::before 的縮放動畫，保持靜止 */
+        #hero-section::after { 
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.25); z-index: 2; 
         }
-        #hero-section::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); z-index: 2; }
         .hero-inner { position: relative; z-index: 10; }
 
-        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
+        /* 內容區塊 */
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
@@ -99,14 +97,10 @@
 
     <div id="envelope-wrapper" onclick="startWedding()">
         <div class="envelope-back"></div>
-        
-        <!-- 上蓋群組 -->
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
             <img src="assets/seal.png" class="seal-btn" alt="Seal">
         </div>
-        
-        <!-- 下半部底座 -->
         <div class="envelope-bottom-flap">
             <h2 style="font-size: 1.6rem; color: #8d7b6d; font-weight: 400; letter-spacing: 4px; margin: 0;">An & Chi</h2>
             <p style="font-size: 1.1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">2026.10.03</p>
@@ -169,10 +163,11 @@
                 wrapper.classList.add('opened');
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
+                // 縮短最後完全移除 DOM 的時間
                 setTimeout(() => {
                     wrapper.style.display = 'none';
                     document.body.style.overflow = 'auto';
-                }, 6000); 
+                }, 2500); 
             }
         }
 
@@ -185,16 +180,10 @@
             canvas.height = container.offsetHeight;
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             gradient.addColorStop(0, '#c0c0c0'); gradient.addColorStop(0.5, '#d4af37'); gradient.addColorStop(1, '#a9a9a9');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < 600; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.4)' : 'rgba(212,175,55,0.3)';
-                ctx.beginPath(); ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.5, 0, Math.PI * 2); ctx.fill();
-            }
+            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#444'; ctx.font = '700 18px "Noto Serif TC"'; ctx.textAlign = 'center';
             ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2);
-            updateTimer();
-            setInterval(updateTimer, 1000);
+            updateTimer(); setInterval(updateTimer, 1000);
         };
 
         function handleScratch(e) {
