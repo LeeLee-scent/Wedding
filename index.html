@@ -10,19 +10,20 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封結構與淡出動畫 --- */
+        /* --- 1. 信封結構與強化淡出 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 3000px; background: #fff;
-            /* 控制整個層組的消失：在翻轉與淡出完成後移除 */
-            transition: opacity 2s ease-in-out 1.5s, visibility 2s ease-in-out 1.5s;
+            /* 縮短層級消失的延遲，讓後方網頁更快被「解鎖」 */
+            transition: opacity 2s ease-in-out 1s, visibility 2s ease-in-out 1s;
         }
 
         .envelope-back {
             position: absolute; width: 100%; height: 100vh;
             background: url('assets/envelope-back.jpg') center/cover no-repeat;
             z-index: 1;
-            transition: opacity 2s ease-in-out 0.5s; /* 點擊後 0.5秒開始淡出 */
+            /* 強化淡出感：使用特定的貝茲曲線 */
+            transition: opacity 2.5s cubic-bezier(0.7, 0, 0.3, 1) 0.5s;
         }
 
         .envelope-bottom-flap {
@@ -33,13 +34,14 @@
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 8vh;
-            transition: opacity 2s ease-in-out 0.5s; /* 同步淡出 */
+            transition: opacity 2.5s cubic-bezier(0.7, 0, 0.3, 1) 0.5s;
         }
 
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
-            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1); /* 翻轉速度設定為 2秒 */
+            /* 翻轉速度調慢，增加優雅感 */
+            transition: transform 3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
 
         .envelope-top-flap {
@@ -53,19 +55,19 @@
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
-            cursor: pointer; transition: opacity 0.4s ease;
+            cursor: pointer; transition: opacity 0.6s ease;
         }
 
-        /* 開啟狀態下的行為 */
+        /* 開啟狀態 */
         .opened .envelope-top-group { transform: rotateX(155deg); }
         .opened .seal-btn { opacity: 0; pointer-events: none; }
         .opened .envelope-back, .opened .envelope-bottom-flap { opacity: 0; }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 後方主內容：即時浮現 --- */
+        /* --- 2. 後方內容：加速顯現 --- */
         #main-content { 
             opacity: 0; 
-            transition: opacity 1.5s ease 0.5s; /* 縮短等待，讓內容隨信封開啟浮現 */
+            transition: opacity 2s ease 0.8s; 
             position: relative; z-index: 5; 
         }
         .visible#main-content { opacity: 1; }
@@ -118,7 +120,7 @@
             </div>
         </section>
 
-        <!-- 倒數計時與邀請內容 (Li & Lin 婚禮細節已保留) -->
+        <!-- 刮刮樂部分 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -168,12 +170,12 @@
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
                 
-                // 3.5秒後徹底移除信封層，讓網頁可操作
-                // (2秒翻轉 + 1.5秒緩衝)
+                /* --- 核心修改：大幅縮短解鎖時間 --- */
+                // 當淡出動畫進行到一半時就移除阻擋層，讓操作無縫銜接
                 setTimeout(() => {
                     wrapper.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }, 3500); 
+                    document.body.style.overflow = 'auto'; // 恢復滾動功能
+                }, 2000); 
             }
         }
 
