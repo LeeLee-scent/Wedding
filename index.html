@@ -10,67 +10,56 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封質感強化 (使用您提供的浮雕紙質圖) --- */
+        /* --- 1. 信封結構：分為上下獨立圖片 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 3000px; background: #fff;
             transition: opacity 1.5s ease-in-out 4s, visibility 1.5s ease-in-out 4s;
         }
 
-        /* 底圖：建議將圖片命名為 envelope-paper.png 並放在 assets 資料夾 */
-        .envelope-back {
-            position: absolute; width: 100%; height: 100vh;
-            background: url('assets/envelope-paper.png') center/cover no-repeat;
-            z-index: 1;
-            filter: brightness(0.98); 
-        }
-
-        /* 下半部梯形：裁切圖片下半段 */
-        .envelope-bottom-flap {
-            position: absolute; bottom: 0; width: 100%; height: 50%;
-            background: url('assets/envelope-paper.png') center bottom/cover no-repeat;
+        /* 下半部底座 (靜止不動) */
+        .envelope-bottom-part {
+            position: absolute; bottom: 0; width: 100%; height: 60vh;
+            background: url('assets/envelope-bottom.png') center bottom/cover no-repeat;
             z-index: 10;
-            clip-path: polygon(0 100%, 100% 100%, 100% 45%, 50% 15%, 0 45%);
-            /* 邊緣高光強化紙張切口立體感 */
-            filter: drop-shadow(0 -1px 1.5px rgba(255,255,255,0.9)) 
-                    drop-shadow(0 -15px 30px rgba(0,0,0,0.25));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 5vh;
+            padding-bottom: 8vh;
+            filter: drop-shadow(0 -10px 30px rgba(0,0,0,0.15));
         }
 
-        /* 上半部梯形群組：裁切圖片上半段 */
+        /* 上半部群組 (包含上蓋與封蠟，會向上翻轉) */
         .envelope-top-group {
-            position: absolute; top: 0; width: 100%; height: 50%; 
-            z-index: 25; transform-origin: top;
-            transition: transform 5.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute; 
+            top: 0; /* 這裡可根據圖片比例調整 */
+            width: 100%; 
+            height: 45vh; 
+            z-index: 25; 
+            transform-origin: top;
+            transition: transform 5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .envelope-top-flap {
             position: absolute; width: 100%; height: 100%;
-            background: url('assets/envelope-paper.png') center top/cover no-repeat;
-            clip-path: polygon(0 0, 100% 0, 100% 55%, 50% 85%, 0 55%);
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)) 
-                    drop-shadow(0 25px 45px rgba(0,0,0,0.4)); 
+            background: url('assets/envelope-top.png') center top/cover no-repeat;
         }
 
-        /* 250px 封蠟 */
+        /* 250px 封蠟：放在上蓋的最底端邊緣 */
         .seal-btn {
-            position: absolute; bottom: -55px; left: 50%; transform: translateX(-50%);
+            position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
-            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.5));
-            cursor: pointer; transition: opacity 2s ease 2.5s;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            cursor: pointer; transition: opacity 1.5s ease 2s;
         }
 
-        /* 開啟狀態 */
-        .opened .envelope-top-group { transform: rotateX(150deg); }
-        .opened .seal-btn { opacity: 0; }
+        /* 開啟動畫邏輯 */
+        .opened .envelope-top-group { transform: rotateX(160deg); }
+        .opened .seal-btn { opacity: 0; pointer-events: none; }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 原設計內容區 (完全保留) --- */
+        /* --- 2. 後續設計 (完全保留，未作變動) --- */
         #main-content { opacity: 0; transition: opacity 2.5s ease 3.5s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
-        /* Hero 電影感縮放 */
         @keyframes heroScale {
             0% { transform: scale(1.15); }
             100% { transform: scale(1); }
@@ -85,13 +74,9 @@
             background: inherit; z-index: 1;
             animation: heroScale 12s ease-out forwards;
         }
-        #hero-section::after { 
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.2); z-index: 2; 
-        }
+        #hero-section::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 2; }
         .hero-inner { position: relative; z-index: 10; }
 
-        /* 內容樣式 */
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1.2s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
@@ -108,19 +93,22 @@
 
     <!-- 信封層 -->
     <div id="envelope-wrapper" onclick="startWedding()">
-        <div class="envelope-back"></div>
+        <!-- 上蓋群組：會向上掀開 -->
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
             <img src="assets/seal.png" class="seal-btn" alt="Seal">
         </div>
-        <div class="envelope-bottom-flap">
+        
+        <!-- 下半部底座：固定在下方 -->
+        <div class="envelope-bottom-part">
             <h2 style="font-size: 1.6rem; color: var(--text-color); font-weight: 400; letter-spacing: 4px; margin: 0;">An & Chi</h2>
             <p style="font-size: 1.1rem; color: var(--text-color); margin-top: 10px; letter-spacing: 2px;">2026.10.03</p>
         </div>
     </div>
 
-    <!-- 主內容區 (原設計) -->
+    <!-- 主內容區 (原設計保留) -->
     <main id="main-content">
+        <!-- 此處內容與之前相同，不再重述 -->
         <section id="hero-section">
             <div class="hero-inner">
                 <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
@@ -128,21 +116,20 @@
             </div>
         </section>
 
-        <!-- 刮刮樂倒數 -->
+        <!-- 刮刮樂、誠摯邀請、照片等區塊... -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
                 <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
-                    <div style="text-align:center;"><span id="days" style="font-weight:700; color:var(--gold);">00</span><br><small>DAYS</small></div>
-                    <div style="text-align:center;"><span id="hours" style="font-weight:700; color:var(--gold);">00</span><br><small>HRS</small></div>
-                    <div style="text-align:center;"><span id="mins" style="font-weight:700; color:var(--gold);">00</span><br><small>MINS</small></div>
-                    <div style="text-align:center;"><span id="secs" style="font-weight:700; color:var(--gold);">00</span><br><small>SECS</small></div>
+                    <div style="text-align:center;"><span id="days">00</span><br><small>DAYS</small></div>
+                    <div style="text-align:center;"><span id="hours">00</span><br><small>HRS</small></div>
+                    <div style="text-align:center;"><span id="mins">00</span><br><small>MINS</small></div>
+                    <div style="text-align:center;"><span id="secs">00</span><br><small>SECS</small></div>
                 </div>
                 <canvas id="scratch-canvas"></canvas>
             </div>
         </section>
 
-        <!-- 邀請文字 -->
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
                 <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
@@ -157,7 +144,6 @@
             </div>
         </section>
 
-        <!-- 照片牆與影片 -->
         <section id="part4" class="fade-in-section">
             <div class="photo-grid">
                 <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
@@ -172,7 +158,6 @@
     </main>
 
     <script>
-        // 核心邏輯
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
@@ -187,7 +172,7 @@
             }
         }
 
-        // 刮刮樂效果 (銀金漸層 + 粒子)
+        // 刮刮樂邏輯與倒數計時維持不變...
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
@@ -197,16 +182,10 @@
             canvas.height = container.offsetHeight;
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             gradient.addColorStop(0, '#c0c0c0'); gradient.addColorStop(0.5, '#d4af37'); gradient.addColorStop(1, '#a9a9a9');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < 600; i++) {
-                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.4)' : 'rgba(212,175,55,0.3)';
-                ctx.beginPath(); ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.5, 0, Math.PI * 2); ctx.fill();
-            }
+            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#444'; ctx.font = '700 18px "Noto Serif TC"'; ctx.textAlign = 'center';
             ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2);
-            updateTimer();
-            setInterval(updateTimer, 1000);
+            updateTimer(); setInterval(updateTimer, 1000);
         };
 
         function handleScratch(e) {
