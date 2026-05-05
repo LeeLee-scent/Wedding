@@ -10,20 +10,18 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封結構與新型消散特效 --- */
+        /* --- 1. 3D 信封與光影昇華特效 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; background: #fff;
-            transition: opacity 2s ease 3s, visibility 2s ease 3s;
+            transition: opacity 2s ease 3.5s, visibility 2s ease 3.5s;
         }
 
-        /* 恢復原設計：背景與底座 */
         .envelope-back {
             position: absolute; width: 100%; height: 100vh;
             background: url('assets/envelope-back.jpg') center/cover no-repeat;
             z-index: 1;
-            /* 新特效：向上位移 + 亮度提升 */
-            transition: opacity 3s ease-in-out 0.5s, transform 3s ease-in-out 0.5s, filter 3s ease-in-out 0.5s;
+            transition: opacity 3.5s ease-in-out 0.5s, transform 3.5s ease-in-out 0.5s, filter 3.5s ease-in-out 0.5s;
         }
 
         .envelope-bottom-flap {
@@ -34,15 +32,14 @@
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 8vh;
-            transition: opacity 3s ease-in-out 0.5s, transform 3s ease-in-out 0.5s;
+            transition: opacity 3.5s ease-in-out 0.5s, transform 3.5s ease-in-out 0.5s;
         }
 
-        /* 3D 翻蓋群組：極緩慢翻轉 */
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
             transform-style: preserve-3d;
-            transition: transform 5s cubic-bezier(0.45, 0.05, 0.55, 0.95); /* 延長至 5 秒 */
+            transition: transform 5.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .envelope-top-flap {
@@ -53,45 +50,27 @@
             backface-visibility: hidden;
         }
 
-        /* 封蠟：恢復 A&C 樣式與 3D 連動 */
         .seal-btn {
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
             cursor: pointer;
-            transition: opacity 1.5s ease 2.5s; /* 翻轉中段開始消失 */
+            transition: opacity 2s ease 3s; 
         }
 
-        /* 開啟狀態 */
+        /* 昇華特效啟動 */
         .opened .envelope-top-group { transform: rotateX(160deg); }
         .opened .seal-btn { opacity: 0; }
-        
-        /* 新特效：向上昇華消散 (Lift & Dissolve) */
-        .opened .envelope-back { 
-            opacity: 0; 
-            transform: translateY(-50px); 
-            filter: brightness(1.5) blur(5px); 
-        }
-        .opened .envelope-bottom-flap { 
-            opacity: 0; 
-            transform: translateY(-30px); 
-        }
+        .opened .envelope-back { opacity: 0; transform: translateY(-60px); filter: brightness(1.6) blur(4px); }
+        .opened .envelope-bottom-flap { opacity: 0; transform: translateY(-40px); }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 恢復原始主內容設計 --- */
-        #main-content { 
-            opacity: 0; 
-            transition: opacity 2s ease 1s; 
-            position: relative; z-index: 5; 
-        }
+        /* --- 2. 內容區域 (恢復照片牆設計) --- */
+        #main-content { opacity: 0; transition: opacity 2s ease 1s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
-        #hero-section { 
-            height: 100vh; width: 100%; 
-            background: url('assets/hero-photo.jpg') center/cover; 
-            display: flex; align-items: center; justify-content: center;
-        }
-
+        #hero-section { height: 100vh; width: 100%; background: url('assets/hero-photo.jpg') center/cover; display: flex; align-items: center; justify-content: center; }
+        
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
@@ -99,11 +78,12 @@
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
-        .invitation-frame { 
-            padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; 
-            background: #fff; border: 1px solid var(--gold); 
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1); 
-        }
+        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); }
+        
+        /* 恢復第四部分照片與影片設計 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
+        .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -114,7 +94,6 @@
         <div class="envelope-back"></div>
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
-            <!-- 恢復封蠟圖片 -->
             <img src="assets/seal.png" class="seal-btn" alt="A&C Seal">
         </div>
         <div class="envelope-bottom-flap">
@@ -131,7 +110,7 @@
             </div>
         </section>
 
-        <!-- 恢復刮刮樂與計時器 -->
+        <!-- 第二部分：刮刮樂 (恢復銀粉設計) -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -145,6 +124,7 @@
             </div>
         </section>
 
+        <!-- 第三部分：邀請正文 -->
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
                 <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
@@ -158,6 +138,19 @@
                 </p>
             </div>
         </section>
+
+        <!-- 第四部分：恢復照片牆與影片 -->
+        <section id="part4" class="fade-in-section">
+            <div class="photo-grid">
+                <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
+                <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
+            </div>
+            <div class="video-container">
+                <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
+                    <source src="assets/wedding-video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -168,35 +161,47 @@
                 wrapper.classList.add('opened');
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
-                
-                // 恢復解鎖邏輯：動畫中段即解鎖，確保操作流暢
+                // 延長解鎖時間以配合 5.5 秒的極慢動畫
                 setTimeout(() => {
                     wrapper.style.display = 'none';
                     document.body.style.overflow = 'auto';
-                }, 4000); 
+                }, 5000); 
             }
         }
 
-        // 恢復刮刮樂與計時器邏輯
+        // 恢復刮刮樂銀粉設計
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
         window.onload = () => {
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
+            
+            // 銀粉筆觸效果
             const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
-            grad.addColorStop(0, '#c0c0c0'); grad.addColorStop(1, '#a9a9a9');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#d1d1d1'); grad.addColorStop(0.3, '#ffffff');
+            grad.addColorStop(0.5, '#e0e0e0'); grad.addColorStop(1, '#c0c0c0');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 繪製銀粉粒子
+            for(let i=0; i<1500; i++){
+                ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.4})`;
+                ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 1.5, 1.5);
+            }
+            
             updateTimer(); setInterval(updateTimer, 1000);
         };
+
         function handleScratch(e) {
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
             const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
         }
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
+
         function updateTimer() {
             const targetDate = new Date('2026-10-03T18:30:00');
             const diff = targetDate - new Date();
@@ -206,6 +211,7 @@
             document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
             document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
