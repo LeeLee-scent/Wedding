@@ -10,24 +10,22 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 3D 信封結構與複合淡出特效 --- */
+        /* --- 1. 信封結構與新型消散特效 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            z-index: 9999; perspective: 2000px; background: #fff;
-            transition: opacity 1.5s ease 1.5s, visibility 1.5s ease 1.5s;
+            z-index: 9999; perspective: 2500px; background: #fff;
+            transition: opacity 2s ease 3s, visibility 2s ease 3s;
         }
 
-        /* 背面背景：加入縮放與模糊淡出 */
+        /* 恢復原設計：背景與底座 */
         .envelope-back {
             position: absolute; width: 100%; height: 100vh;
             background: url('assets/envelope-back.jpg') center/cover no-repeat;
             z-index: 1;
-            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s, 
-                        transform 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s,
-                        filter 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+            /* 新特效：向上位移 + 亮度提升 */
+            transition: opacity 3s ease-in-out 0.5s, transform 3s ease-in-out 0.5s, filter 3s ease-in-out 0.5s;
         }
 
-        /* 前方底座：同步縮放淡出 */
         .envelope-bottom-flap {
             position: absolute; bottom: 0; width: 100%; height: 55%;
             background: #fff url('assets/envelope-bottom.png') center top/cover no-repeat;
@@ -36,16 +34,15 @@
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 8vh;
-            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s, 
-                        transform 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+            transition: opacity 3s ease-in-out 0.5s, transform 3s ease-in-out 0.5s;
         }
 
-        /* 3D 翻蓋群組 */
+        /* 3D 翻蓋群組：極緩慢翻轉 */
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
-            transform-style: preserve-3d; /* 開啟 3D 子元素連動 */
-            transition: transform 3.5s cubic-bezier(0.4, 0, 0.2, 1); /* 慢速優雅翻開 */
+            transform-style: preserve-3d;
+            transition: transform 5s cubic-bezier(0.45, 0.05, 0.55, 0.95); /* 延長至 5 秒 */
         }
 
         .envelope-top-flap {
@@ -56,32 +53,32 @@
             backface-visibility: hidden;
         }
 
-        /* 封蠟：與翻蓋連在一起，並維持 3D 位置 */
+        /* 封蠟：恢復 A&C 樣式與 3D 連動 */
         .seal-btn {
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
             cursor: pointer;
-            transition: opacity 1s ease 2s; /* 翻轉到一半時慢慢消失 */
+            transition: opacity 1.5s ease 2.5s; /* 翻轉中段開始消失 */
         }
 
-        /* 開啟狀態特效 */
+        /* 開啟狀態 */
         .opened .envelope-top-group { transform: rotateX(160deg); }
         .opened .seal-btn { opacity: 0; }
         
-        /* 強化淡出特效：透明度 0 + 縮放 1.1倍 + 模糊效果 */
+        /* 新特效：向上昇華消散 (Lift & Dissolve) */
         .opened .envelope-back { 
             opacity: 0; 
-            transform: scale(1.1); 
-            filter: blur(10px); 
+            transform: translateY(-50px); 
+            filter: brightness(1.5) blur(5px); 
         }
         .opened .envelope-bottom-flap { 
             opacity: 0; 
-            transform: scale(1.1); 
+            transform: translateY(-30px); 
         }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 後方內容 --- */
+        /* --- 2. 恢復原始主內容設計 --- */
         #main-content { 
             opacity: 0; 
             transition: opacity 2s ease 1s; 
@@ -101,7 +98,12 @@
         
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
+        
+        .invitation-frame { 
+            padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; 
+            background: #fff; border: 1px solid var(--gold); 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1); 
+        }
     </style>
 </head>
 <body>
@@ -110,10 +112,10 @@
 
     <div id="envelope-wrapper" onclick="startWedding()">
         <div class="envelope-back"></div>
-        <!-- 封蠟已移入此群組，與翻蓋同步翻轉 -->
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
-            <img src="assets/seal.png" class="seal-btn" alt="Seal">
+            <!-- 恢復封蠟圖片 -->
+            <img src="assets/seal.png" class="seal-btn" alt="A&C Seal">
         </div>
         <div class="envelope-bottom-flap">
             <h2 style="font-size: 1.6rem; color: #8d7b6d; font-weight: 400; letter-spacing: 4px; margin: 0;">An & Chi</h2>
@@ -129,6 +131,7 @@
             </div>
         </section>
 
+        <!-- 恢復刮刮樂與計時器 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -166,22 +169,24 @@
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
                 
-                // 2秒後移除阻擋層，使用者可直接操作
+                // 恢復解鎖邏輯：動畫中段即解鎖，確保操作流暢
                 setTimeout(() => {
                     wrapper.style.display = 'none';
                     document.body.style.overflow = 'auto';
-                }, 2500); 
+                }, 4000); 
             }
         }
 
-        // 刮刮樂邏輯保留...
+        // 恢復刮刮樂與計時器邏輯
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
         window.onload = () => {
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
-            ctx.fillStyle = '#c0c0c0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+            grad.addColorStop(0, '#c0c0c0'); grad.addColorStop(1, '#a9a9a9');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
             updateTimer(); setInterval(updateTimer, 1000);
         };
         function handleScratch(e) {
