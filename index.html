@@ -10,22 +10,24 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 信封結構與強化淡出 --- */
+        /* --- 1. 3D 信封結構與複合淡出特效 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            z-index: 9999; perspective: 3000px; background: #fff;
-            /* 縮短層級消失的延遲，讓後方網頁更快被「解鎖」 */
-            transition: opacity 2s ease-in-out 1s, visibility 2s ease-in-out 1s;
+            z-index: 9999; perspective: 2000px; background: #fff;
+            transition: opacity 1.5s ease 1.5s, visibility 1.5s ease 1.5s;
         }
 
+        /* 背面背景：加入縮放與模糊淡出 */
         .envelope-back {
             position: absolute; width: 100%; height: 100vh;
             background: url('assets/envelope-back.jpg') center/cover no-repeat;
             z-index: 1;
-            /* 強化淡出感：使用特定的貝茲曲線 */
-            transition: opacity 2.5s cubic-bezier(0.7, 0, 0.3, 1) 0.5s;
+            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s, 
+                        transform 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s,
+                        filter 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
         }
 
+        /* 前方底座：同步縮放淡出 */
         .envelope-bottom-flap {
             position: absolute; bottom: 0; width: 100%; height: 55%;
             background: #fff url('assets/envelope-bottom.png') center top/cover no-repeat;
@@ -34,14 +36,16 @@
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 8vh;
-            transition: opacity 2.5s cubic-bezier(0.7, 0, 0.3, 1) 0.5s;
+            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s, 
+                        transform 2.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
         }
 
+        /* 3D 翻蓋群組 */
         .envelope-top-group {
             position: absolute; top: 0; width: 100%; height: 50%; 
             z-index: 25; transform-origin: top;
-            /* 翻轉速度調慢，增加優雅感 */
-            transition: transform 3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transform-style: preserve-3d; /* 開啟 3D 子元素連動 */
+            transition: transform 3.5s cubic-bezier(0.4, 0, 0.2, 1); /* 慢速優雅翻開 */
         }
 
         .envelope-top-flap {
@@ -49,25 +53,38 @@
             background: #fff url('assets/envelope-top.png') center bottom/cover no-repeat;
             clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); 
+            backface-visibility: hidden;
         }
 
+        /* 封蠟：與翻蓋連在一起，並維持 3D 位置 */
         .seal-btn {
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
-            cursor: pointer; transition: opacity 0.6s ease;
+            cursor: pointer;
+            transition: opacity 1s ease 2s; /* 翻轉到一半時慢慢消失 */
         }
 
-        /* 開啟狀態 */
-        .opened .envelope-top-group { transform: rotateX(155deg); }
-        .opened .seal-btn { opacity: 0; pointer-events: none; }
-        .opened .envelope-back, .opened .envelope-bottom-flap { opacity: 0; }
+        /* 開啟狀態特效 */
+        .opened .envelope-top-group { transform: rotateX(160deg); }
+        .opened .seal-btn { opacity: 0; }
+        
+        /* 強化淡出特效：透明度 0 + 縮放 1.1倍 + 模糊效果 */
+        .opened .envelope-back { 
+            opacity: 0; 
+            transform: scale(1.1); 
+            filter: blur(10px); 
+        }
+        .opened .envelope-bottom-flap { 
+            opacity: 0; 
+            transform: scale(1.1); 
+        }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 後方內容：加速顯現 --- */
+        /* --- 2. 後方內容 --- */
         #main-content { 
             opacity: 0; 
-            transition: opacity 2s ease 0.8s; 
+            transition: opacity 2s ease 1s; 
             position: relative; z-index: 5; 
         }
         .visible#main-content { opacity: 1; }
@@ -75,14 +92,8 @@
         #hero-section { 
             height: 100vh; width: 100%; 
             background: url('assets/hero-photo.jpg') center/cover; 
-            position: relative; color: white; text-align: center; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
-        #hero-section::after { 
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.25); z-index: 2; 
-        }
-        .hero-inner { position: relative; z-index: 10; }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
@@ -90,10 +101,7 @@
         
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
-        
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
-        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
+        .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -102,6 +110,7 @@
 
     <div id="envelope-wrapper" onclick="startWedding()">
         <div class="envelope-back"></div>
+        <!-- 封蠟已移入此群組，與翻蓋同步翻轉 -->
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
             <img src="assets/seal.png" class="seal-btn" alt="Seal">
@@ -114,13 +123,12 @@
 
     <main id="main-content">
         <section id="hero-section">
-            <div class="hero-inner">
+            <div style="text-align:center; color:white; position:relative; z-index:10;">
                 <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
                 <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
             </div>
         </section>
 
-        <!-- 刮刮樂部分 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -147,18 +155,6 @@
                 </p>
             </div>
         </section>
-
-        <section id="part4" class="fade-in-section">
-            <div class="photo-grid">
-                <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
-                <img src="assets/photo3.jpg"> <img src="assets/photo4.jpg">
-            </div>
-            <div style="width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2);">
-                <video controls width="100%" poster="assets/video-poster.jpg" playsinline>
-                    <source src="assets/wedding-video.mp4" type="video/mp4">
-                </video>
-            </div>
-        </section>
     </main>
 
     <script>
@@ -170,30 +166,24 @@
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
                 
-                /* --- 核心修改：大幅縮短解鎖時間 --- */
-                // 當淡出動畫進行到一半時就移除阻擋層，讓操作無縫銜接
+                // 2秒後移除阻擋層，使用者可直接操作
                 setTimeout(() => {
                     wrapper.style.display = 'none';
-                    document.body.style.overflow = 'auto'; // 恢復滾動功能
-                }, 2000); 
+                    document.body.style.overflow = 'auto';
+                }, 2500); 
             }
         }
 
+        // 刮刮樂邏輯保留...
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
-
         window.onload = () => {
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, '#c0c0c0'); gradient.addColorStop(0.5, '#d4af37'); gradient.addColorStop(1, '#a9a9a9');
-            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#444'; ctx.font = '700 18px "Noto Serif TC"'; ctx.textAlign = 'center';
-            ctx.fillText('刮開揭曉驚喜', canvas.width/2, canvas.height/2);
+            ctx.fillStyle = '#c0c0c0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             updateTimer(); setInterval(updateTimer, 1000);
         };
-
         function handleScratch(e) {
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
@@ -201,9 +191,7 @@
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2); ctx.fill();
         }
-        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
         canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
-
         function updateTimer() {
             const targetDate = new Date('2026-10-03T18:30:00');
             const diff = targetDate - new Date();
@@ -213,7 +201,6 @@
             document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
             document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
