@@ -10,7 +10,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 3D 信封與光影昇華特效 --- */
+        /* --- 1. 3D 信封與光影昇華特效 (鎖定設計) --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; background: #fff;
@@ -58,14 +58,14 @@
             transition: opacity 2s ease 3s; 
         }
 
-        /* 昇華特效啟動 */
+        /* 昇華特效狀態 */
         .opened .envelope-top-group { transform: rotateX(160deg); }
         .opened .seal-btn { opacity: 0; }
         .opened .envelope-back { opacity: 0; transform: translateY(-60px); filter: brightness(1.6) blur(4px); }
         .opened .envelope-bottom-flap { opacity: 0; transform: translateY(-40px); }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 內容區域 (恢復照片牆設計) --- */
+        /* --- 2. 內容區域 --- */
         #main-content { opacity: 0; transition: opacity 2s ease 1s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
@@ -80,7 +80,6 @@
         
         .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); }
         
-        /* 恢復第四部分照片與影片設計 */
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
         .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
@@ -110,7 +109,7 @@
             </div>
         </section>
 
-        <!-- 第二部分：刮刮樂 (恢復銀粉設計) -->
+        <!-- 第二部分：刮刮樂 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -139,7 +138,7 @@
             </div>
         </section>
 
-        <!-- 第四部分：恢復照片牆與影片 -->
+        <!-- 第四部分：照片牆與影片 -->
         <section id="part4" class="fade-in-section">
             <div class="photo-grid">
                 <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
@@ -161,7 +160,6 @@
                 wrapper.classList.add('opened');
                 document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
-                // 延長解鎖時間以配合 5.5 秒的極慢動畫
                 setTimeout(() => {
                     wrapper.style.display = 'none';
                     document.body.style.overflow = 'auto';
@@ -169,38 +167,51 @@
             }
         }
 
-        // 恢復刮刮樂銀粉設計
+        // --- 刮刮樂優化整合區 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
+
         window.onload = () => {
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
             
-            // 銀粉筆觸效果
-            const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
-            grad.addColorStop(0, '#d1d1d1'); grad.addColorStop(0.3, '#ffffff');
-            grad.addColorStop(0.5, '#e0e0e0'); grad.addColorStop(1, '#c0c0c0');
+            // 1. 恢復銀粉金屬漸層底色
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#d1d1d1'); 
+            grad.addColorStop(0.5, '#f0f0f0'); 
+            grad.addColorStop(1, '#a9a9a9');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 繪製銀粉粒子
-            for(let i=0; i<1500; i++){
-                ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.4})`;
-                ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 1.5, 1.5);
+            // 2. 噴砂質感銀粉點 (加強顆粒感)
+            for(let i = 0; i < 2500; i++) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.6})`;
+                const size = Math.random() * 1.8;
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, size, size);
             }
-            
-            updateTimer(); setInterval(updateTimer, 1000);
+
+            updateTimer(); 
+            setInterval(updateTimer, 1000);
         };
 
         function handleScratch(e) {
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
             const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+            
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath();
+            // 3. 加大刮除半徑：設定為 45，實現「一次刮開」的流暢感
+            ctx.arc(x, y, 45, 0, Math.PI * 2);
+            ctx.fill();
         }
-        canvas.addEventListener('touchmove', (e) => { handleScratch(e); e.preventDefault(); }, { passive: false });
+
+        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
+        canvas.addEventListener('touchmove', (e) => { 
+            handleScratch(e); 
+            e.preventDefault(); 
+        }, { passive: false });
 
         function updateTimer() {
             const targetDate = new Date('2026-10-03T18:30:00');
