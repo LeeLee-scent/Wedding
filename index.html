@@ -10,7 +10,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; background: #fff; font-family: 'Noto Serif TC', serif; overflow-x: hidden; }
 
-        /* --- 1. 3D 信封與光影昇華特效 (鎖定設計) --- */
+        /* --- 1. 3D 信封與光影昇華特效 (嚴格保留) --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; background: #fff;
@@ -58,19 +58,17 @@
             transition: opacity 2s ease 3s; 
         }
 
-        /* 昇華特效狀態 */
         .opened .envelope-top-group { transform: rotateX(160deg); }
         .opened .seal-btn { opacity: 0; }
         .opened .envelope-back { opacity: 0; transform: translateY(-60px); filter: brightness(1.6) blur(4px); }
         .opened .envelope-bottom-flap { opacity: 0; transform: translateY(-40px); }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
 
-        /* --- 2. 內容區域 --- */
+        /* --- 2. 內容區域 (嚴格保留) --- */
         #main-content { opacity: 0; transition: opacity 2s ease 1s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
         #hero-section { height: 100vh; width: 100%; background: url('assets/hero-photo.jpg') center/cover; display: flex; align-items: center; justify-content: center; }
-        
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
@@ -79,7 +77,6 @@
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
         .invitation-frame { padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; background: #fff; border: 1px solid var(--gold); }
-        
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
         .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
@@ -109,7 +106,6 @@
             </div>
         </section>
 
-        <!-- 第二部分：刮刮樂 -->
         <section id="part2" class="fade-in-section">
             <div id="scratch-container">
                 <img src="assets/main-image.jpg" style="width:100%; height:82%; object-fit:cover;">
@@ -123,7 +119,6 @@
             </div>
         </section>
 
-        <!-- 第三部分：邀請正文 -->
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
                 <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
@@ -138,7 +133,6 @@
             </div>
         </section>
 
-        <!-- 第四部分：照片牆與影片 -->
         <section id="part4" class="fade-in-section">
             <div class="photo-grid">
                 <img src="assets/photo1.jpg"> <img src="assets/photo2.jpg">
@@ -167,16 +161,17 @@
             }
         }
 
-        // --- 刮刮樂優化整合區 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
+        let isDrawing = false;
+        let lastX, lastY;
 
         window.onload = () => {
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
             
-            // 1. 恢復銀粉金屬漸層底色
+            // 銀粉漸層
             const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             grad.addColorStop(0, '#d1d1d1'); 
             grad.addColorStop(0.5, '#f0f0f0'); 
@@ -184,7 +179,7 @@
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 2. 噴砂質感銀粉點 (加強顆粒感)
+            // 銀粉點質感 (保留設計)
             for(let i = 0; i < 2500; i++) {
                 ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.6})`;
                 const size = Math.random() * 1.8;
@@ -195,23 +190,40 @@
             setInterval(updateTimer, 1000);
         };
 
-        function handleScratch(e) {
+        // --- 核心優化：更流暢的一次性刮除邏輯 ---
+        function getEventCoords(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-            
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            // 3. 加大刮除半徑：設定為 45，實現「一次刮開」的流暢感
-            ctx.arc(x, y, 45, 0, Math.PI * 2);
-            ctx.fill();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
-        canvas.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleScratch(e); });
-        canvas.addEventListener('touchmove', (e) => { 
-            handleScratch(e); 
-            e.preventDefault(); 
-        }, { passive: false });
+        function scratch(x, y) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 110; // 大幅提升線寬 (約等於半徑 55)
+
+            ctx.beginPath();
+            if (lastX !== undefined) {
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+            } else {
+                ctx.arc(x, y, 55, 0, Math.PI * 2);
+            }
+            ctx.stroke();
+            ctx.fill();
+            lastX = x;
+            lastY = y;
+        }
+
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; const coords = getEventCoords(e); lastX = coords.x; lastY = coords.y; });
+        canvas.addEventListener('mousemove', (e) => { if(!isDrawing) return; const coords = getEventCoords(e); scratch(coords.x, coords.y); });
+        window.addEventListener('mouseup', () => { isDrawing = false; lastX = undefined; lastY = undefined; });
+
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; const coords = getEventCoords(e); lastX = coords.x; lastY = coords.y; e.preventDefault(); }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => { if(!isDrawing) return; const coords = getEventCoords(e); scratch(coords.x, coords.y); e.preventDefault(); }, { passive: false });
+        canvas.addEventListener('touchend', () => { isDrawing = false; lastX = undefined; lastY = undefined; });
 
         function updateTimer() {
             const targetDate = new Date('2026-10-03T18:30:00');
