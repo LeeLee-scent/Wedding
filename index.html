@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>An & Chi Wedding Invitation</title>
     
-    <!-- --- 0506版：相容性修正預覽標籤 --- -->
     <meta property="og:url" content="https://leelee-scent.github.io/Wedding/">
     <meta property="og:title" content="An & Chi Wedding Invitation">
     <meta property="og:description" content="誠摯邀請您見證我們的幸福時刻 - 2026.10.03">
@@ -14,23 +13,19 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <!-- Twitter Card 備援 -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://leelee-scent.github.io/Wedding/assets/og-preview.jpg">
-
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* --- 背景質感優化：整合真實手感紙紋理 --- */
+        /* --- 背景質感：手感紙紋理 --- */
         body, html { 
             margin: 0; padding: 0; 
             background-color: #f4f1ea; 
-            background-image: url('assets/paper-texture.jpg'); /* 使用您提供的紙張紋理圖 */
-            background-size: 400px auto; /* 縮放尺寸使纖維更細膩 */
+            background-image: url('assets/paper-texture.jpg');
+            background-size: 400px auto; 
             background-repeat: repeat;
-            background-attachment: fixed; /* 固定背景增加層次感 */
+            background-attachment: fixed;
             font-family: 'Noto Serif TC', serif; 
             overflow-x: hidden; 
         }
@@ -39,7 +34,7 @@
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; 
-            background: transparent; /* 透出背景紙張紋理 */
+            background: transparent; 
             transition: opacity 2s ease 3.5s, visibility 2s ease 3.5s;
         }
 
@@ -94,7 +89,23 @@
         #main-content { opacity: 0; transition: opacity 2s ease 1s; position: relative; z-index: 5; }
         .visible#main-content { opacity: 1; }
 
-        #hero-section { height: 100vh; width: 100%; background: url('assets/hero-photo.webp') center/cover; display: flex; align-items: center; justify-content: center; }
+        #hero-section { height: 100vh; width: 100%; background: url('assets/hero-photo.webp') center/cover; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+        /* --- 新增：首頁文字升起動畫 --- */
+        .hero-text-container {
+            text-align: center; color: white; position: relative; z-index: 10;
+            opacity: 0;
+            transform: translateY(100px); /* 初始位置在下方 100px */
+            /* 設定緩緩升起的效果：持續 2.5 秒，並延遲 1.5 秒啟動（配合信封昇華特效） */
+            transition: opacity 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s, 
+                        transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s;
+        }
+        /* 當主內容變為可見時觸發升起 */
+        .visible .hero-text-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
@@ -104,10 +115,8 @@
         
         .invitation-frame { 
             padding: 60px 35px; width: 100%; max-width: 450px; 
-            text-align: center; 
-            background: rgba(255, 255, 255, 0.8); /* 讓背景紙張纖維透上來 */
-            border: 1px solid var(--gold);
-            backdrop-filter: blur(2px);
+            text-align: center; background: rgba(255, 255, 255, 0.8); 
+            border: 1px solid var(--gold); backdrop-filter: blur(2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
@@ -133,7 +142,7 @@
 
     <main id="main-content">
         <section id="hero-section">
-            <div style="text-align:center; color:white; position:relative; z-index:10;">
+            <div class="hero-text-container">
                 <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
                 <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
             </div>
