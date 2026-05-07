@@ -95,10 +95,10 @@
         .hero-text-container {
             text-align: center; color: white; position: relative; z-index: 10;
             opacity: 0;
-            transform: translateY(100px); /* 初始位置在下方 100px */
+            transform: translateY(150px); /* 初始位置在下方 100px */
             /* 設定緩緩升起的效果：持續 2.5 秒，並延遲 1.5 秒啟動（配合信封昇華特效） */
-            transition: opacity 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s, 
-                        transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s;
+            transition: opacity 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) 2s, 
+                        transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) 2s;
         }
         /* 當主內容變為可見時觸發升起 */
         .visible .hero-text-container {
