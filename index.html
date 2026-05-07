@@ -29,7 +29,7 @@
             overflow-x: hidden; 
         }
 
-        /* --- 1. 3D 信封與光影昇華特效 --- */
+        /* --- 1. 3D 信封特效 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; 
@@ -92,8 +92,7 @@
 
         .hero-text-container {
             text-align: center; color: white; position: relative; z-index: 10;
-            opacity: 0;
-            transform: translateY(100px); 
+            opacity: 0; transform: translateY(100px); 
             transition: opacity 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s, 
                         transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s;
         }
@@ -103,30 +102,22 @@
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
         section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
         
+        /* --- 3. 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        
         .scratch-guide-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; }
         .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 1rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 25px 0; font-weight: 500; }
-
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
-        /* 新增：刮除達標跳出的文字樣式 */
         #scratch-success-msg {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            color: var(--gold);
-            margin-top: 25px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 1.2s ease;
+            font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold);
+            margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease;
         }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
         .invitation-frame { 
-            padding: 60px 35px; width: 100%; max-width: 450px; 
-            text-align: center; background: rgba(255, 255, 255, 0.8); 
-            border: 1px solid var(--gold); backdrop-filter: blur(2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; 
+            background: rgba(255, 255, 255, 0.8); border: 1px solid var(--gold); 
+            backdrop-filter: blur(2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
@@ -135,7 +126,10 @@
 </head>
 <body>
 
-    <audio id="bgm" loop><source src="assets/bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop preload="auto">
+        <source src="assets/bgm.m4a" type="audio/mp4">
+        <source src="assets/bgm.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="envelope-wrapper" onclick="startWedding()">
         <div class="envelope-back"></div>
@@ -171,8 +165,6 @@
                 </div>
                 <canvas id="scratch-canvas"></canvas>
             </div>
-            
-            <!-- 新增：達成 60% 刮除後的跳出文字 -->
             <div id="scratch-success-msg">We're getting married!</div>
         </section>
 
@@ -204,12 +196,22 @@
     </main>
 
     <script>
+        // --- 核心播放與動畫邏輯 ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
+            const bgm = document.getElementById('bgm');
+
+            if (bgm) {
+                bgm.muted = false;
+                bgm.play().catch(() => {
+                    bgm.load();
+                    bgm.play();
+                });
+            }
+
             if (!wrapper.classList.contains('opened')) {
                 wrapper.classList.add('opened');
-                document.getElementById('bgm').play().catch(()=>{});
                 mainContent.classList.add('visible');
                 setTimeout(() => {
                     wrapper.style.display = 'none';
@@ -218,12 +220,11 @@
             }
         }
 
+        // --- 刮刮樂邏輯 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
-        let isDrawing = false;
-        let lastX, lastY;
-        let isSuccessShown = false;
+        let isDrawing = false, lastX, lastY, isSuccessShown = false;
 
         window.onload = () => {
             canvas.width = container.offsetWidth;
@@ -233,32 +234,28 @@
             ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
             for(let i = 0; i < 2500; i++) {
                 ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.6})`;
-                const size = Math.random() * 1.8;
-                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, size, size);
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1.8, 1.8);
             }
             updateTimer(); setInterval(updateTimer, 1000);
         };
 
-        function checkScratchPercentage() {
+        function checkProgress() {
             if (isSuccessShown) return;
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let transparentPixels = 0;
-            const data = imageData.data;
-            for (let i = 0; i < data.length; i += 4) {
-                if (data[i + 3] === 0) transparentPixels++;
-            }
-            const percentage = (transparentPixels / (canvas.width * canvas.height)) * 100;
-            if (percentage >= 60) {
+            const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            let count = 0;
+            for (let i = 3; i < data.length; i += 16) { if (data[i] === 0) count++; }
+            if (count > (data.length / 16) * 0.6) {
                 document.getElementById('scratch-success-msg').classList.add('show');
                 isSuccessShown = true;
+                canvas.style.transition = 'opacity 2s'; canvas.style.opacity = '0';
             }
         }
 
-        function getEventCoords(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-            return { x: clientX - rect.left, y: clientY - rect.top };
+        function getCoords(e) {
+            const r = canvas.getBoundingClientRect();
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            return { x: x - r.left, y: y - r.top };
         }
 
         function scratch(x, y) {
@@ -267,22 +264,19 @@
             ctx.beginPath();
             if (lastX !== undefined) { ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); }
             else { ctx.arc(x, y, 55, 0, Math.PI * 2); }
-            ctx.stroke(); ctx.fill();
-            lastX = x; lastY = y;
-            // 每刮一下檢查一次百分比
-            checkScratchPercentage();
+            ctx.stroke(); lastX = x; lastY = y;
+            checkProgress();
         }
 
-        canvas.addEventListener('mousedown', (e) => { isDrawing = true; const coords = getEventCoords(e); lastX = coords.x; lastY = coords.y; });
-        canvas.addEventListener('mousemove', (e) => { if(!isDrawing) return; const coords = getEventCoords(e); scratch(coords.x, coords.y); });
-        window.addEventListener('mouseup', () => { isDrawing = false; lastX = undefined; lastY = undefined; });
-        canvas.addEventListener('touchstart', (e) => { isDrawing = true; const coords = getEventCoords(e); lastX = coords.x; lastY = coords.y; e.preventDefault(); }, { passive: false });
-        canvas.addEventListener('touchmove', (e) => { if(!isDrawing) return; const coords = getEventCoords(e); scratch(coords.x, coords.y); e.preventDefault(); }, { passive: false });
-        canvas.addEventListener('touchend', () => { isDrawing = false; lastX = undefined; lastY = undefined; });
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; const c = getCoords(e); lastX = c.x; lastY = c.y; });
+        canvas.addEventListener('mousemove', (e) => { if(!isDrawing) return; const c = getCoords(e); scratch(c.x, c.y); });
+        window.addEventListener('mouseup', () => { isDrawing = false; lastX = undefined; });
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; const c = getCoords(e); lastX = c.x; lastY = c.y; e.preventDefault(); }, {passive:false});
+        canvas.addEventListener('touchmove', (e) => { if(!isDrawing) return; const c = getCoords(e); scratch(c.x, c.y); e.preventDefault(); }, {passive:false});
+        canvas.addEventListener('touchend', () => { isDrawing = false; lastX = undefined; });
 
         function updateTimer() {
-            const targetDate = new Date('2026-10-03T18:30:00');
-            const diff = targetDate - new Date();
+            const diff = new Date('2026-10-03T18:30:00') - new Date();
             if (diff <= 0) return;
             document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
             document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
