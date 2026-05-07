@@ -23,14 +23,14 @@
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* --- 背景質感優化：米色紙張紋理 --- */
+        /* --- 背景質感優化：整合真實手感紙紋理 --- */
         body, html { 
             margin: 0; padding: 0; 
-            background-color: #f9f7f2; 
-            background-image: 
-                radial-gradient(#e8e4d9 0.5px, transparent 0.5px),
-                linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0));
-            background-size: 4px 4px, 100% 100%;
+            background-color: #f4f1ea; 
+            background-image: url('assets/paper-texture.jpg'); /* 使用您提供的紙張紋理圖 */
+            background-size: 400px auto; /* 縮放尺寸使纖維更細膩 */
+            background-repeat: repeat;
+            background-attachment: fixed; /* 固定背景增加層次感 */
             font-family: 'Noto Serif TC', serif; 
             overflow-x: hidden; 
         }
@@ -39,7 +39,7 @@
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; 
-            background: transparent; /* 改為透明以透出底層紙張質感 */
+            background: transparent; /* 透出背景紙張紋理 */
             transition: opacity 2s ease 3.5s, visibility 2s ease 3.5s;
         }
 
@@ -105,9 +105,10 @@
         .invitation-frame { 
             padding: 60px 35px; width: 100%; max-width: 450px; 
             text-align: center; 
-            background: rgba(255, 255, 255, 0.85); 
+            background: rgba(255, 255, 255, 0.8); /* 讓背景紙張纖維透上來 */
             border: 1px solid var(--gold);
             backdrop-filter: blur(2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
