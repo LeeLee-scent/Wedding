@@ -13,7 +13,8 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,7 +26,8 @@
             background-size: 400px auto; 
             background-repeat: repeat;
             background-attachment: fixed;
-            font-family: 'Noto Serif TC', serif; 
+            /* 全域預設字體順序 */
+            font-family: 'Noto Serif TC', 'Ma Shan Zheng', serif; 
             overflow-x: hidden; 
         }
 
@@ -104,12 +106,14 @@
         
         /* --- 3. 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        .scratch-guide-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; }
+        
+        /* 更新英文藝術字體應用 */
+        .scratch-guide-reveal { font-family: 'Pinyon Script', cursive; font-size: 4.5rem; color: var(--gold); margin: 0; line-height: 1; }
         .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 1rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 25px 0; font-weight: 500; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
         #scratch-success-msg {
-            font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold);
+            font-family: 'Pinyon Script', cursive; font-size: 3.2rem; color: var(--gold);
             margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease;
         }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
@@ -119,6 +123,10 @@
             background: rgba(255, 255, 255, 0.8); border: 1px solid var(--gold); 
             backdrop-filter: blur(2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
+        /* 更新邀請函中文字質感 */
+        .invitation-frame h2 { font-family: 'Ma Shan Zheng', cursive; font-size: 3.5rem !important; margin-bottom: 25px; font-weight: normal; }
+        .invitation-frame p strong { font-family: 'Ma Shan Zheng', cursive; font-size: 1.6rem; font-weight: normal; }
+
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
         .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
@@ -146,7 +154,7 @@
     <main id="main-content">
         <section id="hero-section">
             <div class="hero-text-container">
-                <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
+                <h1 style="font-family: 'Pinyon Script', cursive; font-size: 6rem; margin: 0;">An & Chi</h1>
                 <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
             </div>
         </section>
@@ -170,8 +178,8 @@
 
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
-                <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
-                <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
+                <h2>誠摯邀請</h2>
+                <p><strong>林建安 & 李抒琪</strong></p>
                 <p style="line-height: 2.4; color: #444; margin-top: 20px;">
                     在台東海邊遇見了你<br>
                     從此我們的世界有了旋律<br>
@@ -196,7 +204,6 @@
     </main>
 
     <script>
-        // --- 核心播放與動畫邏輯 ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
@@ -220,7 +227,6 @@
             }
         }
 
-        // --- 刮刮樂邏輯 ---
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('scratch-container');
