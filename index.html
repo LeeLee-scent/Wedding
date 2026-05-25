@@ -13,8 +13,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Akaya+Kanadaka&family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -26,7 +25,6 @@
             background-size: 400px auto; 
             background-repeat: repeat;
             background-attachment: fixed;
-            /* 💡 【全域預設字型】網頁基本內文（如故事、時間、地點）使用的字型 */
             font-family: 'Noto Serif TC', serif; 
             overflow-x: hidden; 
         }
@@ -106,29 +104,12 @@
         
         /* --- 3. 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        
-        .scratch-guide-reveal { 
-            /* 💡 【刮刮樂標題：Reveal】 */
-            font-family: 'Akaya Kanadaka', system-ui; /* 字型 */
-            font-size: 3rem;                          /* 字體大小 */
-            color: var(--gold); 
-            margin: 0; line-height: 1; 
-        }
-        .scratch-guide-instruction { 
-            /* 💡 【刮刮樂說明小字：SCRATCH TO DISCOVER THE DATE】 */
-            font-family: 'Noto Serif TC', serif;       /* 字型 */
-            font-size: 1rem;                          /* 字體大小 */
-            color: var(--text-color); 
-            letter-spacing: 2px;                      /* 字寬（字距間隙） */
-            margin: 10px 0 25px 0; font-weight: 500; 
-        }
+        .scratch-guide-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; }
+        .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 1rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 25px 0; font-weight: 500; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
         #scratch-success-msg {
-            /* 💡 【刮完後顯示的驚喜文字：We're getting married!】 */
-            font-family: 'Akaya Kanadaka', system-ui; /* 字型 */
-            font-size: 2.5rem;                        /* 字體大小 */
-            color: var(--gold);
+            font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold);
             margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease;
         }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
@@ -157,8 +138,8 @@
             <img src="assets/seal.webp" class="seal-btn" alt="A&C Seal">
         </div>
         <div class="envelope-bottom-flap">
-            <h2 style="font-family: 'Akaya Kanadaka', system-ui; font-size: 1.5rem; color: #8d7b6d; font-weight: 300; letter-spacing: 4px; margin: 0;">WEDDING INVITATION</h2>
-            <p style="font-family: 'Akaya Kanadaka', system-ui; font-size: 1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">SAVE THE DATE</p>
+            <h2 style="font-size: 1.5rem; color: #8d7b6d; font-weight: 300; letter-spacing: 4px; margin: 0;">WEDDING INVITATION</h2>
+            <p style="font-size: 1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">SAVE THE DATE</p>
         </div>
     </div>
 
@@ -166,7 +147,7 @@
         <section id="hero-section">
             <div class="hero-text-container">
                 <h1 style="font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin: 0;">An & Chi</h1>
-                <p style="font-family: 'Akaya Kanadaka', system-ui; letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
+                <p style="letter-spacing: 8px; font-weight: 300; margin-top: 15px;">2026 . 10 . 03</p>
             </div>
         </section>
 
@@ -176,8 +157,7 @@
 
             <div id="scratch-container">
                 <img src="assets/main-image.webp" style="width:100%; height:82%; object-fit:cover;">
-                
-                <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff; font-family: 'Akaya Kanadaka', system-ui;">
+                <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
                     <div style="text-align:center;"><span id="days" style="font-weight:700; color:var(--gold);">00</span><br><small>DAYS</small></div>
                     <div style="text-align:center;"><span id="hours" style="font-weight:700; color:var(--gold);">00</span><br><small>HRS</small></div>
                     <div style="text-align:center;"><span id="mins" style="font-weight:700; color:var(--gold);">00</span><br><small>MINS</small></div>
@@ -190,9 +170,9 @@
 
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
-                <h2 style="font-family: 'Ma Shan Zheng', cursive; font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
-                <p style="font-family: 'Ma Shan Zheng', cursive; font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
-                <p style="font-family: 'Noto Serif TC', serif; line-height: 2.4; color: #444; margin-top: 20px;">
+                <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
+                <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
+                <p style="line-height: 2.4; color: #444; margin-top: 20px;">
                     在台東海邊遇見了你<br>
                     從此我們的世界有了旋律<br>
                     誠摯邀請您見證我們的幸福時刻<br><br>
