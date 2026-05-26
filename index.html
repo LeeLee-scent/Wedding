@@ -13,7 +13,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,7 +25,6 @@
             background-size: 400px auto; 
             background-repeat: repeat;
             background-attachment: fixed;
-            /* 💡 可修改：全域預設字型 */
             font-family: 'Noto Serif TC', serif; 
             overflow-x: hidden; 
         }
@@ -99,28 +98,28 @@
         }
         .visible .hero-text-container { opacity: 1; transform: translateY(0); }
 
-        /* 💡 可修改：全新獨立詩意文字區塊的樣式（移除了文字陰影，改用深色字體在紙張背景上更顯氣質） */
+        /* 💡 已調整：縮小與婚紗照之間的距離，讓版面更緊湊 */
         #hero-poem-section {
-            min-height: 50vh; /* 調整此數值可以改變這個文字區塊的高矮空隙 */
+            min-height: 25vh; /* 💡 從 50vh 縮小至 25vh，減少整體佔用高度 */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
+            padding: 25px 20px 15px 20px; /* 💡 縮小上下內距（特別是上方 padding 改小） */
         }
         .hero-poem-english {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem; /* 稍微放大英文 */
+            font-size: 1.6rem; 
             letter-spacing: 1px;
-            color: var(--gold); /* 英文改用優雅金金色 */
-            margin: 0 0 15px 0;
+            color: var(--gold); 
+            margin: 0 0 12px 0;
         }
         .hero-poem-chinese {
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.05rem; /* 稍微放大中文 */
-            letter-spacing: 4px; /* 拉寬中文字距 */
-            color: #5c5246; /* 使用深質感的灰褐色，在紙質背景上非常好讀 */
+            font-size: 1.05rem; 
+            letter-spacing: 4px; 
+            color: #5c5246; 
             margin: 0;
             font-weight: 500;
         }
@@ -132,7 +131,6 @@
         /* --- 3. 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
         
-        /* 💡 可修改：刮刮樂主標題「Reveal」的文字樣式 */
         .scratch-guide-reveal { 
             font-family: 'Dancing Script', cursive; 
             font-size: 3rem;                        
@@ -140,7 +138,6 @@
             margin: 0; line-height: 1; 
         }
         
-        /* 💡 可修改：刮刮樂提示小字「SCRATCH TO DISCOVER THE DATE」的文字樣式 */
         .scratch-guide-instruction { 
             font-family: 'Noto Serif TC', serif;    
             font-size: 0.8rem;                        
@@ -150,7 +147,6 @@
             font-weight: 500;                       
         }
 
-        /* 💡 可修改：新增的「刮開揭曉驚喜」中文提示樣式 */
         .scratch-guide-chinese {
             font-family: 'Noto Serif TC', serif;
             font-size: 0.9rem;
@@ -162,7 +158,6 @@
 
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
         
-        /* 💡 可修改：刮完之後跳出來的驚喜文字「We're getting married!」的文字樣式 */
         #scratch-success-msg {
             font-family: 'Dancing Script', cursive; 
             font-size: 2.5rem;                      
@@ -260,7 +255,7 @@
     </main>
 
     <script>
-        // --- 核心播放與動畫邏輯 （完整保留，絕對不變） ---
+        // --- 核心播放與動畫邏輯 ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
