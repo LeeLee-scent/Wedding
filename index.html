@@ -152,11 +152,11 @@
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
 
-        /* 📸 💡 修正後樣式：垂直接連往下且「完全緊貼」的橫向照片流 (只包含7,8,9) */
+        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 (只包含7,8,9) */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
             gap: 0; 
-            width: 100%; max-width: 600px; margin: 0 auto 20px auto; /* 💡 稍微縮小下方 margin */
+            width: 100%; max-width: 600px; margin: 0 auto 20px auto; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
             border-radius: 8px; 
             overflow: hidden; 
@@ -167,15 +167,20 @@
             border-radius: 0; 
         }
 
-        /* 💡 新增：最後獨立區塊的照片樣式 (photo10) */
-        #final-extra-photo {
-            width: 100%; max-width: 600px; margin: 30px auto 10px auto; 
-            padding: 0 10px; /* 稍微留點間距，增加獨立感 */
+        /* 📸 💡 修正後樣式：最後獨立區塊的直式照片樣式 (photo10) */
+        #final-extra-photo-portrait {
+            width: 100%; max-width: 480px; /* 💡 直式照片不需要太寬 */
+            margin: 30px auto 10px auto; 
+            padding: 0 20px;
         }
-        #final-extra-photo img {
-            width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover;
-            border-radius: 8px; /* 💡 給予圓角，讓它看起來是獨立的紀念塊 */
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* 增加陰影，凸顯出來 */
+        #final-extra-photo-portrait img {
+            width: 100%; height: auto; 
+            aspect-ratio: 2/3; /* 💡 關鍵：設定為直式比例 (例如寬 1000, 高 1500) */
+            max-height: 80vh; /* 防止直式照片在手機上顯得過長 */
+            object-fit: cover; /* 確保在規定的比例內填滿，不變形 */
+            border-radius: 8px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
+            display: block;
         }
 
         /* 正式邀約區塊 */
@@ -186,12 +191,12 @@
         .final-greeting { font-size: 0.95rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
         .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
         
-        /* 💡 將原本合併的 speech 拆出來單獨控制順序 */
+        /* 將原本合併的 speech 拆出來單獨控制順序 */
         .thanks-speech-block {
              width: 100%; max-width: 600px; text-align: center;
-            margin: 10px auto 100px auto; /* 💡 移到底部做收尾 */
+            margin: 10px auto 100px auto; 
             padding: 35px 20px;
-            border-top: 1px dashed rgba(197, 163, 104, 0.3); /* 保留虛線 */
+            border-top: 1px dashed rgba(197, 163, 104, 0.3); 
         }
         .thanks-speech-text { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; }
 
@@ -331,7 +336,7 @@
                 <img src="assets/photo7.webp" loading="lazy">
                 <img src="assets/photo8.webp" loading="lazy">
                 <img src="assets/photo9.webp" loading="lazy">
-                </div>
+            </div>
             
             <div id="final-invitation-block" style="margin-bottom: 10px;">
                 <p class="final-greeting">
@@ -347,8 +352,8 @@
             </div>
         </section>
 
-        <div id="final-extra-photo" class="fade-in-section">
-            <img src="assets/photo10.webp" alt="最終紀念照片" loading="lazy">
+        <div id="final-extra-photo-portrait" class="fade-in-section">
+            <img src="assets/photo10.webp" alt="最終直式紀念照片" loading="lazy">
         </div>
 
         <div class="thanks-speech-block fade-in-section">
