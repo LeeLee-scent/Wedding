@@ -29,7 +29,7 @@
             overflow-x: hidden; 
         }
 
-        /* --- 1. 3D 信封特效 (核心動畫不變) --- */
+        /* --- 1. 3D 信封特效 --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; 
@@ -123,11 +123,11 @@
             font-weight: 500;
         }
 
-        /* 💡 拱門造型的核心 CSS 樣式控制 */
+        /* 拱門新人介紹區塊 CSS */
         .couple-arch-section {
             width: 100%;
             max-width: 500px;
-            margin: 20px auto 50px auto;
+            margin: 20px auto 30px auto;
             display: flex;
             justify-content: space-between;
             padding: 0 25px;
@@ -138,13 +138,12 @@
             width: 46%;
         }
 
-        /* 透過 border-radius 讓方形照片直接裁切成精緻的拱門型 */
         .arch-frame {
             width: 100%;
-            aspect-ratio: 1 / 1.4; /* 控制拱門的優雅高寬比例 */
-            border-radius: 120px 120px 0 0; /* 💡 關鍵：左上、右上設定大圓角，左下、右下維持直角 */
+            aspect-ratio: 1 / 1.4; 
+            border-radius: 120px 120px 0 0; 
             overflow: hidden;
-            border: 1px solid var(--gold); /* 幫拱門鑲上細緻的金邊 */
+            border: 1px solid var(--gold); 
             box-shadow: 0 8px 20px rgba(0,0,0,0.06);
             margin-bottom: 12px;
         }
@@ -152,7 +151,7 @@
         .arch-frame img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 確保不管照片比例如何，都能完美填滿拱門且不變形 */
+            object-fit: cover; 
             display: block;
         }
 
@@ -163,6 +162,30 @@
             margin: 0;
             letter-spacing: 1px;
             font-weight: 600;
+        }
+
+        /* 💡 可修改：全新新增的新人歡迎詞區塊樣式 */
+        #couple-greeting-section {
+            width: 100%;
+            max-width: 550px;
+            margin: 40px auto 60px auto;
+            text-align: center;
+            padding: 0 30px;
+        }
+        .greeting-title {
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+        }
+        .greeting-text {
+            font-size: 1.05rem;
+            color: #5c5246;
+            line-height: 2.2;
+            letter-spacing: 2px;
+            font-weight: 500;
+            margin: 0;
         }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
@@ -264,6 +287,17 @@
             </div>
         </div>
 
+        <div id="couple-greeting-section" class="fade-in-section">
+            <h2 class="greeting-title">嗨！！</h2>
+            <p class="greeting-text">
+                當你收到這封請帖的時候<br>
+                我們婚禮已經在倒數計時啦～<br><br>
+                人生有三萬多天<br>
+                很開心這一天你們專門為我們而來<br><br>
+                好久不見 &nbsp; 婚禮見
+            </p>
+        </div>
+
         <section id="part2" class="fade-in-section">
             <h3 class="scratch-guide-reveal">Reveal</h3>
             <p class="scratch-guide-instruction">SCRATCH TO DISCOVER THE DATE</p>
@@ -310,7 +344,7 @@
     </main>
 
     <script>
-        // --- 核心播放與動畫邏輯 (維持原樣) ---
+        // --- 核心播放與動畫邏輯 ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
