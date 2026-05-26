@@ -148,9 +148,24 @@
             backdrop-filter: blur(2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
 
-        /* 原本的 4 格婚紗照相簿樣式 */
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
-        .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
+        /* 💡 核心修正：專門容納 4 張「直式照片」的精緻雙排相簿樣式 */
+        .photo-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            width: 100%; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 0 15px;
+        }
+        .photo-grid img { 
+            width: 100%; 
+            height: auto; /* 解鎖固定的 220px */
+            aspect-ratio: 3 / 4; /* 強制格子符合直式的 3:4 完美黃金比例 */
+            object-fit: cover; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
 
         /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 (只包含7,8,9) */
         .photo-grid-vertical-stream { 
@@ -167,17 +182,17 @@
             border-radius: 0; 
         }
 
-        /* 📸 💡 修正後樣式：最後獨立區塊的直式照片樣式 (photo10) */
+        /* 📸 最後獨立區塊的直式照片樣式 (photo10) */
         #final-extra-photo-portrait {
-            width: 100%; max-width: 480px; /* 💡 直式照片不需要太寬 */
+            width: 100%; max-width: 480px; 
             margin: 30px auto 10px auto; 
             padding: 0 20px;
         }
         #final-extra-photo-portrait img {
             width: 100%; height: auto; 
-            aspect-ratio: 2/3; /* 💡 關鍵：設定為直式比例 (例如寬 1000, 高 1500) */
-            max-height: 80vh; /* 防止直式照片在手機上顯得過長 */
-            object-fit: cover; /* 確保在規定的比例內填滿，不變形 */
+            aspect-ratio: 2/3; 
+            max-height: 80vh; 
+            object-fit: cover; 
             border-radius: 8px; 
             box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
             display: block;
@@ -342,6 +357,8 @@
                 <p class="final-greeting">
                     我們將成為彼此緊緊依靠的家人<br>
                     謝謝你這一天撥空前來
+                </p>
+                <p class="final-couple-names">林建安 + 李抒琪</p>
                 <p class="final-greeting">
                     攜同我們的父母<br>
                     邀請您出席我們的婚禮儀式<br>
