@@ -164,7 +164,7 @@
             font-weight: 600;
         }
 
-        /* 💡 可修改：全新新增的新人歡迎詞區塊樣式 */
+        /* 新人歡迎詞區塊樣式 */
         #couple-greeting-section {
             width: 100%;
             max-width: 550px;
@@ -186,6 +186,33 @@
             letter-spacing: 2px;
             font-weight: 500;
             margin: 0;
+        }
+
+        /* 💡 全新新增：泰戈爾詩句區塊樣式 */
+        #poem-quote-section {
+            width: 100%;
+            max-width: 550px;
+            margin: 60px auto;
+            text-align: center;
+            padding: 0 30px;
+        }
+        .quote-text {
+            font-size: 0.95rem;
+            color: #5c5246;
+            line-height: 2.4;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+            margin: 0;
+        }
+        .quote-author {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            margin-top: 15px;
+            letter-spacing: 1px;
+            text-align: right;
+            max-width: 85%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
@@ -316,6 +343,15 @@
             <div id="scratch-success-msg">We're getting married!</div>
         </section>
 
+        <div id="poem-quote-section" class="fade-in-section">
+            <p class="quote-text">
+                人們從詩人的字句裡，<br>
+                選取自己心愛的意義；<br>
+                但是詩句的最終意義，是指向你。
+            </p>
+            <p class="quote-author">—— 泰戈爾 《吉檀迦利》</p>
+        </div>
+
         <section id="part3" class="fade-in-section">
             <div class="invitation-frame">
                 <h2 style="font-size: 2.8rem; margin-bottom: 25px;">誠摯邀請</h2>
@@ -385,6 +421,7 @@
             updateTimer(); setInterval(updateTimer, 1000);
         };
 
+        // 核心滾動偵測
         function checkProgress() {
             if (isSuccessShown) return;
             const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
