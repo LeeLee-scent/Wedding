@@ -152,19 +152,19 @@
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
 
-        /* 📸 💡 修正後樣式：垂直接連往下且「完全緊貼」的橫向照片流 */
+        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
-            gap: 0; /* 💡 關鍵：將間隙設定為 0 */
+            gap: 0; 
             width: 100%; max-width: 600px; margin: 0 auto 40px auto; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* 幫整組貼合的照片加上淡淡陰影，增加立體感 */
-            border-radius: 8px; /* 整組照片共用圓角 */
-            overflow: hidden; /* 確保圓角效果能剪裁內部的照片 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-radius: 8px; 
+            overflow: hidden; 
         }
         .photo-grid-vertical-stream img { 
             width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; 
-            display: block; /* 移除圖片下方的微小空隙 */
-            border-radius: 0; /* 💡 核心：移除單張照片的圓角，讓它們完美貼合 */
+            display: block; 
+            border-radius: 0; 
         }
 
         /* 正式邀約區塊 */
@@ -174,6 +174,7 @@
         }
         .final-greeting { font-size: 0.95rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
         .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
+        .thanks-speech { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; margin-top: 40px; border-top: 1px dashed rgba(197, 163, 104, 0.3); padding-top: 35px; }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
@@ -311,7 +312,7 @@
                 <img src="assets/photo7.webp">
                 <img src="assets/photo8.webp">
                 <img src="assets/photo9.webp">
-            </div>
+                <img src="assets/photo10.webp"> </div>
 
             <div id="final-invitation-block">
                 <p class="final-greeting">
@@ -323,6 +324,12 @@
                     攜同我們的父母<br>
                     邀請您出席我們的婚禮儀式<br>
                     見證和分享我們的幸福記憶
+                </p>
+
+                <p class="thanks-speech">
+                    一路走來，心中裝滿感謝親人的關愛與照顧<br>
+                    朋友的見證與陪伴<br><br>
+                    這一天感謝有你，陪我們啟程。
                 </p>
             </div>
         </section>
