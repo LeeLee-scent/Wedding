@@ -100,178 +100,46 @@
 
         #hero-poem-section {
             min-height: 25vh; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px 20px 10px 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 30px 20px 10px 20px;
         }
         .hero-poem-english {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem; 
-            letter-spacing: 1px;
-            color: var(--gold); 
-            margin: 0 0 12px 0;
+            font-family: 'Dancing Script', cursive; font-size: 1.6rem; letter-spacing: 1px; color: var(--gold); margin: 0 0 12px 0;
         }
         .hero-poem-chinese {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 1.05rem; 
-            letter-spacing: 4px; 
-            color: #5c5246; 
-            margin: 0;
-            font-weight: 500;
+            font-family: 'Noto Serif TC', serif; font-size: 1.05rem; letter-spacing: 4px; color: #5c5246; margin: 0; font-weight: 500;
         }
 
-        /* 拱門新人介紹區塊 CSS */
         .couple-arch-section {
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto 30px auto;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 25px;
+            width: 100%; max-width: 500px; margin: 20px auto 30px auto;
+            display: flex; justify-content: space-between; padding: 0 25px;
         }
-
-        .arch-container {
-            text-align: center;
-            width: 46%;
-        }
-
+        .arch-container { text-align: center; width: 46%; }
         .arch-frame {
-            width: 100%;
-            aspect-ratio: 1 / 1.4; 
-            border-radius: 120px 120px 0 0; 
-            overflow: hidden;
-            border: 1px solid var(--gold); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            margin-bottom: 12px;
+            width: 100%; aspect-ratio: 1 / 1.4; border-radius: 120px 120px 0 0; 
+            overflow: hidden; border: 1px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.06); margin-bottom: 12px;
         }
+        .arch-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .couple-label { font-family: 'Noto Serif TC', serif; font-size: 0.95rem; color: #5c5246; margin: 0; letter-spacing: 1px; font-weight: 600; }
 
-        .arch-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            display: block;
-        }
+        #couple-greeting-section { width: 100%; max-width: 550px; margin: 40px auto 60px auto; text-align: center; padding: 0 30px; }
+        .greeting-title { font-size: 1rem; color: var(--gold); font-weight: 700; letter-spacing: 3px; margin-bottom: 25px; }
+        .greeting-text { font-size: 0.8rem; color: #5c5246; line-height: 2.2; letter-spacing: 2px; font-weight: 500; margin: 0; }
 
-        .couple-label {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 0.95rem;
-            color: #5c5246;
-            margin: 0;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
+        #poem-quote-section { width: 100%; max-width: 550px; margin: 60px auto; text-align: center; padding: 0 30px; }
+        .quote-text { font-size: 0.95rem; color: #5c5246; line-height: 2.4; letter-spacing: 2.5px; font-weight: 500; margin: 0; }
+        .quote-author { font-size: 0.8rem; color: var(--text-color); margin-top: 15px; letter-spacing: 1px; text-align: right; max-width: 85%; margin-left: auto; margin-right: auto; }
 
-        /* 新人歡迎詞區塊樣式 */
-        #couple-greeting-section {
-            width: 100%;
-            max-width: 550px;
-            margin: 40px auto 60px auto;
-            text-align: center;
-            padding: 0 30px;
-        }
-        .greeting-title {
-            font-size: 1rem;
-            color: var(--gold);
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin-bottom: 25px;
-        }
-        .greeting-text {
-            font-size: 0.8rem;
-            color: #5c5246;
-            line-height: 2.2;
-            letter-spacing: 2px;
-            font-weight: 500;
-            margin: 0;
-        }
+        .lyric-text-block { width: 100%; max-width: 550px; margin: 40px auto; text-align: center; padding: 0 30px; }
+        .lyric-text-block p { font-size: 0.85rem; color: #5c5246; line-height: 2.4; letter-spacing: 2.5px; font-weight: 500; margin: 0; }
 
-        /* 泰戈爾詩句區塊樣式 */
-        #poem-quote-section {
-            width: 100%;
-            max-width: 550px;
-            margin: 60px auto;
-            text-align: center;
-            padding: 0 30px;
-        }
-        .quote-text {
-            font-size: 0.95rem;
-            color: #5c5246;
-            line-height: 2.4;
-            letter-spacing: 2.5px;
-            font-weight: 500;
-            margin: 0;
-        }
-        .quote-author {
-            font-size: 0.8rem;
-            color: var(--text-color);
-            margin-top: 15px;
-            letter-spacing: 1px;
-            text-align: right;
-            max-width: 85%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* 💡 新增：段落抒情文字通用樣式（用於內頁下、婚紗照下） */
-        .lyric-text-block {
-            width: 100%;
-            max-width: 550px;
-            margin: 40px auto;
-            text-align: center;
-            padding: 0 30px;
-        }
-        .lyric-text-block p {
-            font-size: 0.85rem;
-            color: #5c5246;
-            line-height: 2.4;
-            letter-spacing: 2.5px;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-        .fade-in-section.active { opacity: 1; transform: translateY(0); }
-        section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
-        
         /* --- 3. 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        
-        .scratch-guide-reveal { 
-            font-family: 'Dancing Script', cursive; 
-            font-size: 3rem;                        
-            color: var(--gold);                     
-            margin: 0; line-height: 1; 
-        }
-        
-        .scratch-guide-instruction { 
-            font-family: 'Noto Serif TC', serif;    
-            font-size: 0.8rem;                        
-            color: var(--text-color);               
-            letter-spacing: 2px;                    
-            margin: 10px 0 4px 0; 
-            font-weight: 500;                       
-        }
-
-        .scratch-guide-chinese {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            color: #a19285;
-            margin: 0 0 25px 0; 
-            font-weight: 500;
-        }
-
+        .scratch-guide-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; }
+        .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 0.8rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 4px 0; font-weight: 500; }
+        .scratch-guide-chinese { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; letter-spacing: 2px; color: #a19285; margin: 0 0 25px 0; font-weight: 500; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-        
-        #scratch-success-msg {
-            font-family: 'Dancing Script', cursive; 
-            font-size: 2.5rem;                      
-            color: var(--gold);                     
-            margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease;
-        }
+        #scratch-success-msg { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold); margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease; }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
         .invitation-frame { 
@@ -279,9 +147,29 @@
             background: rgba(255, 255, 255, 0.8); border: 1px solid var(--gold); 
             backdrop-filter: blur(2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+
+        /* 相簿樣式：原本的 4 格 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 20px; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
-        .video-container { width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+
+        /* 💡 新增樣式：最後的三格橫向相簿 */
+        .photo-grid-triple {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+            width: 100%; max-width: 700px; margin: 0 auto 40px auto;
+        }
+        .photo-grid-triple img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; }
+
+        /* 💡 新增樣式：最底部的正式邀約區塊 */
+        #final-invitation-block {
+            width: 100%; max-width: 600px; text-align: center;
+            margin: 50px auto 100px auto; padding: 0 20px;
+        }
+        .final-greeting { font-size: 0.95rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
+        .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
+
+        .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .fade-in-section.active { opacity: 1; transform: translateY(0); }
+        section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; }
     </style>
 </head>
 <body>
@@ -365,12 +253,12 @@
                 人們從詩人的字句裡，<br>
                 選取自己心愛的意義；<br>
                 但是詩句的最終意義，<br>
-                指向你。
+                是指向你。
             </p>
             <p class="quote-author">—— 泰戈爾 《吉檀迦利》</p>
         </div>
 
-        <section id="part3" class="fade-in-section">
+        <section id="part3" class="fade-in-section" style="min-height: auto; padding-bottom: 20px;">
             <div class="invitation-frame">
                 <h2 style="font-size: 2.4rem; margin-bottom: 25px;">誠摯邀請</h2>
                 <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
@@ -393,13 +281,13 @@
             </p>
         </div>
 
-        <section id="part4" class="fade-in-section">
+        <section id="part4" class="fade-in-section" style="min-height: auto;">
             <div class="photo-grid">
                 <img src="assets/photo3.webp"> <img src="assets/photo4.webp">
                 <img src="assets/photo5.webp"> <img src="assets/photo6.webp">
             </div>
 
-            <div class="lyric-text-block" style="margin: 0 auto 50px auto;">
+            <div class="lyric-text-block" style="margin: 40px auto;">
                 <p>
                     不管外面的世界風雨飄搖<br>
                     希望我們總能以最簡單的方式相伴<br><br>
@@ -409,10 +297,23 @@
                 </p>
             </div>
 
-            <div class="video-container">
-                <video controls width="100%" poster="assets/video-poster.webp" playsinline>
-                    <source src="assets/wedding-video.mp4" type="video/mp4">
-                </video>
+            <div class="photo-grid-triple fade-in-section">
+                <img src="assets/photo7.webp">
+                <img src="assets/photo8.webp">
+                <img src="assets/photo9.webp">
+            </div>
+
+            <div id="final-invitation-block" class="fade-in-section">
+                <p class="final-greeting">
+                    我們將成為彼此緊緊依靠的家人<br>
+                    很開心這一天你專門為我們而來
+                </p>
+                <p class="final-couple-names">林建安 &nbsp; + &nbsp; 李抒琪</p>
+                <p class="final-greeting">
+                    攜同我們的父母<br>
+                    邀請您出席我們的婚禮儀式<br>
+                    見證和分享我們的幸福記憶
+                </p>
             </div>
         </section>
     </main>
