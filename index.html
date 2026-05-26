@@ -188,7 +188,7 @@
             margin: 0;
         }
 
-        /* 💡 全新新增：泰戈爾詩句區塊樣式 */
+        /* 泰戈爾詩句區塊樣式 */
         #poem-quote-section {
             width: 100%;
             max-width: 550px;
@@ -213,6 +213,23 @@
             max-width: 85%;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        /* 💡 新增：段落抒情文字通用樣式（用於內頁下、婚紗照下） */
+        .lyric-text-block {
+            width: 100%;
+            max-width: 550px;
+            margin: 40px auto;
+            text-align: center;
+            padding: 0 30px;
+        }
+        .lyric-text-block p {
+            font-size: 0.85rem;
+            color: #5c5246;
+            line-height: 2.4;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+            margin: 0;
         }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
@@ -348,7 +365,7 @@
                 人們從詩人的字句裡，<br>
                 選取自己心愛的意義；<br>
                 但是詩句的最終意義，<br>
-                是指向你。
+                指向你。
             </p>
             <p class="quote-author">—— 泰戈爾 《吉檀迦利》</p>
         </div>
@@ -367,11 +384,31 @@
             </div>
         </section>
 
+        <div class="lyric-text-block fade-in-section">
+            <p>
+                人生其實只要兩次幸運就好<br>
+                一次遇見你，一次走到底<br><br>
+                如今 &nbsp; 我們決定開啟人生新的篇章<br>
+                讓愛以夫妻之名延續
+            </p>
+        </div>
+
         <section id="part4" class="fade-in-section">
             <div class="photo-grid">
                 <img src="assets/photo3.webp"> <img src="assets/photo4.webp">
                 <img src="assets/photo5.webp"> <img src="assets/photo6.webp">
             </div>
+
+            <div class="lyric-text-block" style="margin: 0 auto 50px auto;">
+                <p>
+                    不管外面的世界風雨飄搖<br>
+                    希望我們總能以最簡單的方式相伴<br><br>
+                    家人閒坐 &nbsp; 燈火通明<br><br>
+                    世上最有趣的事<br>
+                    就是和最愛的人一起虛度光陰
+                </p>
+            </div>
+
             <div class="video-container">
                 <video controls width="100%" poster="assets/video-poster.webp" playsinline>
                     <source src="assets/wedding-video.mp4" type="video/mp4">
@@ -422,7 +459,6 @@
             updateTimer(); setInterval(updateTimer, 1000);
         };
 
-        // 核心滾動偵測
         function checkProgress() {
             if (isSuccessShown) return;
             const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
