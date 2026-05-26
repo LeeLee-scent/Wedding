@@ -152,11 +152,11 @@
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
         .photo-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; }
 
-        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
+        /* 📸 💡 修正後樣式：垂直接連往下且「完全緊貼」的橫向照片流 (只包含7,8,9) */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
             gap: 0; 
-            width: 100%; max-width: 600px; margin: 0 auto 40px auto; 
+            width: 100%; max-width: 600px; margin: 0 auto 20px auto; /* 💡 稍微縮小下方 margin */
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
             border-radius: 8px; 
             overflow: hidden; 
@@ -167,6 +167,17 @@
             border-radius: 0; 
         }
 
+        /* 💡 新增：最後獨立區塊的照片樣式 (photo10) */
+        #final-extra-photo {
+            width: 100%; max-width: 600px; margin: 30px auto 10px auto; 
+            padding: 0 10px; /* 稍微留點間距，增加獨立感 */
+        }
+        #final-extra-photo img {
+            width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover;
+            border-radius: 8px; /* 💡 給予圓角，讓它看起來是獨立的紀念塊 */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* 增加陰影，凸顯出來 */
+        }
+
         /* 正式邀約區塊 */
         #final-invitation-block {
             width: 100%; max-width: 600px; text-align: center;
@@ -174,7 +185,15 @@
         }
         .final-greeting { font-size: 0.95rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
         .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
-        .thanks-speech { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; margin-top: 40px; border-top: 1px dashed rgba(197, 163, 104, 0.3); padding-top: 35px; }
+        
+        /* 💡 將原本合併的 speech 拆出來單獨控制順序 */
+        .thanks-speech-block {
+             width: 100%; max-width: 600px; text-align: center;
+            margin: 10px auto 100px auto; /* 💡 移到底部做收尾 */
+            padding: 35px 20px;
+            border-top: 1px dashed rgba(197, 163, 104, 0.3); /* 保留虛線 */
+        }
+        .thanks-speech-text { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
@@ -216,13 +235,13 @@
         <div class="couple-arch-section fade-in-section">
             <div class="arch-container">
                 <div class="arch-frame">
-                    <img src="assets/photo1.webp" alt="新郎照">
+                    <img src="assets/photo1.webp" alt="新郎照" loading="lazy">
                 </div>
                 <p class="couple-label">新郎：林建安</p>
             </div>
             <div class="arch-container">
                 <div class="arch-frame">
-                    <img src="assets/photo2.webp" alt="新娘照">
+                    <img src="assets/photo2.webp" alt="新娘照" loading="lazy">
                 </div>
                 <p class="couple-label">新娘：李抒琪</p>
             </div>
@@ -245,7 +264,7 @@
             <p class="scratch-guide-chinese">刮開揭曉驚喜</p>
 
             <div id="scratch-container">
-                <img src="assets/main-image.webp" style="width:100%; height:82%; object-fit:cover;">
+                <img src="assets/main-image.webp" style="width:100%; height:82%; object-fit:cover;" loading="lazy">
                 <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
                     <div style="text-align:center;"><span id="days" style="font-weight:700; color:var(--gold);">00</span><br><small>DAYS</small></div>
                     <div style="text-align:center;"><span id="hours" style="font-weight:700; color:var(--gold);">00</span><br><small>HRS</small></div>
@@ -292,8 +311,8 @@
 
         <section id="part4" class="fade-in-section" style="min-height: auto; padding-bottom: 0;">
             <div class="photo-grid">
-                <img src="assets/photo3.webp"> <img src="assets/photo4.webp">
-                <img src="assets/photo5.webp"> <img src="assets/photo6.webp">
+                <img src="assets/photo3.webp" loading="lazy"> <img src="assets/photo4.webp" loading="lazy">
+                <img src="assets/photo5.webp" loading="lazy"> <img src="assets/photo6.webp" loading="lazy">
             </div>
 
             <div class="lyric-text-block" style="margin: 40px auto;">
@@ -307,14 +326,14 @@
             </div>
         </section>
 
-        <section id="part5" class="fade-in-section" style="min-height: auto; padding-top: 0;">
+        <section id="part5" class="fade-in-section" style="min-height: auto; padding-top: 0; padding-bottom: 0;">
             <div class="photo-grid-vertical-stream">
-                <img src="assets/photo7.webp">
-                <img src="assets/photo8.webp">
-                <img src="assets/photo9.webp">
-                <img src="assets/photo10.png"> </div>
-
-            <div id="final-invitation-block">
+                <img src="assets/photo7.webp" loading="lazy">
+                <img src="assets/photo8.webp" loading="lazy">
+                <img src="assets/photo9.webp" loading="lazy">
+                </div>
+            
+            <div id="final-invitation-block" style="margin-bottom: 10px;">
                 <p class="final-greeting">
                     我們將成為彼此緊緊依靠的家人<br>
                     謝謝你這一天你專門為我們而來
@@ -325,14 +344,21 @@
                     邀請您出席我們的婚禮儀式<br>
                     見證和分享我們的幸福記憶
                 </p>
-
-                <p class="thanks-speech">
-                    一路走來，心中裝滿感謝親人的關愛與照顧<br>
-                    朋友的見證與陪伴<br><br>
-                    這一天感謝有你，陪我們啟程。
-                </p>
             </div>
         </section>
+
+        <div id="final-extra-photo" class="fade-in-section">
+            <img src="assets/photo10.webp" alt="最終紀念照片" loading="lazy">
+        </div>
+
+        <div class="thanks-speech-block fade-in-section">
+            <p class="thanks-speech-text">
+                一路走來，心中裝滿感謝親人的關愛與照顧<br>
+                朋友的見證與陪伴<br><br>
+                這一天感謝有你，陪我們啟程。
+            </p>
+        </div>
+
     </main>
 
     <script>
