@@ -13,7 +13,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -29,7 +29,7 @@
             overflow-x: hidden; 
         }
 
-        /* --- 1. 3D 信封特效 --- */
+        /* --- 1. 3D 信封特效 (核心動畫不變) --- */
         #envelope-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             z-index: 9999; perspective: 2500px; 
@@ -98,15 +98,14 @@
         }
         .visible .hero-text-container { opacity: 1; transform: translateY(0); }
 
-        /* 💡 已調整：縮小與婚紗照之間的距離，讓版面更緊湊 */
         #hero-poem-section {
-            min-height: 25vh; /* 💡 從 50vh 縮小至 25vh，減少整體佔用高度 */
+            min-height: 25vh; 
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 25px 20px 15px 20px; /* 💡 縮小上下內距（特別是上方 padding 改小） */
+            padding: 30px 20px 10px 20px;
         }
         .hero-poem-english {
             font-family: 'Dancing Script', cursive;
@@ -122,6 +121,48 @@
             color: #5c5246; 
             margin: 0;
             font-weight: 500;
+        }
+
+        /* 💡 拱門造型的核心 CSS 樣式控制 */
+        .couple-arch-section {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto 50px auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px;
+        }
+
+        .arch-container {
+            text-align: center;
+            width: 46%;
+        }
+
+        /* 透過 border-radius 讓方形照片直接裁切成精緻的拱門型 */
+        .arch-frame {
+            width: 100%;
+            aspect-ratio: 1 / 1.4; /* 控制拱門的優雅高寬比例 */
+            border-radius: 120px 120px 0 0; /* 💡 關鍵：左上、右上設定大圓角，左下、右下維持直角 */
+            overflow: hidden;
+            border: 1px solid var(--gold); /* 幫拱門鑲上細緻的金邊 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            margin-bottom: 12px;
+        }
+
+        .arch-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保不管照片比例如何，都能完美填滿拱門且不變形 */
+            display: block;
+        }
+
+        .couple-label {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 0.95rem;
+            color: #5c5246;
+            margin: 0;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
@@ -208,6 +249,21 @@
             <p class="hero-poem-chinese">日子慢慢過，愛意漸漸濃</p>
         </div>
 
+        <div class="couple-arch-section fade-in-section">
+            <div class="arch-container">
+                <div class="arch-frame">
+                    <img src="assets/photo1.webp" alt="新郎照">
+                </div>
+                <p class="couple-label">新郎：林建安</p>
+            </div>
+            <div class="arch-container">
+                <div class="arch-frame">
+                    <img src="assets/photo2.webp" alt="新娘照">
+                </div>
+                <p class="couple-label">新娘：李抒琪</p>
+            </div>
+        </div>
+
         <section id="part2" class="fade-in-section">
             <h3 class="scratch-guide-reveal">Reveal</h3>
             <p class="scratch-guide-instruction">SCRATCH TO DISCOVER THE DATE</p>
@@ -215,7 +271,6 @@
 
             <div id="scratch-container">
                 <img src="assets/main-image.webp" style="width:100%; height:82%; object-fit:cover;">
-                
                 <div style="height:18%; display:flex; justify-content:center; align-items:center; gap:15px; background:#fff;">
                     <div style="text-align:center;"><span id="days" style="font-weight:700; color:var(--gold);">00</span><br><small>DAYS</small></div>
                     <div style="text-align:center;"><span id="hours" style="font-weight:700; color:var(--gold);">00</span><br><small>HRS</small></div>
@@ -255,12 +310,11 @@
     </main>
 
     <script>
-        // --- 核心播放與動畫邏輯 ---
+        // --- 核心播放與動畫邏輯 (維持原樣) ---
         function startWedding() {
             const wrapper = document.getElementById('envelope-wrapper');
             const mainContent = document.getElementById('main-content');
             const bgm = document.getElementById('bgm');
-
             if (bgm) {
                 bgm.muted = false;
                 bgm.play().catch(() => {
@@ -268,7 +322,6 @@
                     bgm.play();
                 });
             }
-
             if (!wrapper.classList.contains('opened')) {
                 wrapper.classList.add('opened');
                 mainContent.classList.add('visible');
