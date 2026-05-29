@@ -142,7 +142,7 @@
         #scratch-success-msg { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold); margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease; }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
-        /* 📸 專門容納 4 張「直式照片」的精緻雙排相簿樣式 */
+        /* 📸 精緻雙排相簿樣式 */
         .photo-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -161,19 +161,23 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 💡 新增：取代文字的正式邀請函圖片容器樣式 */
+        /* 💡 修正：取代文字的正式邀請函圖片容器樣式 (確保適配長形圖片) */
         .invitation-image-wrap {
             width: 100%;
             max-width: 450px;
             margin: 0 auto;
-            padding: 0 15px; /* 增加手機版的左右微留白，避免圖片死貼邊緣 */
+            padding: 0 15px;
         }
         .invitation-image-wrap img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 8px; /* 讓圖片四角有些微圓角，更有實體卡片感 */
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* 優雅的微立體陰影 */
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            /* 💡 針對直式長形圖片的優化 */
+            aspect-ratio: 2 / 3; /* 設定圖片容器為直式比例 */
+            object-fit: cover;   /* 確保圖片填滿容器不變形 */
+            max-height: 80vh;    /* 防止圖片在手機上拉得過長 */
         }
 
         /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
@@ -205,6 +209,21 @@
             border-radius: 8px; 
             box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
             display: block;
+        }
+
+        /* 💡 新增：最後一張照片的樣式區塊 */
+        #final-extra-photo {
+            width: 100%;
+            max-width: 600px; /* 這裡設定最大寬度，您可以根據圖片解析度調整 */
+            margin: 50px auto; /* 增加上下間距，讓它與邀約塊和謝詞分開 */
+            padding: 0 15px;
+        }
+        #final-extra-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1); /* 優雅的陰影 */
         }
 
         /* 正式邀約區塊 */
@@ -258,7 +277,7 @@
 
         <div id="hero-poem-section" class="fade-in-section">
             <p class="hero-poem-english">Love is space and time measured by the heart</p>
-            <p class="hero-poem-chinese">日子慢慢過，愛意漸漸濃</p>
+            <p class="hero-poem-chinese">日子慢過，愛意漸漸濃</p>
         </div>
 
         <div class="couple-arch-section fade-in-section">
@@ -354,14 +373,18 @@
             <div id="final-invitation-block" style="margin-bottom: 10px;">
                 <p class="final-greeting">
                     我們將成為彼此緊緊依靠的家人<br>
-                    邁入人生新階段的這天<br>
-                    與我們共同分享幸福與歡樂<br>
+                    攜同我們的父母<br>
+                    邀請您出席我們的婚禮儀式<br>
                 </p>
             </div>
         </section>
 
         <div id="final-extra-photo-portrait" class="fade-in-section">
             <img src="assets/photo10.webp" alt="最終直式紀念照片" loading="lazy">
+        </div>
+
+        <div id="final-extra-photo" class="fade-in-section">
+            <img src="assets/photo11.webp" alt="結尾婚紗紀念照片" loading="lazy">
         </div>
 
         <div class="thanks-speech-block fade-in-section">
