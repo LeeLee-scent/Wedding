@@ -142,13 +142,7 @@
         #scratch-success-msg { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold); margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease; }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
-        .invitation-frame { 
-            padding: 60px 35px; width: 100%; max-width: 450px; text-align: center; 
-            background: rgba(255, 255, 255, 0.8); border: 1px solid var(--gold); 
-            backdrop-filter: blur(2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-        }
-
-        /* 💡 核心修正：專門容納 4 張「直式照片」的精緻雙排相簿樣式 */
+        /* 📸 專門容納 4 張「直式照片」的精緻雙排相簿樣式 */
         .photo-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -160,14 +154,29 @@
         }
         .photo-grid img { 
             width: 100%; 
-            height: auto; /* 解鎖固定的 220px */
-            aspect-ratio: 3 / 4; /* 強制格子符合直式的 3:4 完美黃金比例 */
+            height: auto; 
+            aspect-ratio: 3 / 4; 
             object-fit: cover; 
             border-radius: 8px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 (只包含7,8,9) */
+        /* 💡 新增：取代文字的正式邀請函圖片容器樣式 */
+        .invitation-image-wrap {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 0 15px; /* 增加手機版的左右微留白，避免圖片死貼邊緣 */
+        }
+        .invitation-image-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px; /* 讓圖片四角有些微圓角，更有實體卡片感 */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* 優雅的微立體陰影 */
+        }
+
+        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
             gap: 0; 
@@ -206,7 +215,7 @@
         .final-greeting { font-size: 0.85rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
         .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
         
-        /* 將原本合併的 speech 拆出來單獨控制順序 */
+        /* 結尾謝詞區塊 */
         .thanks-speech-block {
              width: 100%; max-width: 600px; text-align: center;
             margin: 10px auto 100px auto; 
@@ -307,16 +316,8 @@
         </div>
 
         <section id="part3" class="fade-in-section" style="min-height: auto; padding-bottom: 20px;">
-            <div class="invitation-frame">
-                <h2 style="font-size: 2.4rem; margin-bottom: 25px;">誠摯邀請</h2>
-                <p style="font-size: 1.2rem; letter-spacing: 2px;"><strong>林建安 & 李抒琪</strong></p>
-                <p style="line-height: 2.4; color: #444; margin-top: 20px;">
-                    在台東海邊遇見了你<br>
-                    從此我們的世界有了旋律<br>
-                    誠摯邀請您見證我們的幸福時刻<br><br>
-                    <strong>2026 年 10 月 03 日</strong><br>
-                    18:30 入席 | 八德彭園會館
-                </p>
+            <div class="invitation-image-wrap">
+                <img src="assets/invitation-card.webp" alt="誠摯邀請 林建安 & 李抒琪 婚禮邀請函" loading="lazy">
             </div>
         </section>
         
