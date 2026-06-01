@@ -161,7 +161,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 💡 修正：取代文字的正式邀請函圖片容器樣式 (確保適配長形圖片) */
+        /* 正式邀請函圖片容器樣式 */
         .invitation-image-wrap {
             width: 100%;
             max-width: 450px;
@@ -174,10 +174,9 @@
             display: block;
             border-radius: 8px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            /* 💡 針對直式長形圖片的優化 */
-            aspect-ratio: 2 / 3; /* 設定圖片容器為直式比例 */
-            object-fit: cover;   /* 確保圖片填滿容器不變形 */
-            max-height: 80vh;    /* 防止圖片在手機上拉得過長 */
+            aspect-ratio: 2 / 3; 
+            object-fit: cover;   
+            max-height: 80vh;    
         }
 
         /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
@@ -211,19 +210,20 @@
             display: block;
         }
 
-        /* 💡 新增：最後一張照片的樣式區塊 */
+        /* 💡 修正：針對 photo11 去背圖量身打造的平貼無特效樣式 */
         #final-extra-photo {
             width: 100%;
-            max-width: 600px; 
-            margin: 30px auto; /* 調整為移動至邀請函後方時的適當間距 */
-            padding: 0 20px;
+            max-width: 450px;       /* 限制最大寬度，讓去背文字與圖案比例精緻 */
+            margin: 15px auto 35px auto; /* 優雅的上下過渡間距 */
+            padding: 0 25px;
         }
         #final-extra-photo img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 8px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1); /* 優雅的陰影 */
+            border-radius: 0;       /* 移除圓角，保持素材原本形狀 */
+            box-shadow: none;       /* 💡 核心：移除所有陰影，讓去背圖片完美融入背景紙張 */
+            filter: none;
         }
 
         /* 正式邀約區塊 */
@@ -340,7 +340,7 @@
             </div>
         </section>
 
-        <!-- 💡 移至此處：結尾婚紗紀念照片 (photo11) 移動到邀請函 (part3) 後面 -->
+        <!-- 💡 已優化：平貼於紙張紋理背景、毫無特效的 photo11 去背紀念圖案 -->
         <div id="final-extra-photo" class="fade-in-section">
             <img src="assets/photo11.png" alt="結尾婚紗紀念照片" loading="lazy">
         </div>
