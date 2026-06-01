@@ -214,8 +214,8 @@
         /* 💡 新增：最後一張照片的樣式區塊 */
         #final-extra-photo {
             width: 100%;
-            max-width: 600px; /* 這裡設定最大寬度，您可以根據圖片解析度調整 */
-            margin: 50px auto; /* 增加上下間距，讓它與邀約塊和謝詞分開 */
+            max-width: 600px; 
+            margin: 30px auto; /* 調整為移動至邀請函後方時的適當間距 */
             padding: 0 20px;
         }
         #final-extra-photo img {
@@ -339,6 +339,11 @@
                 <img src="assets/invitation-card.webp" alt="誠摯邀請 林建安 & 李抒琪 婚禮邀請函" loading="lazy">
             </div>
         </section>
+
+        <!-- 💡 移至此處：結尾婚紗紀念照片 (photo11) 移動到邀請函 (part3) 後面 -->
+        <div id="final-extra-photo" class="fade-in-section">
+            <img src="assets/photo11.webp" alt="結尾婚紗紀念照片" loading="lazy">
+        </div>
         
         <div class="lyric-text-block fade-in-section">
             <p>
@@ -381,10 +386,6 @@
 
         <div id="final-extra-photo-portrait" class="fade-in-section">
             <img src="assets/photo10.webp" alt="最終直式紀念照片" loading="lazy">
-        </div>
-
-        <div id="final-extra-photo" class="fade-in-section">
-            <img src="assets/photo11.webp" alt="結尾婚紗紀念照片" loading="lazy">
         </div>
 
         <div class="thanks-speech-block fade-in-section">
