@@ -13,7 +13,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=600&family=Noto+Serif+TC:wght=500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a368; --text-color: #8d7b6d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -142,44 +142,23 @@
         #scratch-success-msg { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold); margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease; }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
-        /* 📸 ✨完美整合：四格相簿每張精確間隔 50% 高度的階梯瀑布排列 */
+        /* 📸 精緻雙排相簿樣式 */
         .photo-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 16px;                  /* 保持精緻的左右欄間距 */
+            gap: 6px; 
             width: 100%; 
             max-width: 600px; 
             margin: 0 auto; 
-            padding: 0 16px;
+            padding: 0 0px;
         }
         .photo-grid img { 
             width: 100%; 
             height: auto; 
             aspect-ratio: 3 / 4; 
             object-fit: cover; 
-            border-radius: 0;           /* 延續先前設定：平貼去背無圓角無陰影 */
-            box-shadow: none;
-        }
-        
-        /* 💡 運用精確計算的 margin-top，完美打造每張照片「均勻下沉 50%」的流暢空間感 */
-        .photo-grid img:nth-child(1) { 
-            /* 左邊第一張 (photo3) - 基準點原位不變 */
-            margin-top: 0; 
-        }
-        .photo-grid img:nth-child(2) { 
-            /* 右邊第一張 (photo4) - 比左1下沉 50% 的「照片高度」
-               在比例計算中，3:4 照片高度的 50% 相當於它自身寬度的 66.6% */
-            margin-top: 66.6%; 
-        }
-        .photo-grid img:nth-child(3) { 
-            /* 左邊第二張 (photo5) - 比右1再下沉 50% 
-               為了讓它和左1不黏在一起，並保持與右1的完美落差，這裡推開 33.3% */
-            margin-top: 33.3%; 
-        }
-        .photo-grid img:nth-child(4) { 
-            /* 右邊第二張 (photo6) - 比左2再下沉 50%
-               推開對應的間距，使其完美抵達階梯最底部 */
-            margin-top: 33.3%; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         /* 正式邀請函圖片容器樣式 */
@@ -231,19 +210,19 @@
             display: block;
         }
 
-        /* 💡 針對 photo11 去背圖量身打造的平貼無特效樣式 */
+        /* 💡 修正：針對 photo11 去背圖量身打造的平貼無特效樣式 */
         #final-extra-photo {
             width: 100%;
-            max-width: 450px;       
-            margin: 15px auto 35px auto; 
+            max-width: 450px;       /* 限制最大寬度，讓去背文字與圖案比例精緻 */
+            margin: 15px auto 35px auto; /* 優雅的上下過渡間距 */
             padding: 0 25px;
         }
         #final-extra-photo img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 0;       
-            box-shadow: none;       
+            border-radius: 0;       /* 移除圓角，保持素材原本形狀 */
+            box-shadow: none;       /* 💡 核心：移除所有陰影，讓去背圖片完美融入背景紙張 */
             filter: none;
         }
 
@@ -361,7 +340,7 @@
             </div>
         </section>
 
-        <!-- 平貼於紙張紋理背景、毫無特效的 photo11 去背紀念圖案 -->
+        <!-- 💡 已優化：平貼於紙張紋理背景、毫無特效的 photo11 去背紀念圖案 -->
         <div id="final-extra-photo" class="fade-in-section">
             <img src="assets/photo11.png" alt="結尾婚紗紀念照片" loading="lazy">
         </div>
@@ -375,16 +354,13 @@
             </p>
         </div>
 
-        <!-- 📸 已更新：完美交錯下沉的四格階梯相簿 -->
-        <section id="part4" class="fade-in-section" style="min-height: auto; padding-bottom: 40px;">
+        <section id="part4" class="fade-in-section" style="min-height: auto; padding-bottom: 0;">
             <div class="photo-grid">
-                <img src="assets/photo3.webp" loading="lazy"> <!-- 左1：原位基準 -->
-                <img src="assets/photo4.webp" loading="lazy"> <!-- 右1：比左1下沉 50% -->
-                <img src="assets/photo5.webp" loading="lazy"> <!-- 左2：比右1下沉 50% -->
-                <img src="assets/photo6.webp" loading="lazy"> <!-- 右2：比左2下沉 50% -->
+                <img src="assets/photo3.webp" loading="lazy"> <img src="assets/photo4.webp" loading="lazy">
+                <img src="assets/photo5.webp" loading="lazy"> <img src="assets/photo6.webp" loading="lazy">
             </div>
 
-            <div class="lyric-text-block" style="margin: 60px auto 40px auto;">
+            <div class="lyric-text-block" style="margin: 40px auto;">
                 <p>
                     世上最有趣的事<br>
                     就是和最愛的人一起虛度光陰
