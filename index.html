@@ -133,9 +133,12 @@
         .lyric-text-block { width: 100%; max-width: 550px; margin: 40px auto; text-align: center; padding: 0 30px; }
         .lyric-text-block p { font-size: 0.85rem; color: #5c5246; line-height: 2.4; letter-spacing: 2.5px; font-weight: 500; margin: 0; }
 
-        /* --- 3. 刮刮樂區域 --- */
+        /* --- 3. 刮刮樂區域與時間軸標題樣式（Dancing Script, cursive） --- */
+        .script-title-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; text-align: center;}
+
+        /* --- 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        .scratch-guide-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; }
+        
         .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 0.8rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 4px 0; font-weight: 500; }
         .scratch-guide-chinese { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; letter-spacing: 2px; color: #a19285; margin: 0 0 25px 0; font-weight: 500; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
@@ -161,25 +164,23 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 正式邀請函圖片容器樣式 */
+        /* 💡 調整 1：邀請函卡片比照 photo11 改為平貼、無陰影無圓角去背樣式 */
         .invitation-image-wrap {
             width: 100%;
             max-width: 450px;
             margin: 0 auto;
-            padding: 0 8px;
+            padding: 0 25px;
         }
         .invitation-image-wrap img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 8px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            aspect-ratio: 2 / 3; 
-            object-fit: cover;   
-            max-height: 80vh;    
+            border-radius: 0;       
+            box-shadow: none;       
+            filter: none;
         }
 
-        /* 📸 垂直接連往下且「完全緊貼」的橫向照片流 */
+        /* 📸 調整 3（選項 A）：photo7-9 保持最完整原始比例、不切圖的橫向照片流 */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
             gap: 0; 
@@ -189,7 +190,9 @@
             overflow: hidden; 
         }
         .photo-grid-vertical-stream img { 
-            width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; 
+            width: 100%; 
+            height: auto;       /* 讓高度隨原始比例自動縮放 */
+            object-fit: contain; /* 💡 確保完全顯示整張照片，絕不剪裁放大 */
             display: block; 
             border-radius: 0; 
         }
@@ -213,16 +216,16 @@
         /* 💡 修正：針對 photo11 去背圖量身打造的平貼無特效樣式 */
         #final-extra-photo {
             width: 100%;
-            max-width: 450px;       /* 限制最大寬度，讓去背文字與圖案比例精緻 */
-            margin: 15px auto 35px auto; /* 優雅的上下過渡間距 */
+            max-width: 450px;       
+            margin: 15px auto 35px auto; 
             padding: 0 25px;
         }
         #final-extra-photo img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 0;       /* 移除圓角，保持素材原本形狀 */
-            box-shadow: none;       /* 💡 核心：移除所有陰影，讓去背圖片完美融入背景紙張 */
+            border-radius: 0;       
+            box-shadow: none;       
             filter: none;
         }
 
@@ -307,7 +310,7 @@
         </div>
 
         <section id="part2" class="fade-in-section">
-            <h3 class="scratch-guide-reveal">Reveal</h3>
+            <h3 class="script-title-reveal">Reveal</h3>
             <p class="scratch-guide-instruction">SCRATCH TO DISCOVER THE DATE</p>
             <p class="scratch-guide-chinese">刮開揭曉驚喜</p>
 
@@ -340,7 +343,10 @@
             </div>
         </section>
 
-        <!-- 💡 已優化：平貼於紙張紋理背景、毫無特效的 photo11 去背紀念圖案 -->
+        <div class="fade-in-section">
+            <h3 class="script-title-reveal" style="margin-top: 40px; margin-bottom: 20px;">WEDDING TIME LINE</h3>
+        </div>
+
         <div id="final-extra-photo" class="fade-in-section">
             <img src="assets/photo11.png" alt="結尾婚紗紀念照片" loading="lazy">
         </div>
