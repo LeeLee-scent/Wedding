@@ -164,23 +164,30 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 💡 調整 1：邀請函卡片比照 photo11 改為平貼、無陰影無圓角去背樣式 */
+        /* 💡 ✨全新優化：將邀請函卡片盡量放大，以滿版清晰呈現核心內容 */
         .invitation-image-wrap {
             width: 100%;
-            max-width: 450px;
+            max-width: 650px;              /* 💡 大幅增加最大寬度限制 */
             margin: 0 auto;
-            padding: 0 25px;
+            padding: 0 5px;                /* 💡 在手機上大幅減少側邊留白，達到近乎滿版 */
         }
+        /* 此處優化手機滿版效果，當螢幕小於一定尺寸時，寬度撐滿 100% 減去極小留白 */
+        @media screen and (max-width: 650px) {
+            .invitation-image-wrap {
+                width: calc(100% - 10px); 
+            }
+        }
+
         .invitation-image-wrap img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 0;       
-            box-shadow: none;       
+            border-radius: 0;               /* 保持平貼設計 */
+            box-shadow: none;               
             filter: none;
         }
 
-        /* 📸 調整 3（選項 A）：photo7-9 保持最完整原始比例、不切圖的橫向照片流 */
+        /* 📸 photo7-9 保持最完整原始比例、不切圖的橫向照片流 */
         .photo-grid-vertical-stream { 
             display: flex; flex-direction: column; 
             gap: 0; 
@@ -191,8 +198,8 @@
         }
         .photo-grid-vertical-stream img { 
             width: 100%; 
-            height: auto;       /* 讓高度隨原始比例自動縮放 */
-            object-fit: contain; /* 💡 確保完全顯示整張照片，絕不剪裁放大 */
+            height: auto;       
+            object-fit: contain; 
             display: block; 
             border-radius: 0; 
         }
