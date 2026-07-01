@@ -220,14 +220,14 @@
             display: block;
         }
 
-        /* 💡 修正：針對 photo11 去背圖量身打造的平貼無特效樣式 */
-        #final-extra-photo {
+        /* 💡 修正：針對 photo11、photo12 滿版或去背圖量身打造的平貼無特效樣式 */
+        #final-extra-photo, .traffic-image-wrap {
             width: 100%;
             max-width: 450px;       
             margin: 15px auto 35px auto; 
             padding: 0 25px;
         }
-        #final-extra-photo img {
+        #final-extra-photo img, .traffic-image-wrap img {
             width: 100%;
             height: auto;
             display: block;
@@ -247,7 +247,7 @@
         /* 結尾謝詞區塊 */
         .thanks-speech-block {
              width: 100%; max-width: 600px; text-align: center;
-            margin: 10px auto 100px auto; 
+            margin: 10px auto 40px auto; /* 💡 稍微縮減下邊距以銜接交通資訊 */
             padding: 35px 20px;
             border-top: 1px dashed rgba(197, 163, 104, 0.3); 
         }
@@ -311,7 +311,7 @@
                 當你收到這封請帖的時候<br>
                 我們婚禮已經在倒數計時啦～<br><br>
                 人生有三萬多天<br>
-                很開心這一天你們專門為我們而來<br><br>
+                很開心這一天你們專為我們而來<br><br>
                 好久不見 &nbsp; 婚禮見
             </p>
         </div>
@@ -407,6 +407,15 @@
                 朋友的見證與陪伴<br><br>
                 這一天感謝有你，陪我們啟程。
             </p>
+        </div>
+
+        <!-- 💡 新增：交通資訊區塊 -->
+        <div class="fade-in-section" style="text-align: center; margin-top: 20px;">
+            <h3 class="script-title-reveal" style="font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 20px;">交通資訊</h3>
+        </div>
+
+        <div class="traffic-image-wrap fade-in-section" style="margin-bottom: 80px;">
+            <img src="images/photo12.png" alt="婚禮交通資訊" loading="lazy">
         </div>
 
     </main>
