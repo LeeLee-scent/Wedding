@@ -133,12 +133,10 @@
         .lyric-text-block { width: 100%; max-width: 550px; margin: 40px auto; text-align: center; padding: 0 30px; }
         .lyric-text-block p { font-size: 0.85rem; color: #5c5246; line-height: 2.4; letter-spacing: 2.5px; font-weight: 500; margin: 0; }
 
-        /* --- 3. 刮刮樂區域與時間軸標題樣式（Dancing Script, cursive） --- */
+        /* --- 3. 標題與刮刮樂樣式 --- */
         .script-title-reveal { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1; text-align: center;}
 
-        /* --- 刮刮樂區域 --- */
         #scratch-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1.2; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        
         .scratch-guide-instruction { font-family: 'Noto Serif TC', serif; font-size: 0.8rem; color: var(--text-color); letter-spacing: 2px; margin: 10px 0 4px 0; font-weight: 500; }
         .scratch-guide-chinese { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; letter-spacing: 2px; color: #a19285; margin: 0 0 25px 0; font-weight: 500; }
         #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; touch-action: none; cursor: crosshair; }
@@ -164,32 +162,31 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 💡 ✨全新優化：將邀請函卡片盡量放大，以滿版清晰呈現核心內容 */
+        /* 📸 滿版清晰呈現核心內容的邀請函卡片 */
         .invitation-image-wrap {
             width: 100%;
-            max-width: 650px;              /* 💡 大幅增加最大寬度限制 */
+            max-width: 650px;              
             margin: 0 auto;
-            padding: 0 5px;                /* 💡 在手機上大幅減少側邊留白，達到近乎滿版 */
+            padding: 0 5px;                
         }
-        /* 此處優化手機滿版效果，當螢幕小於一定尺寸時，寬度撐滿 100% 減去極小留白 */
         @media screen and (max-width: 650px) {
             .invitation-image-wrap {
                 width: calc(100% - 10px); 
             }
         }
-
         .invitation-image-wrap img {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 0;               /* 保持平貼設計 */
+            border-radius: 0;               
             box-shadow: none;               
             filter: none;
         }
 
-        /* 📸 photo7-9 保持最完整原始比例、不切圖的橫向照片流 */
+        /* 📸 photo7-9 完整比例橫向照片流 */
         .photo-grid-vertical-stream { 
-            display: flex; flex-direction: column; 
+            display: grid; 
+            grid-template-columns: 1fr;
             gap: 0; 
             width: 100%; max-width: 600px; margin: 0 auto 20px auto; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
@@ -220,7 +217,7 @@
             display: block;
         }
 
-        /* 💡 修正：針對 photo11、photo12 滿版或去背圖量身打造的平貼無特效樣式 */
+        /* 📸 photo11、photo12 平貼無去背特效樣式 */
         #final-extra-photo, .traffic-image-wrap {
             width: 100%;
             max-width: 450px;       
@@ -247,11 +244,30 @@
         /* 結尾謝詞區塊 */
         .thanks-speech-block {
              width: 100%; max-width: 600px; text-align: center;
-            margin: 10px auto 40px auto; /* 💡 稍微縮減下邊距以銜接交通資訊 */
+            margin: 10px auto 30px auto; 
             padding: 35px 20px;
             border-top: 1px dashed rgba(197, 163, 104, 0.3); 
         }
         .thanks-speech-text { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; }
+
+        /* 🗓️ 行事曆美化卡片樣式 */
+        .calendar-card {
+            width: 100%; max-width: 450px; margin: 0 auto 50px auto; padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(197, 163, 104, 0.25); border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(141, 123, 109, 0.05);
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+        }
+        .universal-cal-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 144px; height: 26px; /* 完美對齊 Google 官方按鈕尺寸 */
+            font-size: 0.75rem; font-family: 'Noto Serif TC', serif; font-weight: bold;
+            color: #ffffff; background: #c5a368; border: none; border-radius: 4px;
+            text-decoration: none; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(197,163,104,0.2);
+            transition: background 0.3s, transform 0.2s;
+        }
+        .universal-cal-btn:active { background: #b39257; transform: scale(0.98); }
 
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .fade-in-section.active { opacity: 1; transform: translateY(0); }
@@ -409,8 +425,28 @@
             </p>
         </div>
 
-        <!-- 💡 新增：交通資訊區塊 -->
-        <div class="fade-in-section" style="text-align: center; margin-top: 20px;">
+        <div class="fade-in-section" style="padding: 0 25px;">
+            <div class="calendar-card">
+                <div style="text-align: center;">
+                    <h3 class="script-title-reveal" style="font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 5px;">Save The Date</h3>
+                    <p style="font-size: 0.8rem; color: #8d7b6d; letter-spacing: 1.5px; margin: 0; font-weight: 500;">一鍵將婚禮加入您的手機行事曆</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
+                    <a target="_blank" href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=N2QxZWlpb2JxbzA2cGZrMmRqMDhraTUwdm0gamlhnamU0Mzk5MTYwMDhAbQ&amp;tmsrc=jianan39916008%40gmail.com" style="display: inline-flex; transition: transform 0.2s;">
+                        <img border="0" src="https://calendar.google.com/calendar/images/ext/gc_button1_zh-TW.gif" alt="Google Calendar" style="display: block; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                    </a>
+
+                    <a href="https://www.addevent.com/dir/?client=atc&start=2026-10-03+18%3A30%3A00&duration=180&title=%E5%BB%BA%E5%AE%89+%26+%E6%8A%92%E7%90%AA+%E5%A9%9A%E5%AE%B4+%F0%9F%92%8D&description=%E8%AA%A0%E6%96%AC%E9%82%80%E8%AB%8B%E6%82%A8%E8%A6%8B%E8%AD%89%E6%88%91%E5%80%91%E7%9A%84%E5%B9%B8%E7%A6%8F%E6%99%82%E5%88%BB%EF%BC%81&location=%E5%BD%AD%E5%9C%92%E5%A9%9A%E5%AE%B4%E6%9C%83%E9%A4%A8-%E5%85%AB%E5%BE%B7%E9%A4%A8+(%E6%A1%83%E5%9C%92%E5%B8%82%E5%85%AB%E5%BE%B7%E5%8D%80%E4%BB%8B%E5%A3%BD%E8%B7%AF%E4%B8%80%E6%AE%B5728%E8%99%9F3%E6%A8%93)" 
+                       target="_blank" 
+                       class="universal-cal-btn">
+                       iPhone / 其他手機點此
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="fade-in-section" style="text-align: center;">
             <h3 class="script-title-reveal" style="font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 20px;">交通資訊</h3>
         </div>
 
