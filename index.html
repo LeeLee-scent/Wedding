@@ -252,7 +252,7 @@
 
         /* 🗓️ 行事曆美化卡片樣式 */
         .calendar-card {
-            width: 100%; max-width: 450px; margin: 0 auto 50px auto; padding: 25px 20px;
+            width: 100%; max-width: 450px; margin: 0 auto 50px auto; padding: 30px 20px;
             background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(197, 163, 104, 0.25); border-radius: 12px;
@@ -261,10 +261,9 @@
         }
         .universal-cal-btn {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 144px; height: 26px; /* 完美對齊 Google 官方按鈕尺寸 */
-            font-size: 0.75rem; font-family: 'Noto Serif TC', serif; font-weight: bold;
-            color: #ffffff; background: #c5a368; border: none; border-radius: 4px;
-            text-decoration: none; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(197,163,104,0.2);
+            font-family: 'Noto Serif TC', serif; font-weight: bold;
+            color: #ffffff; background: #c5a368; border: none;
+            text-decoration: none; letter-spacing: 1px;
             transition: background 0.3s, transform 0.2s;
         }
         .universal-cal-btn:active { background: #b39257; transform: scale(0.98); }
@@ -425,32 +424,31 @@
             </p>
         </div>
 
+        <!-- 🗓️ 一鍵加入行事曆精緻卡片區塊（統一 Google 萬用版） -->
         <div class="fade-in-section" style="padding: 0 25px;">
-            <div class="calendar-card">
+            <div class="calendar-card" style="max-width: 400px;">
                 <div style="text-align: center;">
                     <h3 class="script-title-reveal" style="font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 5px;">Save The Date</h3>
-                    <p style="font-size: 0.8rem; color: #8d7b6d; letter-spacing: 1.5px; margin: 0; font-weight: 500;">一鍵將婚禮加入您的手機行事曆</p>
+                    <p style="font-size: 0.8rem; color: #8d7b6d; letter-spacing: 1.5px; margin: 0 0 20px 0; font-weight: 500;">一鍵將婚禮加入您的手機行事曆 🗓️</p>
                 </div>
                 
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
-                    <a target="_blank" href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=N2QxZWlpb2JxbzA2cGZrMmRqMDhraTUwdm0gamlhnamU0Mzk5MTYwMDhAbQ&amp;tmsrc=jianan39916008%40gmail.com" style="display: inline-flex; transition: transform 0.2s;">
-                        <img border="0" src="https://calendar.google.com/calendar/images/ext/gc_button1_zh-TW.gif" alt="Google Calendar" style="display: block; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
-                    </a>
-
-                    <a href="https://www.addevent.com/dir/?client=atc&start=2026-10-03+18%3A30%3A00&duration=180&title=%E5%BB%BA%E5%AE%89+%26+%E6%8A%92%E7%90%AA+%E5%A9%9A%E5%AE%B4+%F0%9F%92%8D&description=%E8%AA%A0%E6%96%AC%E9%82%80%E8%AB%8B%E6%82%A8%E8%A6%8B%E8%AD%89%E6%88%91%E5%80%91%E7%9A%84%E5%B9%B8%E7%A6%8F%E6%99%82%E5%88%BB%EF%BC%81&location=%E5%BD%AD%E5%9C%92%E5%A9%9A%E5%AE%B4%E6%9C%83%E9%A4%A8-%E5%85%AB%E5%BE%B7%E9%A4%A8+(%E6%A1%83%E5%9C%92%E5%B8%82%E5%85%AB%E5%BE%B7%E5%8D%80%E4%BB%8B%E5%A3%BD%E8%B7%AF%E4%B8%80%E6%AE%B5728%E8%99%9F3%E6%A8%93)" 
-                       target="_blank" 
-                       class="universal-cal-btn">
-                       iPhone / 其他手機點此
-                    </a>
-                </div>
+                <!-- 萬用單一按鈕：點擊直接帶入所有婚禮資訊，只需按「儲存」 -->
+                <a target="_blank" 
+                   href="https://www.google.com/calendar/render?action=TEMPLATE&text=建安+%26+抒琪+婚宴+💍&dates=20261003T183000/20261003T213000&details=誠摯邀請您見證我們的幸福時刻！&location=彭園婚宴會館-八德館+(桃園市八德區介壽路一段728號3樓)&sf=true&output=xml" 
+                   class="universal-cal-btn" 
+                   style="width: 200px; height: 40px; font-size: 0.85rem; border-radius: 6px; background: #c5a368; box-shadow: 0 4px 12px rgba(197,163,104,0.3);">
+                   加入我的行事曆
+                </a>
             </div>
         </div>
 
+        <!-- 交通資訊圖片區塊 -->
         <div class="fade-in-section" style="text-align: center;">
             <h3 class="script-title-reveal" style="font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 20px;">交通資訊</h3>
         </div>
 
         <div class="traffic-image-wrap fade-in-section" style="margin-bottom: 80px;">
+            <!-- 💡 確認路徑：assets/photo12.png -->
             <img src="assets/photo12.png" alt="婚禮交通資訊" loading="lazy">
         </div>
 
