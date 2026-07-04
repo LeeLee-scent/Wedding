@@ -437,7 +437,7 @@
             </p>
         </div>
 
-        <!-- 🗓️ 一鍵加入行事曆精緻卡片區塊（統一 Google 萬用版） -->
+        <!-- 🗓️ 一鍵加入行事曆精緻卡片區塊（雙系統版） -->
         <div class="fade-in-section" style="padding: 0 25px; margin-bottom: 80px;">
             <div class="calendar-card" style="max-width: 400px; margin-bottom: 0;">
                 <div style="text-align: center;">
@@ -445,13 +445,23 @@
                     <p style="font-size: 0.8rem; color: #8d7b6d; letter-spacing: 1.5px; margin: 0 0 20px 0; font-weight: 500;">一鍵將婚禮加入您的手機行事曆 🗓️</p>
                 </div>
                 
-                <!-- 萬用單一按鈕 -->
-                <a target="_blank" 
-                   href="https://www.google.com/calendar/render?action=TEMPLATE&text=建安+%26+抒琪+婚宴+💍&dates=20261003T183000/20261003T213000&details=誠摯邀請您見證我們的幸福時刻！&location=彭園婚宴會館-八德館+(桃園市八德區介壽路一段728號3樓)&sf=true&output=xml" 
-                   class="universal-cal-btn" 
-                   style="width: 200px; height: 40px; font-size: 0.85rem; border-radius: 6px; background: #c5a368; box-shadow: 0 4px 12px rgba(197,163,104,0.3);">
-                   加入我的行事曆
-                </a>
+                <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; align-items: center;">
+                    <!-- Google 行事曆按鈕 -->
+                    <a target="_blank" 
+                       href="https://www.google.com/calendar/render?action=TEMPLATE&text=建安+%26+抒琪+婚宴+💍&dates=20261003T183000/20261003T213000&details=誠摯邀請您見證我們的幸福時刻！&location=彭園婚宴會館-八德館+(桃園市八德區介壽路一段728號3樓)&sf=true&output=xml" 
+                       class="universal-cal-btn" 
+                       style="width: 220px; height: 42px; font-size: 0.85rem; border-radius: 6px; background: #c5a368; box-shadow: 0 4px 12px rgba(197,163,104,0.2); text-decoration: none;">
+                       Google 行事曆
+                    </a>
+
+                    <!-- Apple / iOS 通用行事曆按鈕 (指向剛才上傳的 ics 檔案) -->
+                    <!-- 如果你放在 assets 資料夾下，請改成 href="assets/wedding.ics" -->
+                    <a href="wedding.ics" 
+                       class="universal-cal-btn" 
+                       style="width: 220px; height: 42px; font-size: 0.85rem; border-radius: 6px; background: #7a6f62; box-shadow: 0 4px 12px rgba(122,111,98,0.2); text-decoration: none;">
+                       Apple 行事曆 (iOS / Mac)
+                    </a>
+                </div>
             </div>
         </div>
 
