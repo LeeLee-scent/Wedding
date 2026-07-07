@@ -51,7 +51,7 @@
             clip-path: polygon(0 100%, 100% 100%, 100% 35%, 50% 0%, 0 35%);
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 8vh;
+            padding-bottom: 5vh; /* 調整內襯高度以容納微光文字 */
             transition: opacity 3.5s ease-in-out 0.5s, transform 3.5s ease-in-out 0.5s;
         }
 
@@ -70,16 +70,48 @@
             backface-visibility: hidden;
         }
 
+        /* 👑 蠟封按鈕：加入呼吸跳動與光暈動畫 */
         .seal-btn {
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
             cursor: pointer;
             transition: opacity 2s ease 3s; 
+            animation: sealPulse 1.5s infinite ease-in-out; /* 綁定呼吸動畫 */
+        }
+
+        @keyframes sealPulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)) drop-shadow(0 0 0px rgba(197,163,104,0));
+            }
+            50% {
+                transform: translateX(-50%) scale(1.04); /* 微幅放大 */
+                filter: drop-shadow(0 12px 30px rgba(0,0,0,0.45)) drop-shadow(0 0 15px rgba(197,163,104,0.6)); /* 淡雅金色光暈 */
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)) drop-shadow(0 0 0px rgba(197,163,104,0));
+            }
+        }
+
+        /* ✨ 文字微光提示：漸隱漸現動畫 */
+        .click-hint-text {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-top: 15px;
+            letter-spacing: 3px;
+            font-weight: 500;
+            animation: textGlow 2s infinite ease-in-out; /* 綁定微光動畫 */
+        }
+
+        @keyframes textGlow {
+            0%, 100% { opacity: 0.3; filter: blur(0.2px); }
+            50% { opacity: 1; filter: drop-shadow(0 0 5px rgba(197,163,104,0.5)); }
         }
 
         .opened .envelope-top-group { transform: rotateX(160deg); }
-        .opened .seal-btn { opacity: 0; }
+        .opened .seal-btn { opacity: 0; animation: none; } /* 開啟後停止動畫 */
         .opened .envelope-back { opacity: 0; transform: translateY(-60px); filter: brightness(1.6) blur(4px); }
         .opened .envelope-bottom-flap { opacity: 0; transform: translateY(-40px); }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
@@ -293,11 +325,14 @@
         <div class="envelope-back"></div>
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
+            <!-- 👑 蠟封按鈕已套用呼吸光暈動畫 -->
             <img src="assets/seal.webp" class="seal-btn" alt="A&C Seal">
         </div>
         <div class="envelope-bottom-flap">
             <h2 style="font-size: 1.3rem; color: #8d7b6d; font-weight: 300; letter-spacing: 3px; margin: 0;">WEDDING INVITATION</h2>
             <p style="font-size: 1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">SAVE THE DATE</p>
+            <!-- ✨ 新增的金色文字微光提示 -->
+            <p class="click-hint-text">—— 點擊蠟封開啟邀請 ——</p>
         </div>
     </div>
 
