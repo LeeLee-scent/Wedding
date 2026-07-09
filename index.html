@@ -51,7 +51,7 @@
             clip-path: polygon(0 100%, 100% 100%, 100% 35%, 50% 0%, 0 35%);
             filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.1));
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 5vh; /* 調整內襯高度以容納微光文字 */
+            padding-bottom: 5vh; 
             transition: opacity 3.5s ease-in-out 0.5s, transform 3.5s ease-in-out 0.5s;
         }
 
@@ -70,14 +70,13 @@
             backface-visibility: hidden;
         }
 
-        /* 👑 蠟封按鈕：加入呼吸跳動與光暈動畫 */
         .seal-btn {
             position: absolute; bottom: -110px; left: 50%; transform: translateX(-50%);
             width: 250px; z-index: 30;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
             cursor: pointer;
             transition: opacity 2s ease 3s; 
-            animation: sealPulse 1.5s infinite ease-in-out; /* 綁定呼吸動畫 */
+            animation: sealPulse 1.5s infinite ease-in-out; 
         }
 
         @keyframes sealPulse {
@@ -86,8 +85,8 @@
                 filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)) drop-shadow(0 0 0px rgba(197,163,104,0));
             }
             50% {
-                transform: translateX(-50%) scale(1.04); /* 微幅放大 */
-                filter: drop-shadow(0 12px 30px rgba(0,0,0,0.45)) drop-shadow(0 0 15px rgba(197,163,104,0.6)); /* 淡雅金色光暈 */
+                transform: translateX(-50%) scale(1.04); 
+                filter: drop-shadow(0 12px 30px rgba(0,0,0,0.45)) drop-shadow(0 0 15px rgba(197,163,104,0.6)); 
             }
             100% {
                 transform: translateX(-50%) scale(1);
@@ -95,14 +94,13 @@
             }
         }
 
-        /* ✨ 文字微光提示：漸隱漸現動畫 */
         .click-hint-text {
             font-size: 0.8rem;
             color: var(--gold);
             margin-top: 15px;
             letter-spacing: 3px;
             font-weight: 500;
-            animation: textGlow 2s infinite ease-in-out; /* 綁定微光動畫 */
+            animation: textGlow 2s infinite ease-in-out; 
         }
 
         @keyframes textGlow {
@@ -111,7 +109,7 @@
         }
 
         .opened .envelope-top-group { transform: rotateX(160deg); }
-        .opened .seal-btn { opacity: 0; animation: none; } /* 開啟後停止動畫 */
+        .opened .seal-btn { opacity: 0; animation: none; } 
         .opened .envelope-back { opacity: 0; transform: translateY(-60px); filter: brightness(1.6) blur(4px); }
         .opened .envelope-bottom-flap { opacity: 0; transform: translateY(-40px); }
         .opened#envelope-wrapper { opacity: 0; visibility: hidden; }
@@ -175,13 +173,11 @@
         #scratch-success-msg { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--gold); margin-top: 25px; opacity: 0; transform: translateY(10px); transition: all 1.2s ease; }
         #scratch-success-msg.show { opacity: 1; transform: translateY(0); }
 
-        /* 全螢幕防干擾拉炮畫布 */
         #global-confetti-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 99999; pointer-events: none;
         }
 
-        /* 📸 精緻雙排相簿樣式 */
         .photo-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -200,7 +196,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 📸 滿版清晰呈現核心內容的邀請函卡片 */
         .invitation-image-wrap {
             width: 100%;
             max-width: 650px;              
@@ -221,7 +216,7 @@
             filter: none;
         }
 
-        /* 📸 photo7-9 完整比例橫向照片流 */
+        /* --- 4. 瀑布流與交錯滑入動效樣式 --- */
         .photo-grid-vertical-stream { 
             display: grid; 
             grid-template-columns: 1fr;
@@ -237,9 +232,29 @@
             object-fit: contain; 
             display: block; 
             border-radius: 0; 
+            
+            /* ✨ 預設動效基礎設定：1.2秒平滑平移與淡入 */
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 1.2s ease-out;
+            will-change: transform, opacity;
+        }
+        
+        /* ✨ 方案：第一張從左邊 (-80px) 滑入 */
+        .photo-grid-vertical-stream img.slide-from-left {
+            transform: translateX(-80px);
+        }
+        
+        /* ✨ 方案：第二張從右邊 (80px) 滑入 */
+        .photo-grid-vertical-stream img.slide-from-right {
+            transform: translateX(80px);
+        }
+        
+        /* ✨ 當觸發 active 類別時，回歸原本上下接連的正常位置 */
+        .photo-grid-vertical-stream img.active {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        /* 📸 最後獨立區塊的直式照片樣式 (photo10) */
         #final-extra-photo-portrait {
             width: 100%; max-width: 480px; 
             margin: 30px auto 10px auto; 
@@ -255,7 +270,6 @@
             display: block;
         }
 
-        /* 📸 photo11、photo12 平貼無去背特效樣式 */
         #final-extra-photo, .traffic-image-wrap {
             width: 100%;
             max-width: 450px;       
@@ -271,7 +285,6 @@
             filter: none;
         }
 
-        /* 正式邀約區塊 */
         #final-invitation-block {
             width: 100%; max-width: 600px; text-align: center;
             margin: 50px auto 100px auto; padding: 0 20px;
@@ -279,7 +292,6 @@
         .final-greeting { font-size: 0.85rem; color: #5c5246; line-height: 2.4; letter-spacing: 2px; }
         .final-couple-names { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 25px 0; letter-spacing: 4px; }
         
-        /* 結尾謝詞區塊 */
         .thanks-speech-block {
              width: 100%; max-width: 600px; text-align: center;
             margin: 10px auto 30px auto; 
@@ -288,7 +300,6 @@
         }
         .thanks-speech-text { font-size: 0.85rem; color: #6e6153; line-height: 2.6; letter-spacing: 2.5px; }
 
-        /* 🗓️ 行事曆美化卡片樣式 */
         .calendar-card {
             width: 100%; max-width: 450px; margin: 0 auto 50px auto; padding: 30px 20px;
             background: rgba(255, 255, 255, 0.65);
@@ -313,7 +324,6 @@
 </head>
 <body>
 
-    <!-- 全螢幕獨立拉炮專用 Canvas -->
     <canvas id="global-confetti-canvas"></canvas>
 
     <audio id="bgm" loop preload="auto">
@@ -325,13 +335,11 @@
         <div class="envelope-back"></div>
         <div class="envelope-top-group">
             <div class="envelope-top-flap"></div>
-            <!-- 👑 蠟封按鈕已套用呼吸光暈動畫 -->
             <img src="assets/seal.webp" class="seal-btn" alt="A&C Seal">
         </div>
         <div class="envelope-bottom-flap">
             <h2 style="font-size: 1.3rem; color: #8d7b6d; font-weight: 300; letter-spacing: 3px; margin: 0;">WEDDING INVITATION</h2>
             <p style="font-size: 1rem; color: #8d7b6d; margin-top: 10px; letter-spacing: 2px;">SAVE THE DATE</p>
-            <!-- ✨ 新增的金色文字微光提示 -->
             <p class="click-hint-text">—— 點擊蠟封開啟邀請 ——</p>
         </div>
     </div>
@@ -403,14 +411,12 @@
             <p class="quote-author">—— 泰戈爾 《吉檀迦利》</p>
         </div>
 
-        <!-- 📸 邀請函卡片區塊 -->
         <section id="part3" class="fade-in-section" style="min-height: auto; padding-bottom: 20px;">
             <div class="invitation-image-wrap">
                 <img src="assets/invitation-card.webp" alt="誠摯邀請 林建安 & 李抒琪 婚禮邀請函" loading="lazy">
             </div>
         </section>
 
-        <!-- 🧭 交通資訊區塊 -->
         <div class="fade-in-section" style="text-align: center;">
             <h3 class="script-title-reveal" style="font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 20px;">交通資訊</h3>
         </div>
@@ -442,7 +448,6 @@
                 <img src="assets/photo5.webp" loading="lazy"> <img src="assets/photo6.webp" loading="lazy">
             </div>
 
-            <!-- 📝 修改後的精緻文字區塊 -->
             <div class="lyric-text-block" style="margin: 40px auto;">
                 <p>
                     或許，你不需要變得完整，<br>
@@ -455,9 +460,9 @@
 
         <section id="part5" class="fade-in-section" style="min-height: auto; padding-top: 0; padding-bottom: 0;">
             <div class="photo-grid-vertical-stream">
-                <img src="assets/photo7.webp" loading="lazy">
-                <img src="assets/photo8.webp" loading="lazy">
-                <img src="assets/photo9.webp" loading="lazy">
+                <img src="assets/photo7.webp" class="stream-photo slide-from-left" loading="lazy">
+                <img src="assets/photo8.webp" class="stream-photo slide-from-right" loading="lazy">
+                <img src="assets/photo9.webp" class="stream-photo slide-from-left" loading="lazy">
             </div>
             
             <div id="final-invitation-block" style="margin-bottom: 10px;">
@@ -481,7 +486,6 @@
             </p>
         </div>
 
-        <!-- 🗓️ 一鍵加入行事曆精緻卡片區塊（雙系統版） -->
         <div class="fade-in-section" style="padding: 0 25px; margin-bottom: 80px;">
             <div class="calendar-card" style="max-width: 400px; margin-bottom: 0;">
                 <div style="text-align: center;">
@@ -490,7 +494,6 @@
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; align-items: center;">
-                    <!-- Google 行事曆按鈕 -->
                     <a target="_blank" 
                        href="https://www.google.com/calendar/render?action=TEMPLATE&text=建安+%26+抒琪+婚宴+💍&dates=20261003T183000/20261003T213000&details=誠摯邀請您見證我們的幸福時刻！&location=彭園婚宴會館-八德館+(桃園市八德區介壽路一段728號3樓)&sf=true&output=xml" 
                        class="universal-cal-btn" 
@@ -498,7 +501,6 @@
                        Google 行事曆
                     </a>
 
-                    <!-- Apple / iOS 通用行事曆按鈕 (指向 ics 檔案) -->
                     <a href="wedding.ics" 
                        class="universal-cal-btn" 
                        style="width: 220px; height: 42px; font-size: 0.85rem; border-radius: 6px; background: #7a6f62; box-shadow: 0 4px 12px rgba(122,111,98,0.2); text-decoration: none;">
@@ -510,8 +512,8 @@
 
     </main>
 
-    <!-- 🌟 包裝好的獨立 Canvas-Confetti 動效核心，完全無須外部 JS 依賴 -->
     <script>
+        // --- Canvas-Confetti 動效核心 (方案 B 與 1.5秒) ---
         (function(window) {
             var canvas = document.getElementById('global-confetti-canvas');
             var ctx = canvas.getContext('2d');
@@ -527,13 +529,11 @@
             resizeCanvas();
 
             function fireSideConfetti() {
-                var duration = 1.5 * 1000;
+                var duration = 1.5 * 1000; 
                 var end = Date.now() + duration;
 
                 (function frame() {
-                    // 左側斜向上噴發粒子
                     particles.push(createParticle(0, canvas.height * 0.8, 65, 45));
-                    // 右側斜向上噴發粒子
                     particles.push(createParticle(canvas.width, canvas.height * 0.8, 115, 135));
 
                     if (Date.now() < end) {
@@ -547,15 +547,15 @@
 
             function createParticle(x, y, minAngle, maxAngle) {
                 var angle = (Math.random() * (maxAngle - minAngle) + minAngle) * (Math.PI / 180);
-                var velocity = Math.random() * 8 + 10; // 噴射初速度
+                var velocity = Math.random() * 8 + 10; 
+                
                 return {
-                    x: x,
-                    y: y,
+                    x: x, y: y,
                     size: Math.random() * 6 + 5,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     vx: Math.cos(angle) * velocity,
                     vy: -Math.sin(angle) * velocity,
-                    gravity: 0.2,
+                    gravity: 0.2, 
                     drag: 0.96,
                     rotation: Math.random() * 360,
                     rotationSpeed: Math.random() * 6 - 3,
@@ -568,36 +568,17 @@
                 
                 for (var i = particles.length - 1; i >= 0; i--) {
                     var p = particles[i];
-                    p.vx *= p.drag;
-                    p.vy += p.gravity;
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.rotation += p.rotationSpeed;
-                    
-                    if (p.vy > 0) {
-                        p.opacity -= 0.015; // 下墜時漸隱
-                    }
-
+                    p.vx *= p.drag; p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.rotation += p.rotationSpeed;
+                    if (p.vy > 0) { p.opacity -= 0.015; }
                     if (p.opacity <= 0 || p.y > canvas.height || p.x < -20 || p.x > canvas.width + 20) {
-                        particles.splice(i, 1);
-                        continue;
+                        particles.splice(i, 1); continue;
                     }
-
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate((p.rotation * Math.PI) / 180);
-                    ctx.globalAlpha = p.opacity;
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                    ctx.restore();
+                    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate((p.rotation * Math.PI) / 180); ctx.globalAlpha = p.opacity; ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size); ctx.restore();
                 }
 
-                if (particles.length > 0) {
-                    animationFrameId = requestAnimationFrame(animate);
-                } else {
-                    animationFrameId = null;
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                }
+                if (particles.length > 0) { animationFrameId = requestAnimationFrame(animate); } 
+                else { animationFrameId = null; ctx.clearRect(0, 0, canvas.width, canvas.height); }
             }
 
             window.triggerGlobalConfetti = fireSideConfetti;
@@ -613,8 +594,7 @@
             if (bgm) {
                 bgm.muted = false;
                 bgm.play().catch(() => {
-                    bgm.load();
-                    bgm.play();
+                    bgm.load(); bgm.play();
                 });
             }
             if (!wrapper.classList.contains('opened')) {
@@ -634,8 +614,7 @@
         let isDrawing = false, lastX, lastY, isSuccessShown = false;
 
         window.onload = () => {
-            canvas.width = container.offsetWidth;
-            canvas.height = container.offsetHeight;
+            canvas.width = container.offsetWidth; canvas.height = container.offsetHeight;
             const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             grad.addColorStop(0, '#d1d1d1'); grad.addColorStop(0.5, '#f0f0f0'); grad.addColorStop(1, '#a9a9a9');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -653,22 +632,10 @@
             for (let i = 3; i < data.length; i += 16) { if (data[i] === 0) count++; }
             if (count > (data.length / 16) * 0.6) {
                 isSuccessShown = true;
-                
                 document.getElementById('scratch-success-msg').classList.add('show');
-                
-                // 🚀 觸發新版獨立全螢幕拉炮
-                if (window.triggerGlobalConfetti) {
-                    window.triggerGlobalConfetti();
-                }
-
-                // 刮開圖層淡出
-                canvas.style.transition = 'opacity 1.5s'; 
-                canvas.style.opacity = '0';
-                
-                setTimeout(() => {
-                    canvas.style.display = 'none';
-                }, 1500);
-                
+                if (window.triggerGlobalConfetti) { window.triggerGlobalConfetti(); }
+                canvas.style.transition = 'opacity 1.5s'; canvas.style.opacity = '0';
+                setTimeout(() => { canvas.style.display = 'none'; }, 1500);
                 canvas.replaceWith(canvas.cloneNode(true));
             }
         }
@@ -677,10 +644,7 @@
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
         function scratch(x, y) {
@@ -693,34 +657,20 @@
             checkProgress();
         }
 
-        // 滑鼠與觸控事件
         canvas.addEventListener('mousedown', (e) => { 
-            isDrawing = true; 
-            const c = getCanvasCoords(e); 
-            lastX = c.x; lastY = c.y; 
+            isDrawing = true; const c = getCanvasCoords(e); lastX = c.x; lastY = c.y; 
         });
         canvas.addEventListener('mousemove', (e) => { 
-            if(!isDrawing) return; 
-            const c = getCanvasCoords(e); 
-            scratch(c.x, c.y); 
+            if(!isDrawing) return; const c = getCanvasCoords(e); scratch(c.x, c.y); 
         });
         window.addEventListener('mouseup', () => { isDrawing = false; lastX = undefined; });
 
         canvas.addEventListener('touchstart', (e) => { 
-            if (e.touches.length > 1) return; 
-            isDrawing = true; 
-            const c = getCanvasCoords(e); 
-            lastX = c.x; lastY = c.y; 
-            e.preventDefault(); 
+            if (e.touches.length > 1) return; isDrawing = true; const c = getCanvasCoords(e); lastX = c.x; lastY = c.y; e.preventDefault(); 
         }, {passive:false});
-        
         canvas.addEventListener('touchmove', (e) => { 
-            if(!isDrawing || e.touches.length > 1) return; 
-            const c = getCanvasCoords(e); 
-            scratch(c.x, c.y); 
-            e.preventDefault(); 
+            if(!isDrawing || e.touches.length > 1) return; const c = getCanvasCoords(e); scratch(c.x, c.y); e.preventDefault(); 
         }, {passive:false});
-        
         canvas.addEventListener('touchend', () => { isDrawing = false; lastX = undefined; });
 
         // --- 倒數計時邏輯 ---
@@ -733,10 +683,20 @@
             document.getElementById('secs').innerText = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0');
         }
 
+        // --- 滾動偵測（包含常規區塊與照片流獨立滑入效果） ---
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active'); 
+                }
+            });
+        }, { threshold: 0.15 }); // 調整為進入 15% 時觸發，滑動體驗更好
+
+        // 綁定一般的漸顯區塊
         document.querySelectorAll('.fade-in-section').forEach(s => observer.observe(s));
+        
+        // ✨ 綁定照片串流的三張獨立照片，實現左右交錯滑入
+        document.querySelectorAll('.stream-photo').forEach(img => observer.observe(img));
     </script>
 </body>
 </html>
