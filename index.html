@@ -527,7 +527,7 @@
             resizeCanvas();
 
             function fireSideConfetti() {
-                var duration = 2.5 * 1000;
+                var duration = 1.5 * 1000;
                 var end = Date.now() + duration;
 
                 (function frame() {
@@ -547,7 +547,7 @@
 
             function createParticle(x, y, minAngle, maxAngle) {
                 var angle = (Math.random() * (maxAngle - minAngle) + minAngle) * (Math.PI / 180);
-                var velocity = Math.random() * 15 + 15; // 噴射初速度
+                var velocity = Math.random() * 8 + 10; // 噴射初速度
                 return {
                     x: x,
                     y: y,
@@ -555,8 +555,8 @@
                     color: colors[Math.floor(Math.random() * colors.length)],
                     vx: Math.cos(angle) * velocity,
                     vy: -Math.sin(angle) * velocity,
-                    gravity: 0.35,
-                    drag: 0.95,
+                    gravity: 0.2,
+                    drag: 0.96,
                     rotation: Math.random() * 360,
                     rotationSpeed: Math.random() * 6 - 3,
                     opacity: 1
